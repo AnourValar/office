@@ -15,6 +15,13 @@ class TemplateService
     protected \AnourValar\Office\Template\Parser $parser;
 
     /**
+     * Handle template's loading
+     *
+     * @var \Closure(TemplateInterface $templateDriver, string $templateFile)|null
+     */
+    protected ?\Closure $hookLoad = null;
+
+    /**
      * Actions with template before data inserted
      *
      * @var \Closure(TemplateInterface $templateDriver, array &$data)|null
@@ -36,6 +43,13 @@ class TemplateService
     protected ?\Closure $hookAfter = null;
 
     /**
+     * Handle template's saving
+     *
+     * @var \Closure(TemplateInterface $templateDriver)|null
+     */
+    protected ?\Closure $hookSave = null;
+
+    /**
      * @param string $driverClass
      * @param \AnourValar\Office\Template\Parser $parser
      * @return void
@@ -49,13 +63,13 @@ class TemplateService
     }
 
     /**
-     * @param string $template
+     * @param string $templateFile
      * @param mixed $data
      * @param \AnourValar\Office\SaveFormat $saveFormat
      * @throws \LogicException
      * @return \AnourValar\Office\Rendered
      */
-    public function render(string $template, mixed $data, SaveFormat $saveFormat = SaveFormat::Xlsx): Rendered
+    public function render(string $templateFile, mixed $data, SaveFormat $saveFormat = SaveFormat::Xlsx): Rendered
     {
         // Get instance of driver
         $driver = new $this->driverClass();
@@ -67,7 +81,11 @@ class TemplateService
         $data = $this->parser->canonizeData($data);
 
         // Open the template
-        $driver->loadXlsx($template);
+        if ($this->hookLoad) {
+            ($this->hookLoad)($driver, $templateFile);
+        } else {
+            $driver->loadXlsx($templateFile);
+        }
 
         // Hook: before
         if ($this->hookBefore) {
@@ -75,9 +93,9 @@ class TemplateService
         }
 
         // Get schema of the document
-        $schema = $this->parser->schema($driver->getValues(null), $data);
+        $schema = $this->parser->schema($driver->getValues(null), $data, $driver->getMergeCells())->toArray();
 
-        // Rows add/delete
+        // rows
         foreach ($schema['rows'] as $row) {
             if ($row['action'] == 'add') {
                 $driver->addRow($row['row']);
@@ -88,14 +106,19 @@ class TemplateService
             }
         }
 
-        // Copy styles
-        foreach ($schema['copy_styles'] as $item) {
+        // copy_style
+        foreach ($schema['copy_style'] as $item) {
             $driver->copyStyle($item['from'], $item['to']);
         }
 
-        // Set width
-        foreach ($schema['width'] as $columnTo => $columnFrom) {
-            $driver->setWidth($columnTo, $columnFrom);
+        // merge_cells
+        foreach ($schema['merge_cells'] as $item) {
+            $driver->mergeCells($item);
+        }
+
+        // copy_width
+        foreach ($schema['copy_width'] as $item) {
+            $driver->setWidth($item['to'], $item['from']);
         }
 
         // Decode data
@@ -111,8 +134,25 @@ class TemplateService
 
         // Render & save to the buffer
         ob_start();
-        $driver->{$saveFormat->value}('php://output');
+        if ($this->hookSave) {
+            ($this->hookSave)($driver);
+        } else {
+            $driver->{$saveFormat->driverSaveMethod()}('php://output');
+        }
         return new Rendered(ob_get_clean());
+    }
+
+    /**
+     * Set hookLoad
+     *
+     * @param ?\Closure $closure
+     * @return self
+     */
+    public function hookLoad(?\Closure $closure): self
+    {
+        $this->hookLoad = $closure;
+
+        return $this;
     }
 
     /**
@@ -150,6 +190,19 @@ class TemplateService
     public function hookAfter(?\Closure $closure): self
     {
         $this->hookAfter = $closure;
+
+        return $this;
+    }
+
+    /**
+     * Set hookSave
+     *
+     * @param ?\Closure $closure
+     * @return self
+     */
+    public function hookSave(?\Closure $closure): self
+    {
+        $this->hookSave = $closure;
 
         return $this;
     }

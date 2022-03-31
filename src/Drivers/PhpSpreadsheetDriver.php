@@ -17,12 +17,12 @@ class PhpSpreadsheetDriver implements TemplateInterface
     /**
      * @var \PhpOffice\PhpSpreadsheet\Spreadsheet
      */
-    private $spreadsheet;
+    public readonly \PhpOffice\PhpSpreadsheet\Spreadsheet $spreadsheet;
 
     /**
      * @var \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet
      */
-    public $sheet;
+    public readonly \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $sheet;
 
     /**
      * {@inheritDoc}
@@ -31,6 +31,18 @@ class PhpSpreadsheetDriver implements TemplateInterface
     public function loadXlsx(string $file): self
     {
         $this->spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::createReader('Xlsx')->load($file);
+        $this->sheet = $this->spreadsheet->getActiveSheet();
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \AnourValar\Office\Drivers\TemplateInterface::loadOds()
+     */
+    public function loadOds(string $file): self
+    {
+        $this->spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::createReader('Ods')->load($file);
         $this->sheet = $this->spreadsheet->getActiveSheet();
 
         return $this;
@@ -64,6 +76,15 @@ class PhpSpreadsheetDriver implements TemplateInterface
     }
 
     /**
+     * {@inheritDoc}
+     * @see \AnourValar\Office\Drivers\TemplateInterface::saveOds()
+     */
+    public function saveOds(string $file): void
+    {
+        \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($this->spreadsheet, 'Ods')->save($file);
+    }
+
+    /**
      * Apply value to a cell
      *
      * @param string $cell
@@ -77,7 +98,7 @@ class PhpSpreadsheetDriver implements TemplateInterface
             $this->sheet->setCellValue($cell, \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($value));
             $this->sheet->getStyle($cell)->getNumberFormat()->setFormatCode(static::DATE_FORMAT);
 
-        } elseif (is_string($value) && preg_match('#^\=[A-Z][A-Z\.\d]{1,}\(#', $value)) {
+        } elseif (is_string($value) && preg_match('#^\=[A-Z][A-Z\.\d]#', $value)) {
 
             $this->sheet->setCellValue($cell, $value);
 
@@ -155,23 +176,31 @@ class PhpSpreadsheetDriver implements TemplateInterface
 
     /**
      * {@inheritDoc}
+     * @see \AnourValar\Office\Drivers\TemplateInterface::getMergeCells()
+     */
+    public function getMergeCells(): array
+    {
+        return array_values( $this->sheet->getMergeCells() );
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \AnourValar\Office\Drivers\TemplateInterface::mergeCells()
+     */
+    public function mergeCells(string $ceilRange): self
+    {
+        $this->sheet->mergeCells($ceilRange);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
      * @see \AnourValar\Office\Drivers\TemplateInterface::copyStyle()
      */
     public function copyStyle(string $cellFrom, string $rangeTo): self
     {
         $this->sheet->duplicateStyle($this->sheet->getStyle($cellFrom), $rangeTo);
-
-        if ($cellFrom[0] == $rangeTo[0] && !strpos($rangeTo, ':')) {
-            $merge = $this->sheet->getCell($cellFrom)->getMergeRange();
-
-            if ($merge) {
-                $merge = explode(':', $merge);
-
-                if (mb_substr($merge[0], 1) == mb_substr($merge[1], 1)) {
-                    $this->sheet->mergeCells(sprintf('%s%d:%s%d', $merge[0][0], $rangeTo[1], $merge[1][0], $rangeTo[1]));
-                }
-            }
-        }
 
         return $this;
     }

@@ -34,6 +34,11 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         'E' => '[test10]',
                         'F' => '[test]',
                         'G' => '[test1]',
+                        'H' => 'hello [$=foo]',
+                        'I' => '[$= foo] world',
+                        'J' => '[$! foo] test',
+                        'K' => '[$! foo] test',
+                        'L' => '[$= foo1] test',
                     ],
                     2 => [
                         'A' => '[bar]',
@@ -42,12 +47,17 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         'D' => '[a.b] -> [a.c] -> [a.d] -> [a.e.f]',
                         'H' => '[hello]',
                         'J' => '[world]',
+                        'K' => '[k] [9] [9k] [k9]',
                     ],
                     '3' => [
                         'D' => '[bar] [!bar]',
                     ],
                     '4' => [
                         'D' => 'hello world',
+                    ],
+                    '5' => [
+                        'A' => 1,
+                        'B' => 2,
                     ],
                 ],
 
@@ -73,6 +83,11 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                             'E' => 12.5,
                             'F' => '3',
                             'G' => 5,
+                            'H' => 'hello',
+                            'I' => 'world',
+                            'J' => null,
+                            'K' => null,
+                            'L' => null,
                         ],
                         2 => [
                             'A' => 'world',
@@ -80,16 +95,19 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                             'D' => '11 -> 22 ->  -> oops',
                             'H' => null,
                             'J' => null,
+                            'K' => '[k] [9] [9k]',
                         ],
                     ],
 
                     'rows' => [['action' => 'delete', 'row' => 3]],
 
-                    'copy_styles' => [],
+                    'copy_style' => [],
 
-                    'width' => [],
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
                 ],
-                $this->service->schema($item['values'], $item['data']),
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
             );
         }
@@ -148,17 +166,19 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['action' => 'delete', 'row' => 4],
                     ],
 
-                    'copy_styles' => [],
+                    'copy_style' => [],
 
-                    'width' => [],
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
                 ],
-                $this->service->schema($item['values'], $item['data']),
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
             );
         }
 
         $this->expectException(\LogicException::class);
-        $this->service->schema([1 => ['A' => 'hello [world]']], ['world' => function () {}]);
+        $this->service->schema([1 => ['A' => 'hello [world]']], ['world' => function () {}], []);
     }
 
     /**
@@ -230,11 +250,13 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['action' => 'delete', 'row' => 3],
                     ],
 
-                    'copy_styles' => [],
+                    'copy_style' => [],
 
-                    'width' => [],
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
                 ],
-                $this->service->schema($item['values'], $item['data']),
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "#$id"
             );
         }
@@ -329,11 +351,13 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['action' => 'delete', 'row' => 1],
                     ],
 
-                    'copy_styles' => [],
+                    'copy_style' => [],
 
-                    'width' => [],
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
                 ],
-                $this->service->schema($item['values'], $item['data']),
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "#$id"
             );
         }
@@ -501,11 +525,13 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
 
                     'rows' => [['action' => 'delete', 'row' => 4]],
 
-                    'copy_styles' => [],
+                    'copy_style' => [],
 
-                    'width' => [],
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
                 ],
-                $this->service->schema($item['values'], $item['data']),
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
             );
         }
@@ -517,36 +543,6 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
     public function test_schema_list_two()
     {
         $data = [
-            [
-                'values' => [
-                    1 => [
-                        'A' => 'foo',
-                        'B' => '[foo]',
-                    ],
-                    2 => [
-                        'A' => 'foo',
-                        'B' => '[foo]',
-
-                        'C' => '[list.0.c]',
-                        'D' => '[list.0.d]',
-                        'E' => '[foo] hello [list.0.c] -> [list.0.d] world [bar]',
-
-                        'F' => 'bar',
-                        'G' => '[bar]',
-                    ],
-                    3 => [
-                        'A' => 'bar',
-                        'B' => '[bar]',
-                    ],
-                ],
-
-                'data' => [
-                    'list' => [ ['c' => '11', 'd' => '12'], ['c' => '21', 'd' => '22'] ],
-                    'foo' => 'test1',
-                    'bar' => 'test2',
-                ],
-            ],
-
             [
                 'values' => [
                     1 => [
@@ -587,9 +583,39 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         'A' => 'foo',
                         'B' => '[foo]',
 
-                        'C' => '[list_c.0]',
-                        'D' => '[list_d.0]',
-                        'E' => '[foo] hello [list_c.0] -> [list_d.0] world [bar]',
+                        'C' => '[list.c]',
+                        'D' => '[list.d]',
+                        'E' => '[foo] hello [list.*.c] -> [list.*.d] world [bar]',
+
+                        'F' => 'bar',
+                        'G' => '[bar]',
+                    ],
+                    3 => [
+                        'A' => 'bar',
+                        'B' => '[bar]',
+                    ],
+                ],
+
+                'data' => [
+                    'list' => [ ['c' => '11', 'd' => '12'], ['c' => '21', 'd' => '22'] ],
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                ],
+            ],
+
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+                    ],
+                    2 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+
+                        'C' => '[list_c]',
+                        'D' => '[list_d]',
+                        'E' => '[foo] hello [list_c] -> [list_d] world [bar]',
 
                         'F' => 'bar',
                         'G' => '[bar]',
@@ -618,9 +644,9 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         'A' => 'foo',
                         'B' => '[foo]',
 
-                        'C' => '[list_c]',
-                        'D' => '[list_d]',
-                        'E' => '[foo] hello [list_c] -> [list_d] world [bar]',
+                        'C' => '[list_c.*]',
+                        'D' => '[list_d.*]',
+                        'E' => '[foo] hello [list_c.*] -> [list_d.*] world [bar]',
 
                         'F' => 'bar',
                         'G' => '[bar]',
@@ -674,7 +700,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['action' => 'add', 'row' => 3],
                     ],
 
-                    'copy_styles' => [
+                    'copy_style' => [
                         ['from' => 'A2', 'to' => 'A3'],
                         ['from' => 'B2', 'to' => 'B3'],
                         ['from' => 'C2', 'to' => 'C3'],
@@ -684,9 +710,11 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'G2', 'to' => 'G3'],
                     ],
 
-                    'width' => [],
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
                 ],
-                $this->service->schema($item['values'], $item['data']),
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
             );
         }
@@ -696,6 +724,223 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
      * @return void
      */
     public function test_schema_list_three()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+                    ],
+                    2 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+
+                        'C' => '[list.c]',
+                        'D' => '[list.d]',
+                        'E' => '[foo] hello [list.c] -> [list.d] world [bar]',
+
+                        'G' => 'bar',
+                        'H' => '[bar]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                    ],
+                    3 => [
+                        'A' => 'bar',
+                        'B' => '[bar]',
+                    ],
+                ],
+
+                'data' => [
+                    'list' => [ ['c' => 11, 'd' => 12.5], ['c' => '21', 'd' => '22'], ['c' => '31', 'd' => '32'] ],
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                ],
+
+                'merge_cells' => ['E2:F2'],
+            ],
+
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+                    ],
+                    2 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+
+                        'C' => '[list.*.c]',
+                        'D' => '[list.*.d]',
+                        'E' => '[foo] hello [list.*.c] -> [list.*.d] world [bar]',
+
+                        'G' => 'bar',
+                        'H' => '[bar]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                    ],
+                    3 => [
+                        'A' => 'bar',
+                        'B' => '[bar]',
+                    ],
+                ],
+
+                'data' => [
+                    'list' => [ ['c' => 11, 'd' => 12.5], ['c' => '21', 'd' => '22'], ['c' => '31', 'd' => '32'] ],
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                ],
+
+                'merge_cells' => ['E2:F2'],
+            ],
+
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+                    ],
+                    2 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+
+                        'C' => '[list_c]',
+                        'D' => '[list_d]',
+                        'E' => '[foo] hello [list_c] -> [list_d] world [bar]',
+
+                        'G' => 'bar',
+                        'H' => '[bar]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                    ],
+                    3 => [
+                        'A' => 'bar',
+                        'B' => '[bar]',
+                    ],
+                ],
+
+                'data' => [
+                    'list_c' => [11, '21', '31'],
+                    'list_d' => [12.5, '22', '32'],
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                ],
+
+                'merge_cells' => ['E2:F2'],
+            ],
+
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+                    ],
+                    2 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+
+                        'C' => '[list_c.*]',
+                        'D' => '[list_d.*]',
+                        'E' => '[foo] hello [list_c.*] -> [list_d.*] world [bar]',
+
+                        'G' => 'bar',
+                        'H' => '[bar]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                    ],
+                    3 => [
+                        'A' => 'bar',
+                        'B' => '[bar]',
+                    ],
+                ],
+
+                'data' => [
+                    'list_c' => [11, '21', '31'],
+                    'list_d' => [12.5, '22', '32'],
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                ],
+
+                'merge_cells' => ['E2:F2'],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'B' => 'test1',
+                        ],
+                        2 => [
+                            'A' => 'foo',
+                            'B' => 'test1',
+                            'C' => 11,
+                            'D' => 12.5,
+                            'E' => 'test1 hello 11 -> 12.5 world test2',
+                            'G' => 'bar',
+                            'H' => 'test2',
+                            'I' => '=A2*C2+B1+D3+E$2',
+                        ],
+                        3 => [
+                            'A' => 'foo',
+                            'B' => 'test1',
+                            'C' => '21',
+                            'D' => '22',
+                            'E' => 'test1 hello 21 -> 22 world test2',
+                            'G' => 'bar',
+                            'H' => 'test2',
+                            'I' => '=A2*C2+B1+D3+E$2',
+                        ],
+                        4 => [
+                            'A' => 'foo',
+                            'B' => 'test1',
+                            'C' => '31',
+                            'D' => '32',
+                            'E' => 'test1 hello 31 -> 32 world test2',
+                            'G' => 'bar',
+                            'H' => 'test2',
+                            'I' => '=A2*C2+B1+D3+E$2',
+                        ],
+                        5 => [
+                            'B' => 'test2',
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 3],
+                        ['action' => 'add', 'row' => 4],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'B2', 'to' => 'B3'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'C2', 'to' => 'C3'],
+                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'D2', 'to' => 'D3'],
+                        ['from' => 'D2', 'to' => 'D4'],
+                        ['from' => 'E2', 'to' => 'E3'],
+                        ['from' => 'E2', 'to' => 'E4'],
+                        ['from' => 'G2', 'to' => 'G3'],
+                        ['from' => 'G2', 'to' => 'G4'],
+                        ['from' => 'H2', 'to' => 'H3'],
+                        ['from' => 'H2', 'to' => 'H4'],
+                        ['from' => 'I2', 'to' => 'I3'],
+                        ['from' => 'I2', 'to' => 'I4'],
+                    ],
+
+                    'merge_cells' => ['E3:F3', 'E4:F4'],
+
+                    'copy_width' => [],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_list_three_limit()
     {
         $data = [
             [
@@ -768,62 +1013,27 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                             'B' => 'test1',
                         ],
                         2 => [
-                            'A' => 'foo',
                             'B' => 'test1',
                             'C' => 11,
                             'D' => 12.5,
                             'E' => 'test1 hello 11 -> 12.5 world test2',
-                            'F' => 'bar',
                             'G' => 'test2',
                         ],
+
                         3 => [
-                            'A' => 'foo',
-                            'B' => 'test1',
-                            'C' => '21',
-                            'D' => '22',
-                            'E' => 'test1 hello 21 -> 22 world test2',
-                            'F' => 'bar',
-                            'G' => 'test2',
-                        ],
-                        4 => [
-                            'A' => 'foo',
-                            'B' => 'test1',
-                            'C' => '31',
-                            'D' => '32',
-                            'E' => 'test1 hello 31 -> 32 world test2',
-                            'F' => 'bar',
-                            'G' => 'test2',
-                        ],
-                        5 => [
                             'B' => 'test2',
                         ],
                     ],
 
-                    'rows' => [
-                        ['action' => 'add', 'row' => 3],
-                        ['action' => 'add', 'row' => 4],
-                    ],
+                    'rows' => [],
 
-                    'copy_styles' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
-                        ['from' => 'B2', 'to' => 'B3'],
-                        ['from' => 'B2', 'to' => 'B4'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
-                        ['from' => 'D2', 'to' => 'D3'],
-                        ['from' => 'D2', 'to' => 'D4'],
-                        ['from' => 'E2', 'to' => 'E3'],
-                        ['from' => 'E2', 'to' => 'E4'],
-                        ['from' => 'F2', 'to' => 'F3'],
-                        ['from' => 'F2', 'to' => 'F4'],
-                        ['from' => 'G2', 'to' => 'G3'],
-                        ['from' => 'G2', 'to' => 'G4'],
-                    ],
+                    'copy_style' => [],
 
-                    'width' => [],
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
                 ],
-                $this->service->schema($item['values'], $item['data']),
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
             );
         }
@@ -911,11 +1121,13 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['action' => 'delete', 'row' => 2],
                     ],
 
-                    'copy_styles' => [],
+                    'copy_style' => [],
 
-                    'width' => [],
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
                 ],
-                $this->service->schema($item['values'], $item['data']),
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "#$id"
             );
         }
@@ -1046,11 +1258,13 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
 
                     'rows' => [],
 
-                    'copy_styles' => [],
+                    'copy_style' => [],
 
-                    'width' => [],
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
                 ],
-                $this->service->schema($item['values'], $item['data']),
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "#$id"
             );
         }
@@ -1097,7 +1311,57 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         'A' => 'foo',
                         'B' => '[foo]',
 
+                        'C' => '[matrix.*.c.*]',
+                    ],
+                    3 => [
+                        'A' => 'bar',
+                        'B' => '[bar]',
+                    ],
+                ],
+
+                'data' => [
+                    'matrix' => [ ['c' => ['11']] ],
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                ],
+            ],
+
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+                    ],
+                    2 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+
                         'C' => '[matrix.c]',
+                    ],
+                    3 => [
+                        'A' => 'bar',
+                        'B' => '[bar]',
+                    ],
+                ],
+
+                'data' => [
+                    'matrix' => [ ['c' => ['11']] ],
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                ],
+            ],
+
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+                    ],
+                    2 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+
+                        'C' => '[matrix.*.c]',
                     ],
                     3 => [
                         'A' => 'bar',
@@ -1147,6 +1411,31 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         'A' => 'foo',
                         'B' => '[foo]',
 
+                        'C' => '[matrix.*.*.*]',
+                    ],
+                    3 => [
+                        'A' => 'bar',
+                        'B' => '[bar]',
+                    ],
+                ],
+
+                'data' => [
+                    'matrix' => [ [['11']] ],
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                ],
+            ],
+
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+                    ],
+                    2 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+
                         'C' => '[matrix]',
                     ],
                     3 => [
@@ -1181,11 +1470,13 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
 
                     'rows' => [],
 
-                    'copy_styles' => [],
+                    'copy_style' => [],
 
-                    'width' => [],
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
                 ],
-                $this->service->schema($item['values'], $item['data']),
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
             );
         }
@@ -1197,31 +1488,6 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
     public function test_schema_matrix_two()
     {
         $data = [
-            [
-                'values' => [
-                    1 => [
-                        'A' => 'foo',
-                        'B' => '[foo]',
-                    ],
-                    2 => [
-                        'A' => 'foo',
-                        'B' => '[foo]',
-
-                        'C' => '[matrix.0.c.0]',
-                    ],
-                    3 => [
-                        'A' => 'bar',
-                        'B' => '[bar]',
-                    ],
-                ],
-
-                'data' => [
-                    'matrix' => [ ['c' => ['11', '12']] ],
-                    'foo' => 'test1',
-                    'bar' => 'test2',
-                ],
-            ],
-
             [
                 'values' => [
                     1 => [
@@ -1257,7 +1523,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         'A' => 'foo',
                         'B' => '[foo]',
 
-                        'C' => '[matrix.0.0.0]',
+                        'C' => '[matrix.*.c.*]',
                     ],
                     3 => [
                         'A' => 'bar',
@@ -1266,7 +1532,32 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                 ],
 
                 'data' => [
-                    'matrix' => [ [['11', '12']] ],
+                    'matrix' => [ ['c' => ['11', '12']] ],
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                ],
+            ],
+
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+                    ],
+                    2 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+
+                        'C' => '[matrix.*.c]',
+                    ],
+                    3 => [
+                        'A' => 'bar',
+                        'B' => '[bar]',
+                    ],
+                ],
+
+                'data' => [
+                    'matrix' => [ ['c' => ['11', '12']] ],
                     'foo' => 'test1',
                     'bar' => 'test2',
                 ],
@@ -1317,13 +1608,102 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
 
                     'rows' => [],
 
-                    'copy_styles' => [
+                    'copy_style' => [
                         ['from' => 'C2', 'to' => 'D2'],
                     ],
 
-                    'width' => ['D' => 'C'],
+                    'merge_cells' => [],
+
+                    'copy_width' => [['from' => 'C', 'to' => 'D']],
                 ],
-                $this->service->schema($item['values'], $item['data']),
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_matrix_two_limit()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+                    ],
+                    2 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+
+                        'C' => '[matrix.0.c.0]',
+                    ],
+                    3 => [
+                        'A' => 'bar',
+                        'B' => '[bar]',
+                    ],
+                ],
+
+                'data' => [
+                    'matrix' => [ ['c' => ['11', '12']] ],
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                ],
+            ],
+
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+                    ],
+                    2 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+
+                        'C' => '[matrix.0.0.0]',
+                    ],
+                    3 => [
+                        'A' => 'bar',
+                        'B' => '[bar]',
+                    ],
+                ],
+
+                'data' => [
+                    'matrix' => [ [['11', '12']] ],
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                ],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'B' => 'test1',
+                        ],
+                        2 => [
+                            'B' => 'test1',
+                            'C' => '11',
+                        ],
+                        3 => [
+                            'B' => 'test2',
+                        ],
+                    ],
+
+                    'rows' => [],
+
+                    'copy_style' => [],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
+                ],
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
             );
         }
@@ -1345,7 +1725,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         'A' => 'foo',
                         'B' => '[foo]',
 
-                        'C' => '[matrix.0.c.0]',
+                        'C' => '[matrix.c]',
                     ],
                     3 => [
                         'A' => 'bar',
@@ -1370,7 +1750,57 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         'A' => 'foo',
                         'B' => '[foo]',
 
-                        'C' => '[matrix.0.0.0]',
+                        'C' => '[matrix.*.c]',
+                    ],
+                    3 => [
+                        'A' => 'bar',
+                        'B' => '[bar]',
+                    ],
+                ],
+
+                'data' => [
+                    'matrix' => [ ['c' => ['11', '12', '13']] ],
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                ],
+            ],
+
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+                    ],
+                    2 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+
+                        'C' => '[matrix.*.c.*]',
+                    ],
+                    3 => [
+                        'A' => 'bar',
+                        'B' => '[bar]',
+                    ],
+                ],
+
+                'data' => [
+                    'matrix' => [ ['c' => ['11', '12', '13']] ],
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                ],
+            ],
+
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+                    ],
+                    2 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+
+                        'C' => '[matrix]',
                     ],
                     3 => [
                         'A' => 'bar',
@@ -1406,14 +1836,19 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
 
                     'rows' => [],
 
-                    'copy_styles' => [
+                    'copy_style' => [
                         ['from' => 'C2', 'to' => 'D2'],
                         ['from' => 'C2', 'to' => 'E2'],
                     ],
 
-                    'width' => ['D' => 'C', 'E' => 'C'],
+                    'merge_cells' => [],
+
+                    'copy_width' => [
+                        ['from' => 'C', 'to' => 'D'],
+                        ['from' => 'C', 'to' => 'E']
+                    ],
                 ],
-                $this->service->schema($item['values'], $item['data']),
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
             );
         }
@@ -1433,8 +1868,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     ],
                     2 => [
                         'A' => 'foo',
-                        'B' => '[matrix.0.b]',
-                        'C' => '[matrix.0.c.0]',
+                        'B' => '[matrix.b]',
+                        'C' => '[matrix.c]',
                     ],
                     3 => [
                         'A' => 'bar',
@@ -1463,8 +1898,38 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     ],
                     2 => [
                         'A' => 'foo',
-                        'B' => '[matrix.b]',
-                        'C' => '[matrix.c]',
+                        'B' => '[matrix.*.b]',
+                        'C' => '[matrix.*.c]',
+                    ],
+                    3 => [
+                        'A' => 'bar',
+                        'B' => '[bar]',
+                        'C' => 'foo: [foo] bar: [bar]',
+                        'D' => 'bar: [bar] foo: [foo]',
+                    ],
+                ],
+
+                'data' => [
+                    'matrix' => [
+                        ['b' => 'b1', 'c' => ['c1', 'd1', 'e1']],
+                        ['b' => 'b2', 'c' => ['c2', 'd2', 'e2']],
+                        ['b' => 'b3', 'c' => ['c3', 'd3', 'e3']],
+                    ],
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                ],
+            ],
+
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+                    ],
+                    2 => [
+                        'A' => 'foo',
+                        'B' => '[matrix.*.b.*]',
+                        'C' => '[matrix.*.c.*]',
                     ],
                     3 => [
                         'A' => 'bar',
@@ -1526,7 +1991,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['action' => 'add', 'row' => 4],
                     ],
 
-                    'copy_styles' => [
+                    'copy_style' => [
                         ['from' => 'A2', 'to' => 'A3'],
                         ['from' => 'A2', 'to' => 'A4'],
                         ['from' => 'B2', 'to' => 'B3'],
@@ -1541,9 +2006,83 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'E2', 'to' => 'E4'],
                     ],
 
-                    'width' => ['D' => 'C', 'E' => 'C'],
+                    'merge_cells' => [],
+
+                    'copy_width' => [
+                        ['from' => 'C', 'to' => 'D'],
+                        ['from' => 'C', 'to' => 'E'],
+                    ],
                 ],
-                $this->service->schema($item['values'], $item['data']),
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_multi_equal_limit()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+                    ],
+                    2 => [
+                        'A' => 'foo',
+                        'B' => '[matrix.0.b]',
+                        'C' => '[matrix.0.c.0]',
+                    ],
+                    3 => [
+                        'A' => 'bar',
+                        'B' => '[bar]',
+                        'C' => 'foo: [foo] bar: [bar]',
+                        'D' => 'bar: [bar] foo: [foo]',
+                    ],
+                ],
+
+                'data' => [
+                    'matrix' => [
+                        ['b' => 'b1', 'c' => ['c1', 'd1', 'e1']],
+                        ['b' => 'b2', 'c' => ['c2', 'd2', 'e2']],
+                        ['b' => 'b3', 'c' => ['c3', 'd3', 'e3']],
+                    ],
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                ],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'B' => 'test1',
+                        ],
+                        2 => [
+                            'B' => 'b1',
+                            'C' => 'c1',
+                        ],
+                        3 => [
+                            'B' => 'test2',
+                            'C' => 'foo: test1 bar: test2',
+                            'D' => 'bar: test2 foo: test1',
+                        ],
+                    ],
+
+                    'rows' => [],
+
+                    'copy_style' => [],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
+                ],
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
             );
         }
@@ -1656,7 +2195,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['action' => 'add', 'row' => 4],
                     ],
 
-                    'copy_styles' => [
+                    'copy_style' => [
                         ['from' => 'A2', 'to' => 'A3'],
                         ['from' => 'A2', 'to' => 'A4'],
                         ['from' => 'B2', 'to' => 'B3'],
@@ -1671,9 +2210,14 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'E2', 'to' => 'E4'],
                     ],
 
-                    'width' => ['D' => 'C', 'E' => 'C'],
+                    'merge_cells' => [],
+
+                    'copy_width' => [
+                        ['from' => 'C', 'to' => 'D'],
+                        ['from' => 'C', 'to' => 'E'],
+                    ],
                 ],
-                $this->service->schema($item['values'], $item['data']),
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
             );
         }
@@ -1693,9 +2237,9 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     ],
                     2 => [
                         'A' => 'foo',
-                        'B' => '[rows.0.b]',
-                        'C' => '[rows.0.c]',
-                        'E' => '[columns.0.e.0]',
+                        'B' => '[rows.b]',
+                        'C' => '[rows.c]',
+                        'E' => '[columns.e]',
                     ],
                     3 => [
                         'A' => 'bar',
@@ -1726,9 +2270,9 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     ],
                     2 => [
                         'A' => 'foo',
-                        'B' => '[rows.b]',
-                        'C' => '[rows.c]',
-                        'E' => '[columns.e]',
+                        'B' => '[rows.*.b]',
+                        'C' => '[rows.*.c]',
+                        'E' => '[columns.*.e.*]',
                     ],
                     3 => [
                         'A' => 'bar',
@@ -1793,7 +2337,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['action' => 'add', 'row' => 4],
                     ],
 
-                    'copy_styles' => [
+                    'copy_style' => [
                         ['from' => 'A2', 'to' => 'A3'],
                         ['from' => 'A2', 'to' => 'A4'],
                         ['from' => 'B2', 'to' => 'B3'],
@@ -1810,9 +2354,14 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'G2', 'to' => 'G4'],
                     ],
 
-                    'width' => ['F' => 'E', 'G' => 'E'],
+                    'merge_cells' => [],
+
+                    'copy_width' => [
+                        ['from' => 'E', 'to' => 'F'],
+                        ['from' => 'E', 'to' => 'G'],
+                    ],
                 ],
-                $this->service->schema($item['values'], $item['data']),
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
             );
         }
@@ -1821,7 +2370,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function test_schema_multi_combination2()
+    public function test_schema_multi_combination1_limit()
     {
         $data = [
             [
@@ -1829,16 +2378,16 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
-                        'E' => '[columns.0.one.0]',
                     ],
                     2 => [
                         'A' => 'foo',
                         'B' => '[rows.0.b]',
                         'C' => '[rows.0.c]',
-                        'E' => '[columns.0.two.0]',
+                        'E' => '[columns.0.e.0]',
                     ],
                     3 => [
-                        'A' => '[foo]',
+                        'A' => 'bar',
+                        'B' => '[bar]',
                     ],
                 ],
 
@@ -1848,16 +2397,54 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['b' => 'b2', 'c' => 'c2'],
                     ],
                     'columns' => [
-                        [
-                            'one' => ['01', '02', '03'],
-                            'two' => [15000, 20000, 30000],
-                        ],
+                        ['e' => ['E10', 'E11', '']],
+                        ['e' => ['E20', 'E21', 'E22']],
+                        ['e' => ['E30', 'E31', 'E32']],
                     ],
                     'foo' => 'test1',
                     'bar' => 'test2',
                 ],
             ],
+        ];
 
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'B' => 'test1',
+                        ],
+                        2 => [
+                            'B' => 'b1',
+                            'C' => 'c1',
+                            'E' => 'E10',
+                        ],
+                        3 => [
+                            'B' => 'test2',
+                        ],
+                    ],
+
+                    'rows' => [],
+
+                    'copy_style' => [],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
+                ],
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+
+    /**
+     * @return void
+     */
+    public function test_schema_multi_combination2()
+    {
+        $data = [
             [
                 'values' => [
                     1 => [
@@ -1890,6 +2477,44 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'foo' => 'test1',
                     'bar' => 'test2',
                 ],
+
+                'merge_cells' => ['C2:D2'],
+            ],
+
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+                        'E' => '[columns.*.one]',
+                    ],
+                    2 => [
+                        'A' => 'foo',
+                        'B' => '[rows.b]',
+                        'C' => '[rows.c]',
+                        'E' => '[columns.*.two.*]',
+                    ],
+                    3 => [
+                        'A' => '[foo]',
+                    ],
+                ],
+
+                'data' => [
+                    'rows' => [
+                        ['b' => 'b1', 'c' => 'c1'],
+                        ['b' => 'b2', 'c' => 'c2'],
+                    ],
+                    'columns' => [
+                        [
+                            'one' => ['01', '02', '03'],
+                            'two' => [15000, 20000, 30000],
+                        ],
+                    ],
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                ],
+
+                'merge_cells' => ['C2:D2'],
             ],
         ];
 
@@ -1928,7 +2553,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['action' => 'add', 'row' => 3],
                     ],
 
-                    'copy_styles' => [
+                    'copy_style' => [
                         ['from' => 'A2', 'to' => 'A3'],
                         ['from' => 'B2', 'to' => 'B3'],
                         ['from' => 'C2', 'to' => 'C3'],
@@ -1941,9 +2566,99 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'G2', 'to' => 'G3'],
                     ],
 
-                    'width' => ['F' => 'E', 'G' => 'E'],
+                    'merge_cells' => ['C3:D3'],
+
+                    'copy_width' => [
+                        ['from' => 'E', 'to' => 'F'],
+                        ['from' => 'E', 'to' => 'G'],
+                    ],
                 ],
-                $this->service->schema($item['values'], $item['data']),
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_multi_combination2_limit()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+                        'E' => '[columns.1.one.0]',
+                    ],
+                    2 => [
+                        'A' => 'foo',
+                        'B' => '[rows.1.b]',
+                        'C' => '[rows.1.c]',
+                        'E' => '[columns.1.two.0]',
+                    ],
+                    3 => [
+                        'A' => '[foo]',
+                    ],
+                ],
+
+                'data' => [
+                    'rows' => [
+                        ['b' => 'b1', 'c' => 'c1'],
+                        ['b' => 'b2', 'c' => 'c2'],
+                    ],
+                    'columns' => [
+                        [
+                            'one' => ['01', '02', '03'],
+                            'two' => [15000, 20000, 30000],
+                        ],
+                    ],
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                ],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'B' => 'test1',
+                            'E' => '01',
+                            'F' => '02',
+                            'G' => '03',
+                        ],
+                        2 => [
+                            'B' => 'b2',
+                            'C' => 'c2',
+                            'E' => 15000,
+                            'F' => 20000,
+                            'G' => 30000,
+                        ],
+                        3 => [
+                            'A' => 'test1',
+                        ],
+                    ],
+
+                    'rows' => [],
+
+                    'copy_style' => [
+                        ['from' => 'E1', 'to' => 'F1'],
+                        ['from' => 'E1', 'to' => 'G1'],
+                        ['from' => 'E2', 'to' => 'F2'],
+                        ['from' => 'E2', 'to' => 'G2'],
+                    ],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [
+                        ['from' => 'E', 'to' => 'F'],
+                        ['from' => 'E', 'to' => 'G'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
             );
         }
@@ -1955,44 +2670,6 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
     public function test_schema_multi_combination3()
     {
         $data = [
-            [
-                'values' => [
-                    1 => [
-                        'B' => '[title]',
-                    ],
-                    3 => [
-                        'G' => '[column.0.month.0] [= column.0.month.0]',
-                    ],
-                    4 => [
-                        'A' => '[list.0.name] [=column.0.month.0]',
-                        'B' => '[list.0.count]',
-                        'C' => 'kg',
-                        'D' => '[list.0.price]',
-                        'E' => '[comment]',
-                        'G' => '[column.0.amount.0]',
-                    ],
-                    6 => [
-                        'B' => '[total.count]',
-                    ],
-                ],
-
-                'data' => [
-                    'title' => 'foo',
-                    'total' => ['count' => 3],
-                    'comment' => 'bar',
-                    'list' => [
-                        ['name' => 'Product 1', 'count' => 2, 'price' => 753.14],
-                        ['name' => 'Product 2', 'count' => 1, 'price' => 123]
-                    ],
-                    'column' => [
-                        [
-                            'month' => ['01', '02', '03'],
-                            'amount' => [15000, 20000, 30000],
-                        ],
-                    ],
-                ],
-            ],
-
             [
                 'values' => [
                     1 => [
@@ -2029,6 +2706,48 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ],
                     ],
                 ],
+
+                'merge_cells' => ['G4:H4'],
+            ],
+
+            [
+                'values' => [
+                    1 => [
+                        'B' => '[title] [=column.*.month]',
+                    ],
+                    3 => [
+                        'G' => '[column.*.month] [= column.*.month.*]',
+                    ],
+                    4 => [
+                        'A' => '[list.*.name]',
+                        'B' => '[list.*.count]',
+                        'C' => 'kg',
+                        'D' => '[list.price]',
+                        'E' => '[comment]',
+                        'G' => '[column.*.amount.*]',
+                    ],
+                    6 => [
+                        'B' => '[total.count]',
+                    ],
+                ],
+
+                'data' => [
+                    'title' => 'foo',
+                    'total' => ['count' => 3],
+                    'comment' => 'bar',
+                    'list' => [
+                        ['name' => 'Product 1', 'count' => 2, 'price' => 753.14],
+                        ['name' => 'Product 2', 'count' => 1, 'price' => 123]
+                    ],
+                    'column' => [
+                        [
+                            'month' => ['01', '02', '03'],
+                            'amount' => [15000, 20000, 30000],
+                        ],
+                    ],
+                ],
+
+                'merge_cells' => ['G4:H4'],
             ],
         ];
 
@@ -2073,7 +2792,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['action' => 'add', 'row' => 5],
                     ],
 
-                    'copy_styles' => [
+                    'copy_style' => [
                         ['from' => 'A4', 'to' => 'A5'],
                         ['from' => 'B4', 'to' => 'B5'],
                         ['from' => 'C4', 'to' => 'C5'],
@@ -2088,9 +2807,103 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'I4', 'to' => 'I5'],
                     ],
 
-                    'width' => ['H' => 'G', 'I' => 'G'],
+                    'merge_cells' => ['G5:H5'],
+
+                    'copy_width' => [
+                        ['from' => 'G', 'to' => 'H'],
+                        ['from' => 'G', 'to' => 'I'],
+                    ],
                 ],
-                $this->service->schema($item['values'], $item['data']),
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_multi_combination3_limit()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'B' => '[title]',
+                    ],
+                    3 => [
+                        'G' => '[column.0.month.0] [= column.0.month]',
+                    ],
+                    4 => [
+                        'A' => '[list.0.name] [=column.0.month.0]',
+                        'B' => '[list.0.count]',
+                        'C' => 'kg',
+                        'D' => '[list.0.price]',
+                        'E' => '[comment]',
+                        'G' => '[column.0.amount.0]',
+                    ],
+                    6 => [
+                        'B' => '[total.count]',
+                    ],
+                ],
+
+                'data' => [
+                    'title' => 'foo',
+                    'total' => ['count' => 3],
+                    'comment' => 'bar',
+                    'list' => [
+                        ['name' => 'Product 1', 'count' => 2, 'price' => 753.14],
+                        ['name' => 'Product 2', 'count' => 1, 'price' => 123]
+                    ],
+                    'column' => [
+                        [
+                            'month' => ['01', '02', '03'],
+                            'amount' => [15000, 20000, 30000],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'B' => 'foo',
+                        ],
+                        3 => [
+                            'G' => '01',
+                            'H' => '02',
+                            'I' => '03',
+                        ],
+                        4 => [
+                            'A' => 'Product 1',
+                            'B' => 2,
+                            'D' => 753.14,
+                            'E' => 'bar',
+                            'G' => 15000,
+                        ],
+                        6 => [
+                            'B' => 3,
+                        ],
+                    ],
+
+                    'rows' => [],
+
+                    'copy_style' => [
+                        ['from' => 'G3', 'to' => 'H3'],
+                        ['from' => 'G3', 'to' => 'I3'],
+                    ],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [
+                        ['from' => 'G', 'to' => 'H'],
+                        ['from' => 'G', 'to' => 'I'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
             );
         }

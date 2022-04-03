@@ -2,13 +2,8 @@
 
 namespace AnourValar\Office\Drivers;
 
-class PhpSpreadsheetDriver implements TemplateInterface
+class PhpSpreadsheetDriver implements TemplateInterface, MixInterface
 {
-    /**
-     * @var string
-     */
-    protected const PDF_DRIVER = 'Mpdf';
-
     /**
      * @var string
      */
@@ -26,11 +21,11 @@ class PhpSpreadsheetDriver implements TemplateInterface
 
     /**
      * {@inheritDoc}
-     * @see \AnourValar\Office\Drivers\TemplateInterface::loadXlsx()
+     * @see \AnourValar\Office\Drivers\LoadInterface::load()
      */
-    public function loadXlsx(string $file): self
+    public function load(string $file, \AnourValar\Office\Format $format): self
     {
-        $this->spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::createReader('Xlsx')->load($file);
+        $this->spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($this->getFormat($format))->load($file);
         $this->sheet = $this->spreadsheet->getActiveSheet();
 
         return $this;
@@ -38,50 +33,17 @@ class PhpSpreadsheetDriver implements TemplateInterface
 
     /**
      * {@inheritDoc}
-     * @see \AnourValar\Office\Drivers\TemplateInterface::loadOds()
+     * @see \AnourValar\Office\Drivers\SaveInterface::save()
      */
-    public function loadOds(string $file): self
+    public function save(string $file, \AnourValar\Office\Format $format): void
     {
-        $this->spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::createReader('Ods')->load($file);
-        $this->sheet = $this->spreadsheet->getActiveSheet();
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($this->spreadsheet, $this->getFormat($format));
 
-        return $this;
-    }
+        if (method_exists($writer, 'writeAllSheets')) {
+            $writer->writeAllSheets();
+        }
 
-    /**
-     * {@inheritDoc}
-     * @see \AnourValar\Office\Drivers\TemplateInterface::saveXlsx()
-     */
-    public function saveXlsx(string $file): void
-    {
-        \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($this->spreadsheet, 'Xlsx')->save($file);
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \AnourValar\Office\Drivers\TemplateInterface::savePdf()
-     */
-    public function savePdf(string $file): void
-    {
-        \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($this->spreadsheet, static::PDF_DRIVER)->save($file);
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \AnourValar\Office\Drivers\TemplateInterface::saveHtml()
-     */
-    public function saveHtml(string $file): void
-    {
-        \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($this->spreadsheet, 'Html')->save($file);
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \AnourValar\Office\Drivers\TemplateInterface::saveOds()
-     */
-    public function saveOds(string $file): void
-    {
-        \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($this->spreadsheet, 'Ods')->save($file);
+        $writer->save($file);
     }
 
     /**
@@ -217,6 +179,17 @@ class PhpSpreadsheetDriver implements TemplateInterface
     }
 
     /**
+     * {@inheritDoc}
+     * @see \AnourValar\Office\Drivers\TemplateInterface::deleteRow()
+     */
+    public function deleteRow(int $row, int $qty = 1): self
+    {
+        $this->sheet->removeRow($row, $qty);
+
+        return $this;
+    }
+
+    /**
      * Add a column
      *
      * @param string $columnBefore
@@ -226,17 +199,6 @@ class PhpSpreadsheetDriver implements TemplateInterface
     public function addColumn(string $columnBefore, int $qty = 1): self
     {
         $this->sheet->insertNewColumnBefore($columnBefore, $qty);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \AnourValar\Office\Drivers\TemplateInterface::deleteRow()
-     */
-    public function deleteRow(int $row, int $qty = 1): self
-    {
-        $this->sheet->removeRow($row, $qty);
 
         return $this;
     }
@@ -274,14 +236,32 @@ class PhpSpreadsheetDriver implements TemplateInterface
     }
 
     /**
-     * Set title for active a sheet
-     *
-     * @param string $title
-     * @return self
+     * {@inheritDoc}
+     * @see \AnourValar\Office\Drivers\MixInterface::setSheetTitle()
      */
     public function setSheetTitle(string $title): self
     {
         $this->sheet->setTitle($title);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \AnourValar\Office\Drivers\MixInterface::getSheetTitle()
+     */
+    public function getSheetTitle(): string
+    {
+        return $this->sheet->getTitle();
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \AnourValar\Office\Drivers\MixInterface::mergeDriver()
+     */
+    public function mergeDriver(\AnourValar\Office\Drivers\MixInterface $driver): self
+    {
+        $this->spreadsheet->addExternalSheet($driver->sheet);
 
         return $this;
     }
@@ -331,6 +311,20 @@ class PhpSpreadsheetDriver implements TemplateInterface
         $drawing->setWorksheet($this->sheet);
 
         return $this;
+    }
+
+    /**
+     * @param \AnourValar\Office\Format $format
+     * @return string
+     */
+    protected function getFormat(\AnourValar\Office\Format $format): string
+    {
+        return match($format) {
+            \AnourValar\Office\Format::Xlsx => 'Xlsx',
+            \AnourValar\Office\Format::Pdf => 'Mpdf',
+            \AnourValar\Office\Format::Html => 'Html',
+            \AnourValar\Office\Format::Ods => 'Ods',
+        };
     }
 
     /**

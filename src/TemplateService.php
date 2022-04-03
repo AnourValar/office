@@ -17,7 +17,7 @@ class TemplateService
     /**
      * Handle template's loading
      *
-     * @var \Closure(TemplateInterface $templateDriver, string $templateFile)|null
+     * @var \Closure(TemplateInterface $driver, string $templateFile, \AnourValar\Office\Format $templateFormat)|null
      */
     protected ?\Closure $hookLoad = null;
 
@@ -43,13 +43,6 @@ class TemplateService
     protected ?\Closure $hookAfter = null;
 
     /**
-     * Handle template's saving
-     *
-     * @var \Closure(TemplateInterface $templateDriver)|null
-     */
-    protected ?\Closure $hookSave = null;
-
-    /**
      * @param string $driverClass
      * @param \AnourValar\Office\Template\Parser $parser
      * @return void
@@ -63,13 +56,14 @@ class TemplateService
     }
 
     /**
+     * Generate a document from template
+     *
      * @param string $templateFile
      * @param mixed $data
-     * @param \AnourValar\Office\SaveFormat $saveFormat
-     * @throws \LogicException
-     * @return \AnourValar\Office\Rendered
+     * @param \AnourValar\Office\Format $templateFormat
+     * @return \AnourValar\Office\Generated
      */
-    public function render(string $templateFile, mixed $data, SaveFormat $saveFormat = SaveFormat::Xlsx): Rendered
+    public function generate(string $templateFile, mixed $data, Format $templateFormat = Format::Xlsx): Generated
     {
         // Get instance of driver
         $driver = new $this->driverClass();
@@ -82,9 +76,9 @@ class TemplateService
 
         // Open the template
         if ($this->hookLoad) {
-            ($this->hookLoad)($driver, $templateFile);
+            ($this->hookLoad)($driver, $templateFile, $templateFormat);
         } else {
-            $driver->loadXlsx($templateFile);
+            $driver->load($templateFile, $templateFormat);
         }
 
         // Hook: before
@@ -132,14 +126,7 @@ class TemplateService
             ($this->hookAfter)($driver);
         }
 
-        // Render & save to the buffer
-        ob_start();
-        if ($this->hookSave) {
-            ($this->hookSave)($driver);
-        } else {
-            $driver->{$saveFormat->driverSaveMethod()}('php://output');
-        }
-        return new Rendered(ob_get_clean());
+        return new Generated($driver);
     }
 
     /**
@@ -195,19 +182,6 @@ class TemplateService
     }
 
     /**
-     * Set hookSave
-     *
-     * @param ?\Closure $closure
-     * @return self
-     */
-    public function hookSave(?\Closure $closure): self
-    {
-        $this->hookSave = $closure;
-
-        return $this;
-    }
-
-    /**
      * Set driver class
      *
      * @param string $driverClass
@@ -229,9 +203,7 @@ class TemplateService
     {
         foreach ($schema['data'] as $row => &$columns) {
             foreach ($columns as $column => &$value) {
-                if (is_null($value)) {
-                    continue;
-                }
+                $isNull = is_null($value);
 
                 if ($value instanceof \Closure) {
                     // Private Closure
@@ -241,7 +213,7 @@ class TemplateService
                     $value = ($this->hookValue)($driver, $column.$row, $value);
                 }
 
-                if (is_null($value)) {
+                if (!$isNull && is_null($value)) {
                     unset($schema['data'][$row][$column]);
                 }
             }

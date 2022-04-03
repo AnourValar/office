@@ -2,56 +2,8 @@
 
 namespace AnourValar\Office\Drivers;
 
-interface TemplateInterface
+interface TemplateInterface extends SaveInterface, LoadInterface
 {
-    /**
-     * Load a XLSX template
-     *
-     * @param string $file
-     * @return self
-     */
-    public function loadXlsx(string $file): self;
-
-    /**
-     * Load a Ods template
-     *
-     * @param string $file
-     * @return self
-     */
-    public function loadOds(string $file): self;
-
-    /**
-     * Save as XLSX
-     *
-     * @param string $file
-     * @return void
-     */
-    public function saveXlsx(string $file): void;
-
-    /**
-     * Save as PDF
-     *
-     * @param string $file
-     * @return void
-     */
-    public function savePdf(string $file): void;
-
-    /**
-     * Save as HTML
-     *
-     * @param string $file
-     * @return void
-     */
-    public function saveHtml(string $file): void;
-
-    /**
-     * Save as ODS
-     *
-     * @param string $file
-     * @return void
-     */
-    public function saveOds(string $file): void;
-
     /**
      * Set values
      *

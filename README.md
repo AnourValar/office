@@ -26,7 +26,7 @@ composer require mpdf/mpdf: "^8.0"
 
 ### One-dimensional table
 
-**template.xlsx:**
+**template1.xlsx:**
 
 ![Demo](https://anour.ru/resources/office-v1-10.png)
 
@@ -58,18 +58,20 @@ $data = [
 
 // Save as XLSX (Excel)
 (new \AnourValar\Office\TemplateService())
-    ->render(
-        'template.xlsx', // path to template
-        $data, // input data
-        \AnourValar\Office\SaveFormat::Xlsx // save format
+    ->generate(
+        'template1.xlsx', // path to template
+        $data // input data
     )
-    ->save('generated_document.xlsx');
+    ->saveToFile(
+        'generated_document.xlsx', // path to save
+        \AnourValar\Office\Format::Xlsx // save format
+    );
 
-// Available save formats:
-// \AnourValar\Office\SaveFormat::Xlsx
-// \AnourValar\Office\SaveFormat::Pdf
-// \AnourValar\Office\SaveFormat::Html
-// \AnourValar\Office\SaveFormat::Ods
+// Available formats:
+// \AnourValar\Office\Format::Xlsx
+// \AnourValar\Office\Format::Pdf
+// \AnourValar\Office\Format::Html
+// \AnourValar\Office\Format::Ods
 ```
 
 **generated_document.xlsx:**
@@ -84,7 +86,7 @@ $data = [
 
 ### Two-dimensional table
 
-**template.xlsx:**
+**template2.xlsx:**
 
 ![Demo](https://anour.ru/resources/office-v1-20.png)
 
@@ -115,11 +117,64 @@ $data = [
 
 // Save as XLSX (Excel)
 (new \AnourValar\Office\TemplateService())
-    ->render('template.xlsx' $data)
-    ->save('generated_document.xlsx');
+    ->generate('template2.xlsx', $data)
+    ->saveToFile('generated_document.xlsx'); // xlsx as save format is set by default
 ```
 
 **generated_document.xlsx:**
 
 ![Demo](https://anour.ru/resources/office-v1-21.png)
 
+### Additional Features
+
+**template3.xlsx:**
+
+![Demo](https://anour.ru/resources/office-v1-30.png)
+
+```php
+$data = [
+    'foo' => 'Hello',
+    
+    'bar' => function (\AnourValar\Office\Drivers\TemplateInterface $driver, $cell) {
+        $driver->insertImage('logo.png', $cell, ['width' => 100, 'offset_y' => -45]);
+        return 'Logo!'; // replace marker "[bar]" with return value
+    }
+];
+
+(new \AnourValar\Office\TemplateService())
+    ->hookValue(function (TemplateInterface $driver, $cell, $value) {
+        // Hook will be called for every cell's value which is changing
+    
+        $value .= ' world';
+        return $value;
+    })
+    ->generate(
+        'template3.ods',
+        $data,
+        \AnourValar\Office\Format::Ods // template's format
+    )
+    ->saveToFile('generated_document.xlsx');
+
+// Available hooks:
+// hookLoad: Closure(TemplateInterface $driver, string $templateFile, Format $templateFormat)
+// hookBefore: Closure(TemplateInterface $templateDriver, array &$data)
+// hookValue: Closure(TemplateInterface $templateDriver, string $cell, mixed $value)
+// hookAfter: Closure(TemplateInterface $templateDriver)
+```
+
+**generated_document.xlsx:**
+
+![Demo](https://anour.ru/resources/office-v1-31.png)
+
+### Merge (union)
+
+```php
+$dataA = ['foo' => 'hello'];
+$dataB = ['foo' => 'world'];
+
+$documentA = (new \AnourValar\Office\TemplateService())->generate('template.xlsx', $dataA);
+$documentB = (new \AnourValar\Office\TemplateService())->generate('template.xlsx', $dataB);
+
+$mixer = new \AnourValar\Office\MixerService();
+$mixer($documentA, $documentB)->saveToFile('generated_document.xlsx');
+```

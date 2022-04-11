@@ -190,10 +190,10 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 $this->assertSame('C5:C5', $headersRange);
                 $this->assertSame(null, $dataRange);
                 $this->assertSame('C5:C5', $totalRange);
-                $this->assertSame(['C'], $columns);
+                $this->assertSame(['one' => 'C'], $columns);
             })
             ->generate(
-                ['foo'],
+                ['one' => 'foo'],
                 [ ],
                 'C5'
             );
@@ -355,10 +355,10 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 $this->assertSame('C5:E5', $headersRange);
                 $this->assertSame('C6:E8', $dataRange);
                 $this->assertSame('C5:E8', $totalRange);
-                $this->assertSame(['C', 'D', 'E'], $columns);
+                $this->assertSame(['one' => 'C', 'two' => 'D', 'three' => 'E'], $columns);
             })
             ->generate(
-                ['foo', 'bar', 'baz'],
+                ['one' => 'foo', 'two' => 'bar', 'three' => 'baz'],
                 [ ['foo-1', 'bar-1', 'baz-1'], ['foo-2', 'bar-2', 'baz-2'], ['foo-3', 'bar-3', 'baz-3']  ],
                 'C5'
             );

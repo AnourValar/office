@@ -52,6 +52,7 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
     public function save(string $file, \AnourValar\Office\Format $format): void
     {
         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($this->spreadsheet, $this->getFormat($format));
+        $this->sheet->setSelectedCells('A1');
 
         if (method_exists($writer, 'writeAllSheets')) {
             $writer->writeAllSheets();
@@ -65,42 +66,49 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
      *
      * @param string $cell
      * @param mixed $value
+     * @param string $format
      * @return self
      */
-    public function setValue(string $cell, $value): self
+    public function setValue(string $cell, $value, string $format = null): self
     {
         if ($value instanceof \DateTimeInterface) {
 
             $this->sheet->setCellValue($cell, \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($value));
-            $this->sheet->getStyle($cell)->getNumberFormat()->setFormatCode(static::DATE_FORMAT);
-
-        } elseif (is_string($value) && preg_match('#^\=[A-Z][A-Z\.\d]#', $value)) {
-
-            $this->sheet->setCellValue($cell, $value);
+            $this->setCellFormat($cell, ($format ?? static::DATE_FORMAT));
 
         } elseif (is_string($value) || is_null($value)) {
 
-            $this->sheet->getCell($cell)->setValueExplicit((string) $value, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            if (is_numeric($value)) {
+                $this->sheet->getCell($cell)->setValueExplicit($value, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            } else {
+                $this->sheet->setCellValue($cell, $value);
+            }
 
         } else {
 
             if (is_double($value)) {
-                if (abs($value) >= 1000) {
-                    $this->setCellFormat($cell, '# ##0.00');
-                } else {
-                    $this->setCellFormat($cell, '0.00');
-                }
+                $this->setCellFormat($cell, ($format ?? '#,##0.00'));
             } elseif (is_integer($value)) {
-                if (abs($value) >= 1000) {
-                    $this->setCellFormat($cell, '# ##0');
-                } else {
-                    $this->setCellFormat($cell, '0');
-                }
+                $this->setCellFormat($cell, ($format ?? '#,##0'));
             }
 
             $this->sheet->getCell($cell)->setValueExplicit($value, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
 
         }
+
+        return $this;
+    }
+
+    /**
+     * Set data format of cell (column, range)
+     *
+     * @param string $range
+     * @param string $format
+     * @return self
+     */
+    public function setCellFormat(string $range, string $format): self
+    {
+        $this->sheet->getStyle($range)->getNumberFormat()->setFormatCode($format);
 
         return $this;
     }
@@ -461,21 +469,5 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
             \AnourValar\Office\Format::Html => 'Html',
             \AnourValar\Office\Format::Ods => 'Ods',
         };
-    }
-
-    /**
-     * Установка формата ячейки
-     *
-     * @param string $cell
-     * @param string $format
-     * @return void
-     */
-    private function setCellFormat(string $cell, string $format): void
-    {
-        $this
-            ->sheet
-            ->getStyle($cell)
-            ->getNumberFormat()
-            ->setFormatCode($format);
     }
 }

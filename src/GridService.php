@@ -264,8 +264,15 @@ class GridService
 
             $columns = [];
             if ($totalRange) {
+                $keys = array_keys($headers);
+
                 while ($firstColumn <= $lastColumn) {
-                    $columns[] = $firstColumn;
+                    if (! $keys) {
+                        $columns[] = $firstColumn;
+                    } else {
+                        $columns[array_shift($keys)] = $firstColumn;
+                    }
+
                     $firstColumn++;
                 }
             }

@@ -2,7 +2,9 @@
 
 namespace AnourValar\Office\Drivers;
 
-class PhpSpreadsheetDriver implements TemplateInterface, MixInterface
+use PhpOffice\PhpSpreadsheet\Style\Border;
+
+class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInterface
 {
     /**
      * @var string
@@ -18,6 +20,18 @@ class PhpSpreadsheetDriver implements TemplateInterface, MixInterface
      * @var \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet
      */
     public readonly \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $sheet;
+
+    /**
+     * {@inheritDoc}
+     * @see \AnourValar\Office\Drivers\GridInterface::create()
+     */
+    public function create(): self
+    {
+        $this->spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $this->sheet = $this->spreadsheet->getActiveSheet();
+
+        return $this;
+    }
 
     /**
      * {@inheritDoc}
@@ -100,6 +114,26 @@ class PhpSpreadsheetDriver implements TemplateInterface, MixInterface
         foreach ($data as $row => $columns) {
             foreach ($columns as $column => $value) {
                 $this->setValue($column.$row, $value);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \AnourValar\Office\Drivers\GridInterface::setGrid()
+     */
+    public function setGrid(iterable $data): self
+    {
+        $row = 0;
+        foreach ($data as $values) {
+            $row++;
+            $column = 'A';
+
+            foreach ($values as $value) {
+                $this->setValue($column.$row, $value);
+                $column++;
             }
         }
 
@@ -220,17 +254,31 @@ class PhpSpreadsheetDriver implements TemplateInterface, MixInterface
      * {@inheritDoc}
      * @see \AnourValar\Office\Drivers\TemplateInterface::setWidth()
      */
-    public function setWidth(string $column, mixed $width = null): self
+    public function setWidth(string $column, int|string $width): self
     {
-        if (is_null($width)) {
-            $width = mb_strlen($width) * 1.2 + ( (mb_strlen((int) $width) < 10) ? 4 : 0 );
-        }
-
         if (is_string($width)) {
             $width = $this->sheet->getColumnDimension($width)->getWidth();
         }
 
         $this->sheet->getColumnDimension($column)->setWidth($width);
+
+        return $this;
+    }
+
+    /**
+     * Set fixed height for a row
+     *
+     * @param string $row
+     * @param int|string $height
+     * @return self
+     */
+    public function setHeight(string $row, int|string $height): self
+    {
+        if (mb_substr($height, 0, 1) == '#') {
+            $height = $this->sheet->getRowDimension(mb_substr($height, 1))->getRowHeight();
+        }
+
+        $this->sheet->getRowDimension($row)->setRowHeight($height);
 
         return $this;
     }
@@ -262,6 +310,94 @@ class PhpSpreadsheetDriver implements TemplateInterface, MixInterface
     public function mergeDriver(\AnourValar\Office\Drivers\MixInterface $driver): self
     {
         $this->spreadsheet->addExternalSheet($driver->sheet);
+
+        return $this;
+    }
+
+    /**
+     * Set custom style for the range of cells
+     *
+     * @param string $range
+     * @param array $style
+     * @return self
+     */
+    public function setStyle(string $range, array $style): self
+    {
+        if (isset($style['bold'])) {
+            $this->sheet->getStyle($range)->getFont()->setBold($style['bold']);
+        }
+
+        if (isset($style['italic'])) {
+            $this->sheet->getStyle($range)->getFont()->setItalic($style['italic']);
+        }
+
+        if (isset($style['size'])) {
+            $this->sheet->getStyle($range)->getFont()->setSize($style['size']);
+        }
+
+        if (isset($style['underline'])) {
+            $this->sheet->getStyle($range)->getFont()->setUnderline($style['underline']);
+        }
+
+        if (isset($style['color'])) {
+            $this->sheet->getStyle($range)->getFont()->getColor()->setRGB($style['color']);
+        }
+
+        if (isset($style['background_color'])) {
+            $this
+                ->sheet
+                ->getStyle($range)
+                ->getFill()
+                ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->getStartColor()
+                ->setRGB($style['background_color']);
+        }
+
+        if (isset($style['borders'])) {
+            $this
+                ->sheet
+                ->getStyle($range)
+                ->getBorders()
+                ->getAllBorders()
+                ->setBorderStyle($style['borders'] ? Border::BORDER_THIN : Border::BORDER_NONE);
+        }
+
+        if (isset($style['borders_outline'])) {
+            $this
+                ->sheet
+                ->getStyle($range)
+                ->getBorders()
+                ->getOutline()
+                ->setBorderStyle($style['borders_outline'] ? Border::BORDER_THIN : Border::BORDER_NONE);
+        }
+
+        if (isset($style['align'])) {
+            $align = match($style['align'])
+            {
+                \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT => 'left',
+                \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER => 'center',
+                \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT => 'right',
+            };
+
+            $this
+                ->sheet
+                ->getStyle($range)
+                ->getAlignment()->setHorizontal($align);
+        }
+
+        if (isset($style['valign'])) {
+            $valign = match($style['valign'])
+            {
+                \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP => 'top',
+                \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER => 'center',
+                \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_BOTTOM => 'bottom',
+            };
+
+            $this
+                ->sheet
+                ->getStyle($range)
+                ->getAlignment()->setVertical($valign);
+        }
 
         return $this;
     }

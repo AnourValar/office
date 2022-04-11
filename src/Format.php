@@ -5,7 +5,7 @@ namespace AnourValar\Office;
 enum Format
 {
     case Xlsx;
-    case Pdf;
+    case Pdf; // only writer
     case Html;
     case Ods;
 

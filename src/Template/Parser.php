@@ -8,17 +8,12 @@ class Parser
      * Handle with special types of data
      *
      * @param mixed $data
-     * @throws \LogicException
      * @return array
      */
     public function canonizeData(mixed $data): array
     {
         if (is_object($data) && method_exists($data, 'toArray')) {
             $data = $data->toArray();
-        }
-
-        if (! is_array($data)) {
-            throw new \LogicException('Data must be an array.');
         }
 
         return $data;

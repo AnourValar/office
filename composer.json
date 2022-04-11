@@ -1,7 +1,10 @@
 {
     "name": "anourvalar/office",
-    "description": "Fast document generation from existing Excel templates",
-    "keywords": ["excel", "xls", "xlsx", "template", "view", "document", "contract", "bill", "report", "generate", "markers", "replacers", "templator", "templater", "pdf", "anourvalar"],
+    "description": "Document generation from existing Excel templates | Export tables to Excel (Grids)",
+    "keywords": [
+        "excel", "xls", "xlsx", "template", "view", "document", "contract", "report", "generate", "simple",
+        "markers", "replacers", "templator", "templater", "pdf", "ods", "grid", "export", "generator", "anourvalar"
+    ],
     "homepage": "https://github.com/AnourValar/office",
     "license": "MIT",
     "require": {

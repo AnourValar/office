@@ -66,8 +66,8 @@ interface TemplateInterface extends SaveInterface, LoadInterface
      * Set fixed width for a column
      *
      * @param string $column
-     * @param mixed $width
+     * @param int|string $width
      * @return self
      */
-    public function setWidth(string $column, mixed $width = null): self;
+    public function setWidth(string $column, int|string $width): self;
 }

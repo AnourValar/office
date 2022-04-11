@@ -61,7 +61,7 @@ class Generated
      * @param \AnourValar\Office\Format $format
      * @return int|NULL
      */
-    public function saveToFile(string $filename, Format $format = Format::Xlsx): ?int
+    public function saveAs(string $filename, Format $format = Format::Xlsx): ?int
     {
         return file_put_contents($filename, $this->save($format));
     }

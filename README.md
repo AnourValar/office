@@ -1,4 +1,4 @@
-# Office: Documents & Reports
+# Office: Documents | Reports | Grids
 
 ## Installation
 
@@ -62,7 +62,7 @@ $data = [
         'template1.xlsx', // path to template
         $data // input data
     )
-    ->saveToFile(
+    ->saveAs(
         'generated_document.xlsx', // path to save
         \AnourValar\Office\Format::Xlsx // save format
     );
@@ -118,7 +118,7 @@ $data = [
 // Save as XLSX (Excel)
 (new \AnourValar\Office\TemplateService())
     ->generate('template2.xlsx', $data)
-    ->saveToFile('generated_document.xlsx'); // xlsx as save format is set by default
+    ->saveAs('generated_document.xlsx'); // xlsx as save format is set by default
 ```
 
 **generated_document.xlsx:**
@@ -153,7 +153,7 @@ $data = [
         $data,
         \AnourValar\Office\Format::Ods // template's format
     )
-    ->saveToFile('generated_document.xlsx');
+    ->saveAs('generated_document.xlsx');
 
 // Available hooks:
 // hookLoad: Closure(TemplateInterface $driver, string $templateFile, Format $templateFormat)
@@ -166,7 +166,7 @@ $data = [
 
 ![Demo](https://anour.ru/resources/office-v1-31.png)
 
-### Merge (union)
+### Merge (union) few documents to a single file
 
 ```php
 $dataA = ['foo' => 'hello'];
@@ -176,5 +176,89 @@ $documentA = (new \AnourValar\Office\TemplateService())->generate('template.xlsx
 $documentB = (new \AnourValar\Office\TemplateService())->generate('template.xlsx', $dataB);
 
 $mixer = new \AnourValar\Office\MixerService();
-$mixer($documentA, $documentB)->saveToFile('generated_document.xlsx');
+$mixer($documentA, $documentB)->saveAs('generated_document.xlsx');
 ```
+
+## Export table (Grid)
+
+### Simple usage
+
+```php
+$data = [
+    ['William', 3000],
+    ['James', 4000],
+    ['Sveta', 5000],
+];
+
+// Save as XLSX (Excel)
+(new \AnourValar\Office\GridService())
+    ->generate(
+        ['Name', 'Sales'], // headers
+        $data // data
+    )
+    ->saveAs('generated_grid.xlsx');
+```
+
+**generated_grid.xlsx:**
+
+![Demo](https://anour.ru/resources/office-v1-41.png)
+
+### Advanced usage
+
+```php
+$headers = [
+    ['title' => 'Name', 'width' => 30],
+    ['title' => 'Sales'],
+];
+
+$data = function () {
+    yield ['name' => 'William', 'sales' => 3000];
+    yield ['name' => 'James', 'sales' => 4000];
+    yield ['name' => 'Sveta', 'sales' => 5000];
+};
+
+// Save as XLSX (Excel)
+(new \AnourValar\Office\GridService())
+    ->hookHeader(function (GridInterface $gridDriver, mixed $header, $key, $column)
+    {
+        if (isset($header['width'])) {
+            $gridDriver->setWidth($column, $header['width']); // column with fixed width
+        } else {
+            $gridDriver->autoWidth($column); // column with auto width
+        }
+
+        return $header['title'];
+    })
+    ->hookRow(function (GridInterface $gridDriver, mixed $row, $key)
+    {
+        return [
+            $row['name'],
+            $row['sales'],
+        ];
+    })
+    ->hookAfter(function (
+        GridInterface $gridDriver,
+        string $headersRange,
+        string $dataRange,
+        string $totalRange,
+        array $columns
+    ) {
+        $gridDriver->setSheetTitle('Foo');
+
+        $gridDriver->setStyle(
+            $headersRange, // A1:B1
+            ['bold' => true, 'background_color' => 'EEEEEE']
+        );
+
+        $gridDriver->setStyle(
+            $totalRange, // A1:B4
+            ['borders' => true, 'align' => 'left']
+        );
+    })
+    ->generate($headers, $data)
+    ->saveAs('generated_grid.xlsx');
+```
+
+**generated_grid.xlsx:**
+
+![Demo](https://anour.ru/resources/office-v1-51.png)

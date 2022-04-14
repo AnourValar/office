@@ -158,11 +158,15 @@ class GridService
      * @param array $headers
      * @param iterable $data
      * @param string $leftTopCorner
-     * @return \Generator
+     * @param mixed $headersRange
+     * @param mixed $dataRange
+     * @param mixed $totalRange
+     * @param mixed $columns
+     * @return \Closure
      */
     protected function getGenerator(
         \AnourValar\Office\Drivers\GridInterface $driver,
-        array $headers,
+        array &$headers,
         iterable &$data,
         string $leftTopCorner,
         &$headersRange = null,
@@ -170,7 +174,7 @@ class GridService
         &$totalRange = null,
         &$columns = null
     ): \Closure {
-        return function () use ($driver, $headers, &$data, $leftTopCorner, &$headersRange, &$dataRange, &$totalRange, &$columns)
+        return function () use ($driver, &$headers, &$data, $leftTopCorner, &$headersRange, &$dataRange, &$totalRange, &$columns)
         {
             $ltc = preg_split('|([A-Z]+)|', $leftTopCorner, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
 

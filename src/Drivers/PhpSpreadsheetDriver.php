@@ -140,7 +140,10 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
             $column = 'A';
 
             foreach ($values as $value) {
-                $this->setValue($column.$row, $value);
+                if ($value !== '' && $value !== null) {
+                    $this->setValue($column.$row, $value);
+                }
+
                 $column++;
             }
         }

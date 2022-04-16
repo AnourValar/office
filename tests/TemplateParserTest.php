@@ -39,6 +39,10 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         'J' => '[$! foo] test',
                         'K' => '[$! foo] test',
                         'L' => '[$= foo1] test',
+                        'Q' => '=A1+B2+C3+D4+E5',
+                        'X' => '= A1',
+                        'W' => '=1',
+                        'Y' => '=AB100',
                     ],
                     2 => [
                         'A' => '[bar]',
@@ -58,6 +62,9 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     '5' => [
                         'A' => 1,
                         'B' => 2,
+                    ],
+                    '6' => [
+                        'Q' => '=A1+B2+C3+D4+E5',
                     ],
                 ],
 
@@ -88,6 +95,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                             'J' => null,
                             'K' => null,
                             'L' => null,
+                            'Q' => '=A1+B2+C3+D3+E4',
+                            'Y' => '=AB99',
                         ],
                         2 => [
                             'A' => 'world',
@@ -96,6 +105,9 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                             'H' => null,
                             'J' => null,
                             'K' => '[k] [9] [9k]',
+                        ],
+                        5 => [
+                            'Q' => '=A1+B2+C3+D3+E4',
                         ],
                     ],
 
@@ -199,7 +211,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     ],
                     3 => [
                         'A' => 'bar [= bar]',
-                        'B' => '[bar] 1',
+                        'B' => '[bar] 111',
                     ],
                     4 => [
                         'A' => 'foo [= list.0]',
@@ -207,7 +219,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     ],
                     5 => [
                         'A' => 'bar',
-                        'B' => '[bar] 2 [=bar]',
+                        'B' => '[bar] 222 [=bar]',
+                        'C' => '=A3+B5+C7',
                     ],
                     6 => [
                         'A' => 'foo [= list.0.c]',
@@ -215,7 +228,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     ],
                     7 => [
                         'A' => 'bar',
-                        'B' => '[bar] 3 [! list]',
+                        'B' => '[bar] 333 [! list]',
                     ],
                 ],
 
@@ -233,13 +246,14 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'data' => [
                         1 => [
                             'A' => 'bar',
-                            'B' => 'test2 1',
+                            'B' => 'test2 111',
                         ],
                         2 => [
-                            'B' => 'test2 2',
+                            'B' => 'test2 222',
+                            'C' => '=A1+B2+C3',
                         ],
                         3 => [
-                            'B' => 'test2 3',
+                            'B' => 'test2 333',
                         ],
                     ],
 
@@ -284,10 +298,13 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
 
                         'F' => 'bar',
                         'G' => '[bar]',
+                        'I' => '=A1*B2*C3',
+                        'K' => '=A2:A2',
                     ],
                     3 => [
                         'A' => 'bar',
                         'B' => '[bar]',
+                        'I' => '=A1*B2*C3',
                     ],
                 ],
 
@@ -314,10 +331,13 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
 
                         'F' => 'bar',
                         'G' => '[bar] [! list_c]',
+                        'I' => '=A1*B2*C3',
+                        'K' => '=A2:A2',
                     ],
                     3 => [
                         'A' => 'bar',
                         'B' => '[bar]',
+                        'I' => '=A1*B2*C3',
                     ],
                 ],
 
@@ -341,9 +361,12 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                             'D' => null,
                             'E' => 'test1 hello  ->  world test2',
                             'G' => 'test2',
+                            'I' => '=A1*B1*C2',
+                            'K' => '=A1:A1',
                         ],
                         '2' => [
                             'B' => 'test2',
+                            'I' => '=A1*B1*C2',
                         ],
                     ],
 
@@ -374,6 +397,9 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'H' => '=A1*B2*C3',
+                        'J' => 'A1*B2*C3',
+                        'K' => '=A2:A2',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -385,10 +411,14 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
 
                         'F' => 'bar',
                         'G' => '[bar]',
+                        'H' => '=A1*B2*C3',
                     ],
                     3 => [
                         'A' => 'bar',
                         'B' => '[bar]',
+                        'H' => '=A1*B2*C3',
+                        'J' => 'A1*B2*C3',
+                        'K' => '=A2:A2',
                     ],
                     4 => [
                         'A' => '[bar] [! list]',
@@ -407,6 +437,9 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'H' => '=A1*B2*C3',
+                        'J' => 'A1*B2*C3',
+                        'K' => '=A2:A2',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -418,10 +451,14 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
 
                         'F' => 'bar',
                         'G' => '[bar]',
+                        'H' => '=A1*B2*C3',
                     ],
                     3 => [
                         'A' => 'bar',
                         'B' => '[bar]',
+                        'H' => '=A1*B2*C3',
+                        'J' => 'A1*B2*C3',
+                        'K' => '=A2:A2',
                     ],
                     4 => [
                         'A' => '[bar] [!list]',
@@ -440,6 +477,9 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'H' => '=A1*B2*C3',
+                        'J' => 'A1*B2*C3',
+                        'K' => '=A2:A2',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -451,10 +491,14 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
 
                         'F' => 'bar',
                         'G' => '[bar]',
+                        'H' => '=A1*B2*C3',
                     ],
                     3 => [
                         'A' => 'bar',
                         'B' => '[bar]',
+                        'H' => '=A1*B2*C3',
+                        'J' => 'A1*B2*C3',
+                        'K' => '=A2:A2',
                     ],
                     4 => [
                         'A' => '[bar] [! list_c]',
@@ -474,6 +518,9 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'H' => '=A1*B2*C3',
+                        'J' => 'A1*B2*C3',
+                        'K' => '=A2:A2',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -485,10 +532,14 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
 
                         'F' => 'bar',
                         'G' => '[bar]',
+                        'H' => '=A1*B2*C3',
                     ],
                     3 => [
                         'A' => 'bar',
                         'B' => '[bar]',
+                        'H' => '=A1*B2*C3',
+                        'J' => 'A1*B2*C3',
+                        'K' => '=A2:A2',
                     ],
                     4 => [
                         'A' => '[bar] [!list_c]',
@@ -510,6 +561,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'data' => [
                         1 => [
                             'B' => 'test1',
+                            'H' => '=A1*B2*C3',
+                            'K' => '=A2:A2',
                         ],
                         2 => [
                             'B' => 'test1',
@@ -517,9 +570,12 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                             'D' => '12',
                             'E' => 'test1 hello 11 -> 12 world test2',
                             'G' => 'test2',
+                            'H' => '=A1*B2*C3',
                         ],
                         3 => [
                             'B' => 'test2',
+                            'H' => '=A1*B2*C3',
+                            'K' => '=A2:A2',
                         ],
                     ],
 
@@ -548,6 +604,9 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'H' => '=A1*B2*C3',
+                        'J' => 'A1*B2*C3',
+                        'K' => '=A2:A2',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -559,10 +618,15 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
 
                         'F' => 'bar',
                         'G' => '[bar]',
+                        'H' => '=A1*B2*C3',
+                        'J' => 'A1*B2*C3',
                     ],
                     3 => [
                         'A' => 'bar',
                         'B' => '[bar]',
+                        'H' => '=A1*B2*C3',
+                        'J' => 'A1*B2*C3',
+                        'K' => '=A2:A2',
                     ],
                 ],
 
@@ -578,6 +642,9 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'H' => '=A1*B2*C3',
+                        'J' => 'A1*B2*C3',
+                        'K' => '=A2:A2',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -589,10 +656,15 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
 
                         'F' => 'bar',
                         'G' => '[bar]',
+                        'H' => '=A1*B2*C3',
+                        'J' => 'A1*B2*C3',
                     ],
                     3 => [
                         'A' => 'bar',
                         'B' => '[bar]',
+                        'H' => '=A1*B2*C3',
+                        'J' => 'A1*B2*C3',
+                        'K' => '=A2:A2',
                     ],
                 ],
 
@@ -608,6 +680,9 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'H' => '=A1*B2*C3',
+                        'J' => 'A1*B2*C3',
+                        'K' => '=A2:A2',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -619,10 +694,15 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
 
                         'F' => 'bar',
                         'G' => '[bar]',
+                        'H' => '=A1*B2*C3',
+                        'J' => 'A1*B2*C3',
                     ],
                     3 => [
                         'A' => 'bar',
                         'B' => '[bar]',
+                        'H' => '=A1*B2*C3',
+                        'J' => 'A1*B2*C3',
+                        'K' => '=A2:A2',
                     ],
                 ],
 
@@ -639,6 +719,9 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'H' => '=A1*B2*C3',
+                        'J' => 'A1*B2*C3',
+                        'K' => '=A2:A2',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -650,10 +733,15 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
 
                         'F' => 'bar',
                         'G' => '[bar]',
+                        'H' => '=A1*B2*C3',
+                        'J' => 'A1*B2*C3',
                     ],
                     3 => [
                         'A' => 'bar',
                         'B' => '[bar]',
+                        'H' => '=A1*B2*C3',
+                        'J' => 'A1*B2*C3',
+                        'K' => '=A2:A2',
                     ],
                 ],
 
@@ -672,6 +760,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'data' => [
                         1 => [
                             'B' => 'test1',
+                            'H' => '=A1*B2*C4',
+                            'K' => '=A2:A3',
                         ],
                         2 => [
                             'A' => 'foo',
@@ -681,6 +771,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                             'E' => 'test1 hello 11 -> 12 world test2',
                             'F' => 'bar',
                             'G' => 'test2',
+                            'H' => '=A1*B2*C4',
+                            'J' => 'A1*B2*C3',
                         ],
                         3 => [
                             'A' => 'foo',
@@ -690,9 +782,13 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                             'E' => 'test1 hello 21 -> 22 world test2',
                             'F' => 'bar',
                             'G' => 'test2',
+                            'H' => '=A1*B3*C4',
+                            'J' => 'A1*B2*C3',
                         ],
                         4 => [
                             'B' => 'test2',
+                            'H' => '=A1*B2*C4',
+                            'K' => '=A2:A3',
                         ],
                     ],
 
@@ -708,6 +804,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'E2', 'to' => 'E3'],
                         ['from' => 'F2', 'to' => 'F3'],
                         ['from' => 'G2', 'to' => 'G3'],
+                        ['from' => 'H2', 'to' => 'H3'],
+                        ['from' => 'J2', 'to' => 'J3'],
                     ],
 
                     'merge_cells' => [],
@@ -731,6 +829,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                        'K' => '=A2:A2',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -747,6 +847,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     3 => [
                         'A' => 'bar',
                         'B' => '[bar]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                        'K' => '=A2:A2',
                     ],
                 ],
 
@@ -764,6 +866,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                        'K' => '=A2:A2',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -780,6 +884,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     3 => [
                         'A' => 'bar',
                         'B' => '[bar]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                        'K' => '=A2:A2',
                     ],
                 ],
 
@@ -797,6 +903,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                        'K' => '=A2:A2',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -813,6 +921,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     3 => [
                         'A' => 'bar',
                         'B' => '[bar]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                        'K' => '=A2:A2',
                     ],
                 ],
 
@@ -831,6 +941,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                        'K' => '=A2:A2',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -847,6 +959,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     3 => [
                         'A' => 'bar',
                         'B' => '[bar]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                        'K' => '=A2:A2',
                     ],
                 ],
 
@@ -867,6 +981,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'data' => [
                         1 => [
                             'B' => 'test1',
+                            'I' => '=A2*C2+B1+D5+E$2',
+                            'K' => '=A2:A4',
                         ],
                         2 => [
                             'A' => 'foo',
@@ -876,7 +992,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                             'E' => 'test1 hello 11 -> 12.5 world test2',
                             'G' => 'bar',
                             'H' => 'test2',
-                            'I' => '=A2*C2+B1+D3+E$2',
+                            'I' => '=A2*C2+B1+D5+E$2',
                         ],
                         3 => [
                             'A' => 'foo',
@@ -886,7 +1002,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                             'E' => 'test1 hello 21 -> 22 world test2',
                             'G' => 'bar',
                             'H' => 'test2',
-                            'I' => '=A2*C2+B1+D3+E$2',
+                            'I' => '=A3*C3+B1+D5+E$2',
                         ],
                         4 => [
                             'A' => 'foo',
@@ -896,10 +1012,12 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                             'E' => 'test1 hello 31 -> 32 world test2',
                             'G' => 'bar',
                             'H' => 'test2',
-                            'I' => '=A2*C2+B1+D3+E$2',
+                            'I' => '=A4*C4+B1+D5+E$2',
                         ],
                         5 => [
                             'B' => 'test2',
+                            'I' => '=A2*C2+B1+D5+E$2',
+                            'K' => '=A2:A4',
                         ],
                     ],
 
@@ -1034,6 +1152,262 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'copy_width' => [],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_list_four()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                        'K' => '=A2:A2',
+                    ],
+                    2 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+
+                        'C' => '[list.c]',
+                        'D' => '[list.d]',
+                        'E' => '[foo] hello [list.c] -> [list.d] world [bar]',
+
+                        'G' => 'bar',
+                        'H' => '[bar]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                    ],
+                    3 => [
+                        'A' => 'bar',
+                        'B' => '[bar]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                        'K' => '=A2:A2',
+                    ],
+                ],
+
+                'data' => [
+                    'list' => [ ['c' => 11, 'd' => 12.5], ['c' => '21', 'd' => '22'], ['c' => '31', 'd' => '32'], ['c' => '41', 'd' => '42'] ],
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                ],
+
+                'merge_cells' => ['E2:F2'],
+            ],
+
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                        'K' => '=A2:A2',
+                    ],
+                    2 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+
+                        'C' => '[list.*.c]',
+                        'D' => '[list.*.d]',
+                        'E' => '[foo] hello [list.*.c] -> [list.*.d] world [bar]',
+
+                        'G' => 'bar',
+                        'H' => '[bar]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                    ],
+                    3 => [
+                        'A' => 'bar',
+                        'B' => '[bar]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                        'K' => '=A2:A2',
+                    ],
+                ],
+
+                'data' => [
+                    'list' => [ ['c' => 11, 'd' => 12.5], ['c' => '21', 'd' => '22'], ['c' => '31', 'd' => '32'], ['c' => '41', 'd' => '42'] ],
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                ],
+
+                'merge_cells' => ['E2:F2'],
+            ],
+
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                        'K' => '=A2:A2',
+                    ],
+                    2 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+
+                        'C' => '[list_c]',
+                        'D' => '[list_d]',
+                        'E' => '[foo] hello [list_c] -> [list_d] world [bar]',
+
+                        'G' => 'bar',
+                        'H' => '[bar]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                    ],
+                    3 => [
+                        'A' => 'bar',
+                        'B' => '[bar]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                        'K' => '=A2:A2',
+                    ],
+                ],
+
+                'data' => [
+                    'list_c' => [11, '21', '31', '41'],
+                    'list_d' => [12.5, '22', '32', '42'],
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                ],
+
+                'merge_cells' => ['E2:F2'],
+            ],
+
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                        'K' => '=A2:A2',
+                    ],
+                    2 => [
+                        'A' => 'foo',
+                        'B' => '[foo]',
+
+                        'C' => '[list_c.*]',
+                        'D' => '[list_d.*]',
+                        'E' => '[foo] hello [list_c.*] -> [list_d.*] world [bar]',
+
+                        'G' => 'bar',
+                        'H' => '[bar]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                    ],
+                    3 => [
+                        'A' => 'bar',
+                        'B' => '[bar]',
+                        'I' => '=A2*C2+B1+D3+E$2',
+                        'K' => '=A2:A2',
+                    ],
+                ],
+
+                'data' => [
+                    'list_c' => [11, '21', '31', '41'],
+                    'list_d' => [12.5, '22', '32', '42'],
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                ],
+
+                'merge_cells' => ['E2:F2'],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'B' => 'test1',
+                            'I' => '=A2*C2+B1+D6+E$2',
+                            'K' => '=A2:A5',
+                        ],
+                        2 => [
+                            'A' => 'foo',
+                            'B' => 'test1',
+                            'C' => 11,
+                            'D' => 12.5,
+                            'E' => 'test1 hello 11 -> 12.5 world test2',
+                            'G' => 'bar',
+                            'H' => 'test2',
+                            'I' => '=A2*C2+B1+D6+E$2',
+                        ],
+                        3 => [
+                            'A' => 'foo',
+                            'B' => 'test1',
+                            'C' => '21',
+                            'D' => '22',
+                            'E' => 'test1 hello 21 -> 22 world test2',
+                            'G' => 'bar',
+                            'H' => 'test2',
+                            'I' => '=A3*C3+B1+D6+E$2',
+                        ],
+                        4 => [
+                            'A' => 'foo',
+                            'B' => 'test1',
+                            'C' => '31',
+                            'D' => '32',
+                            'E' => 'test1 hello 31 -> 32 world test2',
+                            'G' => 'bar',
+                            'H' => 'test2',
+                            'I' => '=A4*C4+B1+D6+E$2',
+                        ],
+                        5 => [
+                            'A' => 'foo',
+                            'B' => 'test1',
+                            'C' => '41',
+                            'D' => '42',
+                            'E' => 'test1 hello 41 -> 42 world test2',
+                            'G' => 'bar',
+                            'H' => 'test2',
+                            'I' => '=A5*C5+B1+D6+E$2',
+                        ],
+                        6 => [
+                            'B' => 'test2',
+                            'I' => '=A2*C2+B1+D6+E$2',
+                            'K' => '=A2:A5',
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 3],
+                        ['action' => 'add', 'row' => 4],
+                        ['action' => 'add', 'row' => 5],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'A5'],
+                        ['from' => 'B2', 'to' => 'B3'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'B2', 'to' => 'B5'],
+                        ['from' => 'C2', 'to' => 'C3'],
+                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'C2', 'to' => 'C5'],
+                        ['from' => 'D2', 'to' => 'D3'],
+                        ['from' => 'D2', 'to' => 'D4'],
+                        ['from' => 'D2', 'to' => 'D5'],
+                        ['from' => 'E2', 'to' => 'E3'],
+                        ['from' => 'E2', 'to' => 'E4'],
+                        ['from' => 'E2', 'to' => 'E5'],
+                        ['from' => 'G2', 'to' => 'G3'],
+                        ['from' => 'G2', 'to' => 'G4'],
+                        ['from' => 'G2', 'to' => 'G5'],
+                        ['from' => 'H2', 'to' => 'H3'],
+                        ['from' => 'H2', 'to' => 'H4'],
+                        ['from' => 'H2', 'to' => 'H5'],
+                        ['from' => 'I2', 'to' => 'I3'],
+                        ['from' => 'I2', 'to' => 'I4'],
+                        ['from' => 'I2', 'to' => 'I5'],
+                    ],
+
+                    'merge_cells' => ['E3:F3', 'E4:F4', 'E5:F5'],
+
+                    'copy_width' => [],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
                 "$id"
             );
         }
@@ -2674,6 +3048,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                 'values' => [
                     1 => [
                         'B' => '[title] [=column.month]',
+                        'C' => '=D6 [oops]',
+                        'D' => 'D6',
                     ],
                     3 => [
                         'G' => '[column.month] [= column.month]',
@@ -2685,9 +3061,14 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         'D' => '[list.price]',
                         'E' => '[comment]',
                         'G' => '[column.amount]',
+                        'Q' => '=A1+B3+C4+D6',
                     ],
                     6 => [
                         'B' => '[total.count]',
+                    ],
+                    7 => [
+                        'C' => '=D6 [oops]',
+                        'D' => 'D6',
                     ],
                 ],
 
@@ -2714,6 +3095,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                 'values' => [
                     1 => [
                         'B' => '[title] [=column.*.month]',
+                        'C' => '=D6',
+                        'D' => 'D6',
                     ],
                     3 => [
                         'G' => '[column.*.month] [= column.*.month.*]',
@@ -2725,9 +3108,14 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         'D' => '[list.price]',
                         'E' => '[comment]',
                         'G' => '[column.*.amount.*]',
+                        'Q' => '=A1+B3+C4+D6',
                     ],
                     6 => [
                         'B' => '[total.count]',
+                    ],
+                    7 => [
+                        'C' => '=D6 [oops]',
+                        'D' => 'D6',
                     ],
                 ],
 
@@ -2757,6 +3145,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'data' => [
                         1 => [
                             'B' => 'foo',
+                            'C' => '=D7',
                         ],
                         3 => [
                             'G' => '01',
@@ -2772,6 +3161,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                             'G' => 15000,
                             'H' => 20000,
                             'I' => 30000,
+                            'Q' => '=A1+B3+C4+D7',
                         ],
                         5 => [
                             'A' => 'Product 2',
@@ -2782,9 +3172,13 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                             'G' => null,
                             'H' => null,
                             'I' => null,
+                            'Q' => '=A1+B3+C5+D7',
                         ],
                         7 => [
                             'B' => 3,
+                        ],
+                        8 => [
+                            'C' => '=D7',
                         ],
                     ],
 
@@ -2805,6 +3199,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'G4', 'to' => 'I4'],
                         ['from' => 'H4', 'to' => 'H5'],
                         ['from' => 'I4', 'to' => 'I5'],
+                        ['from' => 'Q4', 'to' => 'Q5'],
                     ],
 
                     'merge_cells' => ['G5:H5'],
@@ -2902,6 +3297,418 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'G', 'to' => 'H'],
                         ['from' => 'G', 'to' => 'I'],
                     ],
+                ],
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_table_with_formula1()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '=A4',
+                        'B' => '=A3',
+                        'C' => '=A2',
+                        'D' => '=A1',
+                        'E' => '=A2:A2',
+                        'F' => '=B2:G2',
+                    ],
+                    2 => [
+                        'A' => '[table.price]',
+                        'B' => '[table.count]',
+                        'C' => '=A2*B2',
+                        'D' => '=A1+A3+A4',
+                        'E' => 'A1+A3+A4',
+                    ],
+                    3 => [
+                        'A' => '=A4',
+                        'B' => '=A3',
+                        'C' => '=A2',
+                        'D' => '=A1',
+                        'E' => '=A2:A2',
+                        'F' => '=B2:G2',
+                    ],
+                ],
+
+                'data' => [
+                    'table' => [
+                        ['price' => 11, 'count' => 1],
+                        ['price' => 12, 'count' => 2],
+                        ['price' => 13, 'count' => 3],
+                        ['price' => 14, 'count' => 4],
+                    ],
+                ],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => '=A7',
+                            'B' => '=A6',
+                            'C' => '=A2',
+                            'D' => '=A1',
+                            'E' => '=A2:A5',
+                            'F' => '=B2:G5',
+                        ],
+                        2 => [
+                            'A' => 11,
+                            'B' => 1,
+                            'C' => '=A2*B2',
+                            'D' => '=A1+A6+A7',
+                            'E' => 'A1+A3+A4',
+                        ],
+                        3 => [
+                            'A' => 12,
+                            'B' => 2,
+                            'C' => '=A3*B3',
+                            'D' => '=A1+A6+A7',
+                            'E' => 'A1+A3+A4',
+                        ],
+                        4 => [
+                            'A' => 13,
+                            'B' => 3,
+                            'C' => '=A4*B4',
+                            'D' => '=A1+A6+A7',
+                            'E' => 'A1+A3+A4',
+                        ],
+                        5 => [
+                            'A' => 14,
+                            'B' => 4,
+                            'C' => '=A5*B5',
+                            'D' => '=A1+A6+A7',
+                            'E' => 'A1+A3+A4',
+                        ],
+                        6 => [
+                            'A' => '=A7',
+                            'B' => '=A6',
+                            'C' => '=A2',
+                            'D' => '=A1',
+                            'E' => '=A2:A5',
+                            'F' => '=B2:G5',
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 3],
+                        ['action' => 'add', 'row' => 4],
+                        ['action' => 'add', 'row' => 5],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'A5'],
+                        ['from' => 'B2', 'to' => 'B3'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'B2', 'to' => 'B5'],
+                        ['from' => 'C2', 'to' => 'C3'],
+                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'C2', 'to' => 'C5'],
+                        ['from' => 'D2', 'to' => 'D3'],
+                        ['from' => 'D2', 'to' => 'D4'],
+                        ['from' => 'D2', 'to' => 'D5'],
+                        ['from' => 'E2', 'to' => 'E3'],
+                        ['from' => 'E2', 'to' => 'E4'],
+                        ['from' => 'E2', 'to' => 'E5'],
+                    ],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
+                ],
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_table_with_formula2()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '=A1',
+                        'B' => '=A2',
+                        'C' => '=A3',
+                        'D' => '=A4',
+                        'E' => '=A5',
+                        'F' => '=A6',
+                        'G' => '=A7',
+                        'H' => '=A8',
+                        'J' => '=A3:A3',
+                        'K' => '=A3:C3',
+                    ],
+                    2 => [
+                        'A' => '[= hello]',
+                    ],
+                    3 => [
+                        'A' => '[table.price]',
+                        'B' => '[table.count]',
+                        'C' => '=A3*B3',
+                    ],
+                    4 => [
+                        'A' => '[=hello]',
+                    ],
+                    5 => [
+                        'A' => '[!table]',
+                    ],
+                    6 => [
+                        'A' => '[!table.count]',
+                    ],
+                    7 => [
+                        'A' => '=A1',
+                        'B' => '=A2',
+                        'C' => '=A3',
+                        'D' => '=A4',
+                        'E' => '=A5',
+                        'F' => '=A6',
+                        'G' => '=A7',
+                        'H' => '=A8',
+                        'J' => '=A3:A3',
+                        'K' => '=A3:C3',
+                    ],
+                ],
+
+                'data' => [
+                    'table' => [
+                        ['price' => 11, 'count' => 1],
+                        ['price' => 12, 'count' => 2],
+                        ['price' => 13, 'count' => 3],
+                        ['price' => 14, 'count' => 4],
+                        ['price' => 15, 'count' => 5],
+                    ],
+                ],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => '=A1',
+                            'B' => '=A2',
+                            'C' => '=A2',
+                            'D' => '=A7',
+                            'E' => '=A7',
+                            'F' => '=A7',
+                            'G' => '=A7',
+                            'H' => '=A8',
+                            'J' => '=A2:A6',
+                            'K' => '=A2:C6',
+                        ],
+                        2 => [
+                            'A' => 11,
+                            'B' => 1,
+                            'C' => '=A2*B2',
+                        ],
+                        3 => [
+                            'A' => 12,
+                            'B' => 2,
+                            'C' => '=A3*B3',
+                        ],
+                        4 => [
+                            'A' => 13,
+                            'B' => 3,
+                            'C' => '=A4*B4',
+                        ],
+                        5 => [
+                            'A' => 14,
+                            'B' => 4,
+                            'C' => '=A5*B5',
+                        ],
+                        6 => [
+                            'A' => 15,
+                            'B' => 5,
+                            'C' => '=A6*B6',
+                        ],
+                        7 => [
+                            'A' => '=A1',
+                            'B' => '=A2',
+                            'C' => '=A2',
+                            'D' => '=A7',
+                            'E' => '=A7',
+                            'F' => '=A7',
+                            'G' => '=A7',
+                            'H' => '=A8',
+                            'J' => '=A2:A6',
+                            'K' => '=A2:C6',
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'delete', 'row' => 2],
+                        ['action' => 'add', 'row' => 3],
+                        ['action' => 'add', 'row' => 4],
+                        ['action' => 'add', 'row' => 5],
+                        ['action' => 'add', 'row' => 6],
+                        ['action' => 'delete', 'row' => 7],
+                        ['action' => 'delete', 'row' => 7],
+                        ['action' => 'delete', 'row' => 7],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'A5'],
+                        ['from' => 'A2', 'to' => 'A6'],
+                        ['from' => 'B2', 'to' => 'B3'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'B2', 'to' => 'B5'],
+                        ['from' => 'B2', 'to' => 'B6'],
+                        ['from' => 'C2', 'to' => 'C3'],
+                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'C2', 'to' => 'C5'],
+                        ['from' => 'C2', 'to' => 'C6'],
+                    ],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
+                ],
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_table_with_formula3()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '=AA1',
+                        'B' => '=BB2',
+                        'C' => '=CC3',
+                        'D' => '=DD4',
+                        'E' => '=EE5',
+                        'F' => '=FF6',
+                        'G' => '=A3:A3',
+                    ],
+                    2 => [
+                        'A' => '[= hello]',
+                    ],
+                    3 => [
+                        'A' => '[table.price]',
+                        'B' => '[table.count]',
+                        'C' => '=A3*B3+C1+D2+E4+F5',
+                    ],
+                    4 => [
+                        'A' => '=AA1',
+                        'B' => '=BB2',
+                        'C' => '=CC3',
+                        'D' => '=DD4',
+                        'E' => '=EE5',
+                        'F' => '=FF6',
+                        'G' => '=A3:A3',
+                    ],
+                ],
+
+                'data' => [
+                    'table' => [
+                        ['price' => 11, 'count' => 1],
+                        ['price' => 12, 'count' => 2],
+                        ['price' => 13, 'count' => 3],
+                        ['price' => 14, 'count' => 4],
+                        ['price' => 15, 'count' => 5],
+                    ],
+                ],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => '=AA1',
+                            'B' => '=BB2',
+                            'C' => '=CC2',
+                            'D' => '=DD7',
+                            'E' => '=EE8',
+                            'F' => '=FF9',
+                            'G' => '=A2:A6',
+                        ],
+                        2 => [
+                            'A' => 11,
+                            'B' => 1,
+                            'C' => '=A2*B2+C1+D2+E7+F8',
+                        ],
+                        3 => [
+                            'A' => 12,
+                            'B' => 2,
+                            'C' => '=A3*B3+C1+D3+E7+F8',
+                        ],
+                        4 => [
+                            'A' => 13,
+                            'B' => 3,
+                            'C' => '=A4*B4+C1+D4+E7+F8',
+                        ],
+                        5 => [
+                            'A' => 14,
+                            'B' => 4,
+                            'C' => '=A5*B5+C1+D5+E7+F8',
+                        ],
+                        6 => [
+                            'A' => 15,
+                            'B' => 5,
+                            'C' => '=A6*B6+C1+D6+E7+F8',
+                        ],
+                        7 => [
+                            'A' => '=AA1',
+                            'B' => '=BB2',
+                            'C' => '=CC2',
+                            'D' => '=DD7',
+                            'E' => '=EE8',
+                            'F' => '=FF9',
+                            'G' => '=A2:A6',
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'delete', 'row' => 2],
+                        ['action' => 'add', 'row' => 3],
+                        ['action' => 'add', 'row' => 4],
+                        ['action' => 'add', 'row' => 5],
+                        ['action' => 'add', 'row' => 6],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'A5'],
+                        ['from' => 'A2', 'to' => 'A6'],
+                        ['from' => 'B2', 'to' => 'B3'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'B2', 'to' => 'B5'],
+                        ['from' => 'B2', 'to' => 'B6'],
+                        ['from' => 'C2', 'to' => 'C3'],
+                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'C2', 'to' => 'C5'],
+                        ['from' => 'C2', 'to' => 'C6'],
+                    ],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"

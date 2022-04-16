@@ -29,16 +29,84 @@ class Parser
      */
     public function schema(array $values, array $data, array $mergeCells): SchemaMapper
     {
+        $schema = new SchemaMapper();
+
+        // Step 0: Parse input arguments to a canon format
         $values = $this->parseValues($values);
         $data = $this->parseData($data);
         $mergeCells = $this->parseMergeCells($mergeCells);
 
-        $schema = new SchemaMapper();
-        $schemaData = [];
+        // Step 1: Short path -> full path
+        $this->canonizeMarkers($values, $data);
 
-        // Step 0: short path -> full path
-        foreach ($values as $row => &$columns) {
-            foreach ($columns as $column => &$value) {
+        // Step 2: Calculate additional rows & columns, redundant data
+        $dataSchema = $this->calculateDataSchema($values, $data, $mergeCells, $schema);
+
+        // Step 3: Shift formulas
+        $this->shiftFormulas($dataSchema, $schema);
+
+        // Step 4: Replace markers with data
+        $this->replaceMarkers($dataSchema, $data, $schema);
+
+        return $schema;
+    }
+
+    /**
+     * @param array $values
+     * @return array
+     */
+    protected function parseValues(array $values): array
+    {
+        ksort($values); // just in case ;)
+
+        return $values;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function parseData(array $data): array
+    {
+        $result = [];
+
+        foreach ($this->dot($data) as $key => $value) {
+            if (is_array($value) && !$value) {
+                continue;
+            }
+
+            $result[$key] = $value;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $mergeCells
+     * @return array
+     */
+    protected function parseMergeCells(array $mergeCells): array
+    {
+        foreach ($mergeCells as &$item) {
+            $item = explode(':', $item);
+
+            $item[0] = preg_split('#([A-Z]+)([\d]+)#', $item[0], -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
+            $item[1] = preg_split('#([A-Z]+)([\d]+)#', $item[1], -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
+        }
+        unset($item);
+
+        return $mergeCells;
+    }
+
+    /**
+     * @param array $values
+     * @param array $data
+     * @return void
+     */
+    protected function canonizeMarkers(array &$values, array &$data): void
+    {
+        foreach ($values as &$columns) {
+            foreach ($columns as &$value) {
                 if (! is_string($value)) {
                     continue;
                 }
@@ -90,9 +158,20 @@ class Parser
             unset($value);
         }
         unset($columns);
+    }
 
-        // Step 1: Calculate additional rows & columns, outline markers
+    /**
+     * @param array $values
+     * @param array $data
+     * @param array $mergeCells
+     * @param \AnourValar\Office\Template\SchemaMapper $schema
+     * @return array
+     */
+    protected function calculateDataSchema(array &$values, array &$data, array &$mergeCells, SchemaMapper &$schema): array
+    {
+        $dataSchema = [];
         $shift = 0;
+
         foreach ($values as $row => $columns) {
             $additionRows = 0;
             $additionColumns = 0;
@@ -136,7 +215,10 @@ class Parser
 
             if (! $additionRows) {
                 foreach ($columns as $column => $value) {
-                    if (! preg_match('#\[(\$?\!\s*|\$?\=\s*)?[a-z][a-z\d\_\.]+\]#i', (string) $value)) {
+                    if (
+                        !preg_match('#\[(\$?\!\s*|\$?\=\s*)?[a-z][a-z\d\_\.]+\]#i', (string) $value)
+                        && !preg_match('#^\=[A-Z][A-Z\.\d]#',  (string) $value)
+                    ) {
                         unset($columns[$column]);
                     }
                 }
@@ -158,7 +240,7 @@ class Parser
                 $schema->copyWidth($additionColumn, $curr);
             }
 
-            $schemaData[$row + $shift] = $columns;
+            $dataSchema[$row + $shift] = $columns;
             $originalRow = ($row + $shift);
             while ($additionRows) {
                 $shift++;
@@ -169,7 +251,7 @@ class Parser
                 }
                 unset($column);
 
-                $schemaData[$row + $shift] = $columns;
+                $dataSchema[$row + $shift] = $columns;
                 $schema->addRow($row + $shift);
 
                 foreach (array_keys($columns) as $curr) {
@@ -185,8 +267,141 @@ class Parser
         }
         unset($values);
 
-        // Step 2: Replace markers with data
-        foreach ($schemaData as $row => $columns) {
+        return $dataSchema;
+    }
+
+    /**
+     * @param array $values
+     * @param \AnourValar\Office\Template\SchemaMapper $schema
+     * @return void
+     */
+    protected function shiftFormulas(array &$values, SchemaMapper &$schema): void
+    {
+        $ranges = [];
+
+        // "Outside" shifts
+        foreach ($schema->toArray()['rows'] as $action) {
+            foreach ($values as $row => &$columns) {
+                foreach ($columns as &$value) {
+                    if (! preg_match('#^\=[A-Z][A-Z\.\d]#', $value)) {
+                        continue;
+                    }
+
+                    $value = preg_replace_callback(
+                        '#([A-Z]+)([\d]+)#',
+                        function ($patterns) use ($action, $row)
+                        {
+                            if ($action['action'] == 'add') {
+
+                                if ($patterns[2] >= $action['row']) {
+                                    return $patterns[1] . ++$patterns[2];
+                                }
+
+                            } else {
+
+                                if ($patterns[2] > $action['row']) {
+                                    return $patterns[1] . --$patterns[2];
+                                }
+
+                            }
+
+                            return $patterns[0];
+                        },
+                        $value
+                    );
+                }
+                unset($value);
+            }
+            unset($columns);
+        }
+
+        // "Inside" shifts
+        $prev = 0;
+        $prevAction = null;
+        foreach ($schema->toArray()['rows'] as $action) {
+            if ($prevAction && $prevAction['row'] + 1 == $action['row'] && $action['action'] == 'add' && $prevAction['action'] == 'add') {
+                $prev++;
+            } else {
+                if ($prev) {
+                    $ranges[] = ['from' => ($prevAction['row'] - $prev - 1), 'to' => ($prevAction['row'])];
+                }
+
+                $prev = 0;
+            }
+
+            foreach ($values as $row => &$columns) {
+                foreach ($columns as &$value) {
+                    if (! preg_match('#^\=[A-Z][A-Z\.\d]#', $value)) {
+                        continue;
+                    }
+
+                    $value = preg_replace_callback(
+                        '#([A-Z]+)([\d]+)#',
+                        function ($patterns) use ($action, $row, $prev)
+                        {
+                            if ($action['action'] == 'add') {
+
+                                if ($action['row'] == $row && ($row - $prev) == ($patterns[2] + 1)) {
+                                    return $patterns[1] . (++$patterns[2] + $prev);
+                                }
+
+                            }
+
+                            return $patterns[0];
+                        },
+                        $value
+                    );
+                }
+                unset($value);
+            }
+            unset($columns);
+
+            $prevAction = $action;
+        }
+        if ($prev || ($prevAction && $prevAction['action'] == 'add')) {
+            $ranges[] = ['from' => ($prevAction['row'] - $prev - 1), 'to' => ($prevAction['row'])];
+        }
+
+        // Dynamic table ranges
+        foreach ($values as $row => &$columns) {
+            foreach ($columns as &$value) {
+                if (! preg_match('#^\=[A-Z][A-Z\.\d]#', $value)) {
+                    continue;
+                }
+
+                $value = preg_replace_callback(
+                    '#([A-Z]+)([\d]+)\:([A-Z]+)([\d]+)#',
+                    function ($patterns) use ($ranges)
+                    {
+                        if ($patterns[2] == $patterns[4]) {
+                            foreach ($ranges as $range) {
+                                if ($patterns[2] == $range['from']) {
+                                    return sprintf('%s%d:%s%d', $patterns[1], $patterns[2], $patterns[3], $range['to']);
+                                }
+                            }
+                        }
+
+                        return $patterns[0];
+                    },
+                    $value
+                );
+            }
+            unset($value);
+        }
+        unset($columns);
+    }
+
+    /**
+     * @param array $dataSchema
+     * @param array $data
+     * @param \AnourValar\Office\Template\SchemaMapper $schema
+     * @return void
+     */
+    protected function replaceMarkers(array &$dataSchema, array &$data, SchemaMapper &$schema): void
+    {
+        foreach ($dataSchema as $row => $columns) {
+            ksort($columns);
+
             foreach ($columns as $column => $value) {
                 if (is_string($value) && $this->shouldBeDeleted([$value], $data, '$')) {
                     $value = null;
@@ -213,8 +428,6 @@ class Parser
                 $schema->addData($row, $column, $value);
             }
         }
-
-        return $schema;
     }
 
     /**
@@ -222,7 +435,7 @@ class Parser
      * @param array $markers
      * @return bool
      */
-    protected function isShortPath(string $path, array $markers): bool
+    private function isShortPath(string $path, array $markers): bool
     {
         if (array_key_exists($path, $markers)) {
             return true;
@@ -243,57 +456,10 @@ class Parser
 
     /**
      * @param array $data
-     * @return array
-     */
-    protected function parseData(array $data): array
-    {
-        $result = [];
-
-        foreach ($this->dot($data) as $key => $value) {
-            if (is_array($value) && !$value) {
-                continue;
-            }
-
-            $result[$key] = $value;
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param array $values
-     * @return array
-     */
-    protected function parseValues(array $values): array
-    {
-        ksort($values); // just in case ;)
-
-        return $values;
-    }
-
-    /**
-     * @param array $mergeCells
-     * @return array
-     */
-    protected function parseMergeCells(array $mergeCells): array
-    {
-        foreach ($mergeCells as &$item) {
-            $item = explode(':', $item);
-
-            $item[0] = preg_split('#([A-Z]+)([\d]+)#', $item[0], -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
-            $item[1] = preg_split('#([A-Z]+)([\d]+)#', $item[1], -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
-        }
-        unset($item);
-
-        return $mergeCells;
-    }
-
-    /**
-     * @param array $data
      * @param string $prefix
      * @return array
      */
-    protected function dot(array $data, string $prefix = ''): array
+    private function dot(array $data, string $prefix = ''): array
     {
         $result = [];
 
@@ -313,7 +479,7 @@ class Parser
      * @param string $value
      * @return bool
      */
-    protected function hasMarker(string $marker, ?string $value): bool
+    private function hasMarker(string $marker, ?string $value): bool
     {
         $value = preg_replace('#\.\*(\.|$|)#', '.0$1', (string) $value, -1, $count);
         if (! $count) {
@@ -333,7 +499,7 @@ class Parser
      * @param string $prefix
      * @return bool
      */
-    protected function shouldBeDeleted(array $columns, array $data, string $prefix = ''): bool
+    private function shouldBeDeleted(array $columns, array $data, string $prefix = ''): bool
     {
         $prefix = preg_quote($prefix);
 
@@ -382,7 +548,7 @@ class Parser
      * @param int $shift
      * @return string|null
      */
-    protected function increment(string $markerName, bool $first, int $shift = 1): ?string
+    private function increment(string $markerName, bool $first, int $shift = 1): ?string
     {
         $markerName = explode('.', $markerName);
         if (! $first) {
@@ -424,7 +590,7 @@ class Parser
      * @param int $shift
      * @return string|null
      */
-    protected function increments(string $value, bool $first, int $shift = 1): ?string
+    private function increments(string $value, bool $first, int $shift = 1): ?string
     {
         return preg_replace_callback(
             '#\[([a-z][a-z\d\.\_]+)\]#i',
@@ -448,7 +614,7 @@ class Parser
      * @throws \LogicException
      * @return mixed
      */
-    protected function replace(string $from, mixed $to, $value): mixed
+    private function replace(string $from, mixed $to, $value): mixed
     {
         if (! is_string($value)) {
             return $value;

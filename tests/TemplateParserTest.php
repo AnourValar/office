@@ -118,6 +118,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'merge_cells' => [],
 
                     'copy_width' => [],
+
+                    'copy_cell_format' => [],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
@@ -183,6 +185,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'merge_cells' => [],
 
                     'copy_width' => [],
+
+                    'copy_cell_format' => [],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
@@ -269,6 +273,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'merge_cells' => [],
 
                     'copy_width' => [],
+
+                    'copy_cell_format' => [],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "#$id"
@@ -379,6 +385,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'merge_cells' => [],
 
                     'copy_width' => [],
+
+                    'copy_cell_format' => [],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "#$id"
@@ -586,6 +594,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'merge_cells' => [],
 
                     'copy_width' => [],
+
+                    'copy_cell_format' => [],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
@@ -811,6 +821,18 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'merge_cells' => [],
 
                     'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                        ['from' => 'B2', 'to' => 'B3'],
+                        ['from' => 'C2', 'to' => 'C3'],
+                        ['from' => 'D2', 'to' => 'D3'],
+                        ['from' => 'E2', 'to' => 'E3'],
+                        ['from' => 'F2', 'to' => 'F3'],
+                        ['from' => 'G2', 'to' => 'G3'],
+                        ['from' => 'H2', 'to' => 'H3'],
+                        ['from' => 'J2', 'to' => 'J3'],
+                    ],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
@@ -1048,6 +1070,25 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'merge_cells' => ['E3:F3', 'E4:F4'],
 
                     'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'B2', 'to' => 'B3'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'C2', 'to' => 'C3'],
+                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'D2', 'to' => 'D3'],
+                        ['from' => 'D2', 'to' => 'D4'],
+                        ['from' => 'E2', 'to' => 'E3'],
+                        ['from' => 'E2', 'to' => 'E4'],
+                        ['from' => 'G2', 'to' => 'G3'],
+                        ['from' => 'G2', 'to' => 'G4'],
+                        ['from' => 'H2', 'to' => 'H3'],
+                        ['from' => 'H2', 'to' => 'H4'],
+                        ['from' => 'I2', 'to' => 'I3'],
+                        ['from' => 'I2', 'to' => 'I4'],
+                    ],
                 ],
                 $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
                 "$id"
@@ -1150,6 +1191,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'merge_cells' => [],
 
                     'copy_width' => [],
+
+                    'copy_cell_format' => [],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
@@ -1406,6 +1449,33 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'merge_cells' => ['E3:F3', 'E4:F4', 'E5:F5'],
 
                     'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'A5'],
+                        ['from' => 'B2', 'to' => 'B3'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'B2', 'to' => 'B5'],
+                        ['from' => 'C2', 'to' => 'C3'],
+                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'C2', 'to' => 'C5'],
+                        ['from' => 'D2', 'to' => 'D3'],
+                        ['from' => 'D2', 'to' => 'D4'],
+                        ['from' => 'D2', 'to' => 'D5'],
+                        ['from' => 'E2', 'to' => 'E3'],
+                        ['from' => 'E2', 'to' => 'E4'],
+                        ['from' => 'E2', 'to' => 'E5'],
+                        ['from' => 'G2', 'to' => 'G3'],
+                        ['from' => 'G2', 'to' => 'G4'],
+                        ['from' => 'G2', 'to' => 'G5'],
+                        ['from' => 'H2', 'to' => 'H3'],
+                        ['from' => 'H2', 'to' => 'H4'],
+                        ['from' => 'H2', 'to' => 'H5'],
+                        ['from' => 'I2', 'to' => 'I3'],
+                        ['from' => 'I2', 'to' => 'I4'],
+                        ['from' => 'I2', 'to' => 'I5'],
+                    ],
                 ],
                 $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
                 "$id"
@@ -1500,6 +1570,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'merge_cells' => [],
 
                     'copy_width' => [],
+
+                    'copy_cell_format' => [],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "#$id"
@@ -1637,6 +1709,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'merge_cells' => [],
 
                     'copy_width' => [],
+
+                    'copy_cell_format' => [],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "#$id"
@@ -1849,6 +1923,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'merge_cells' => [],
 
                     'copy_width' => [],
+
+                    'copy_cell_format' => [],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
@@ -1989,6 +2065,10 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'merge_cells' => [],
 
                     'copy_width' => [['from' => 'C', 'to' => 'D']],
+
+                    'copy_cell_format' => [
+                        ['from' => 'C2', 'to' => 'D2'],
+                    ],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
@@ -2076,6 +2156,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'merge_cells' => [],
 
                     'copy_width' => [],
+
+                    'copy_cell_format' => [],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
@@ -2220,6 +2302,11 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'copy_width' => [
                         ['from' => 'C', 'to' => 'D'],
                         ['from' => 'C', 'to' => 'E']
+                    ],
+
+                    'copy_cell_format' => [
+                        ['from' => 'C2', 'to' => 'D2'],
+                        ['from' => 'C2', 'to' => 'E2'],
                     ],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
@@ -2386,6 +2473,21 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'C', 'to' => 'D'],
                         ['from' => 'C', 'to' => 'E'],
                     ],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'B2', 'to' => 'B3'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'C2', 'to' => 'C3'],
+                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'C2', 'to' => 'D2'],
+                        ['from' => 'C2', 'to' => 'E2'],
+                        ['from' => 'D2', 'to' => 'D3'],
+                        ['from' => 'D2', 'to' => 'D4'],
+                        ['from' => 'E2', 'to' => 'E3'],
+                        ['from' => 'E2', 'to' => 'E4'],
+                    ],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
@@ -2455,6 +2557,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'merge_cells' => [],
 
                     'copy_width' => [],
+
+                    'copy_cell_format' => [],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
@@ -2589,6 +2693,21 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'copy_width' => [
                         ['from' => 'C', 'to' => 'D'],
                         ['from' => 'C', 'to' => 'E'],
+                    ],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'B2', 'to' => 'B3'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'C2', 'to' => 'C3'],
+                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'C2', 'to' => 'D2'],
+                        ['from' => 'C2', 'to' => 'E2'],
+                        ['from' => 'D2', 'to' => 'D3'],
+                        ['from' => 'D2', 'to' => 'D4'],
+                        ['from' => 'E2', 'to' => 'E3'],
+                        ['from' => 'E2', 'to' => 'E4'],
                     ],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
@@ -2734,6 +2853,23 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'E', 'to' => 'F'],
                         ['from' => 'E', 'to' => 'G'],
                     ],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'B2', 'to' => 'B3'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'C2', 'to' => 'C3'],
+                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'E2', 'to' => 'E3'],
+                        ['from' => 'E2', 'to' => 'E4'],
+                        ['from' => 'E2', 'to' => 'F2'],
+                        ['from' => 'E2', 'to' => 'G2'],
+                        ['from' => 'F2', 'to' => 'F3'],
+                        ['from' => 'F2', 'to' => 'F4'],
+                        ['from' => 'G2', 'to' => 'G3'],
+                        ['from' => 'G2', 'to' => 'G4'],
+                    ],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
@@ -2805,6 +2941,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'merge_cells' => [],
 
                     'copy_width' => [],
+
+                    'copy_cell_format' => [],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
@@ -2946,6 +3084,19 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'E', 'to' => 'F'],
                         ['from' => 'E', 'to' => 'G'],
                     ],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                        ['from' => 'B2', 'to' => 'B3'],
+                        ['from' => 'C2', 'to' => 'C3'],
+                        ['from' => 'E1', 'to' => 'F1'],
+                        ['from' => 'E1', 'to' => 'G1'],
+                        ['from' => 'E2', 'to' => 'E3'],
+                        ['from' => 'E2', 'to' => 'F2'],
+                        ['from' => 'E2', 'to' => 'G2'],
+                        ['from' => 'F2', 'to' => 'F3'],
+                        ['from' => 'G2', 'to' => 'G3'],
+                    ],
                 ],
                 $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
                 "$id"
@@ -3030,6 +3181,13 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'copy_width' => [
                         ['from' => 'E', 'to' => 'F'],
                         ['from' => 'E', 'to' => 'G'],
+                    ],
+
+                    'copy_cell_format' => [
+                        ['from' => 'E1', 'to' => 'F1'],
+                        ['from' => 'E1', 'to' => 'G1'],
+                        ['from' => 'E2', 'to' => 'F2'],
+                        ['from' => 'E2', 'to' => 'G2'],
                     ],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
@@ -3208,6 +3366,22 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'G', 'to' => 'H'],
                         ['from' => 'G', 'to' => 'I'],
                     ],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A4', 'to' => 'A5'],
+                        ['from' => 'B4', 'to' => 'B5'],
+                        ['from' => 'C4', 'to' => 'C5'],
+                        ['from' => 'D4', 'to' => 'D5'],
+                        ['from' => 'E4', 'to' => 'E5'],
+                        ['from' => 'G3', 'to' => 'H3'],
+                        ['from' => 'G3', 'to' => 'I3'],
+                        ['from' => 'G4', 'to' => 'G5'],
+                        ['from' => 'G4', 'to' => 'H4'],
+                        ['from' => 'G4', 'to' => 'I4'],
+                        ['from' => 'H4', 'to' => 'H5'],
+                        ['from' => 'I4', 'to' => 'I5'],
+                        ['from' => 'Q4', 'to' => 'Q5'],
+                    ],
                 ],
                 $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
                 "$id"
@@ -3296,6 +3470,11 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'copy_width' => [
                         ['from' => 'G', 'to' => 'H'],
                         ['from' => 'G', 'to' => 'I'],
+                    ],
+
+                    'copy_cell_format' => [
+                        ['from' => 'G3', 'to' => 'H3'],
+                        ['from' => 'G3', 'to' => 'I3'],
                     ],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
@@ -3425,6 +3604,24 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'merge_cells' => [],
 
                     'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'A5'],
+                        ['from' => 'B2', 'to' => 'B3'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'B2', 'to' => 'B5'],
+                        ['from' => 'C2', 'to' => 'C3'],
+                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'C2', 'to' => 'C5'],
+                        ['from' => 'D2', 'to' => 'D3'],
+                        ['from' => 'D2', 'to' => 'D4'],
+                        ['from' => 'D2', 'to' => 'D5'],
+                        ['from' => 'E2', 'to' => 'E3'],
+                        ['from' => 'E2', 'to' => 'E4'],
+                        ['from' => 'E2', 'to' => 'E5'],
+                    ],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
@@ -3579,6 +3776,21 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'merge_cells' => [],
 
                     'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'A5'],
+                        ['from' => 'A2', 'to' => 'A6'],
+                        ['from' => 'B2', 'to' => 'B3'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'B2', 'to' => 'B5'],
+                        ['from' => 'B2', 'to' => 'B6'],
+                        ['from' => 'C2', 'to' => 'C3'],
+                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'C2', 'to' => 'C5'],
+                        ['from' => 'C2', 'to' => 'C6'],
+                    ],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"
@@ -3709,6 +3921,21 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'merge_cells' => [],
 
                     'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'A5'],
+                        ['from' => 'A2', 'to' => 'A6'],
+                        ['from' => 'B2', 'to' => 'B3'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'B2', 'to' => 'B5'],
+                        ['from' => 'B2', 'to' => 'B6'],
+                        ['from' => 'C2', 'to' => 'C3'],
+                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'C2', 'to' => 'C5'],
+                        ['from' => 'C2', 'to' => 'C6'],
+                    ],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
                 "$id"

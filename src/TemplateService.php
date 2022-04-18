@@ -61,10 +61,15 @@ class TemplateService
      * @param string $templateFile
      * @param mixed $data
      * @param \AnourValar\Office\Format $templateFormat
+     * @param bool $autoCellFormat
      * @return \AnourValar\Office\Generated
      */
-    public function generate(string $templateFile, mixed $data, Format $templateFormat = Format::Xlsx): Generated
-    {
+    public function generate(
+        string $templateFile,
+        mixed $data,
+        Format $templateFormat = Format::Xlsx,
+        bool $autoCellFormat = false
+    ): Generated {
         // Get instance of driver
         $driver = new $this->driverClass();
         if (! $driver instanceof \AnourValar\Office\Drivers\TemplateInterface) {
@@ -112,14 +117,21 @@ class TemplateService
 
         // copy_width
         foreach ($schema['copy_width'] as $item) {
-            $driver->setWidth($item['to'], $item['from']);
+            $driver->copyWidth($item['from'], $item['to']);
+        }
+
+        // copy_cell_format
+        if (! $autoCellFormat) {
+            foreach ($schema['copy_cell_format'] as $item) {
+                $driver->copyCellFormat($item['from'], $item['to']);
+            }
         }
 
         // Decode data
         $schema = $this->handleValue($schema, $driver);
 
         // Replace markers (and last but not least :D)
-        $driver->setValues($schema['data']);
+        $driver->setValues($schema['data'], $autoCellFormat);
 
         // Hook: after
         if ($this->hookAfter) {

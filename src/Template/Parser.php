@@ -237,6 +237,7 @@ class Parser
                 $additionColumnValue = $this->increments($additionColumnValue, false);
                 $columns[$curr] = $additionColumnValue;
                 $schema->copyStyle($additionColumn.($row + $shift), $curr.($row + $shift));
+                $schema->copyCellFormat($additionColumn.($row + $shift), $curr.($row + $shift));
                 $schema->copyWidth($additionColumn, $curr);
             }
 
@@ -256,6 +257,7 @@ class Parser
 
                 foreach (array_keys($columns) as $curr) {
                     $schema->copyStyle($curr.$originalRow, $curr.($row + $shift));
+                    $schema->copyCellFormat($curr.$originalRow, $curr.($row + $shift));
 
                     foreach ($mergeCells as $item) {
                         if ($curr.$originalRow == $item[0][0].$item[0][1] && $item[0][1] == $item[1][1]) {

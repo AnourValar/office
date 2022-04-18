@@ -9,7 +9,17 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
     /**
      * @var string
      */
-    protected const DATE_FORMAT = 'm/d/yyyy';
+    protected const FORMAT_DATE = 'm/d/yyyy';
+
+    /**
+     * @var string
+     */
+    protected const FORMAT_DOUBLE = '#,##0.00';
+
+    /**
+     * @var string
+     */
+    protected const FORMAT_INT = '#,##0';
 
     /**
      * @var \PhpOffice\PhpSpreadsheet\Spreadsheet
@@ -66,15 +76,17 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
      *
      * @param string $cell
      * @param mixed $value
-     * @param string $format
+     * @param bool $autoCellFormat
      * @return self
      */
-    public function setValue(string $cell, $value, string $format = null): self
+    public function setValue(string $cell, $value, bool $autoCellFormat = true): self
     {
         if ($value instanceof \DateTimeInterface) {
 
             $this->sheet->setCellValue($cell, \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($value));
-            $this->setCellFormat($cell, ($format ?? static::DATE_FORMAT));
+            if ($autoCellFormat) {
+                $this->setCellFormat($cell, static::FORMAT_DATE);
+            }
 
         } elseif (is_string($value) || is_null($value)) {
 
@@ -86,10 +98,10 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
 
         } else {
 
-            if (is_double($value)) {
-                $this->setCellFormat($cell, ($format ?? '#,##0.00'));
-            } elseif (is_integer($value)) {
-                $this->setCellFormat($cell, ($format ?? '#,##0'));
+            if ($autoCellFormat && is_double($value)) {
+                $this->setCellFormat($cell, static::FORMAT_DOUBLE);
+            } elseif ($autoCellFormat && is_integer($value)) {
+                $this->setCellFormat($cell, static::FORMAT_INT);
             }
 
             $this->sheet->getCell($cell)->setValueExplicit($value, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
@@ -100,28 +112,14 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
     }
 
     /**
-     * Set data format of cell (column, range)
-     *
-     * @param string $range
-     * @param string $format
-     * @return self
-     */
-    public function setCellFormat(string $range, string $format): self
-    {
-        $this->sheet->getStyle($range)->getNumberFormat()->setFormatCode($format);
-
-        return $this;
-    }
-
-    /**
      * {@inheritDoc}
      * @see \AnourValar\Office\Drivers\TemplateInterface::setValues()
      */
-    public function setValues(array $data): self
+    public function setValues(array $data, bool $autoCellFormat = true): self
     {
         foreach ($data as $row => $columns) {
             foreach ($columns as $column => $value) {
-                $this->setValue($column.$row, $value);
+                $this->setValue($column.$row, $value, $autoCellFormat);
             }
         }
 
@@ -214,6 +212,31 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
 
     /**
      * {@inheritDoc}
+     * @see \AnourValar\Office\Drivers\TemplateInterface::copyCellFormat($cellFrom, $rangeTo)
+     */
+    public function copyCellFormat(string $cellFrom, string $rangeTo): self
+    {
+        $this->setCellFormat($rangeTo, $this->sheet->getStyle($cellFrom)->getNumberFormat()->getFormatCode());
+
+        return $this;
+    }
+
+    /**
+     * Set cell (data) format
+     *
+     * @param string $range
+     * @param string $format
+     * @return self
+     */
+    public function setCellFormat(string $range, string $format): self
+    {
+        $this->sheet->getStyle($range)->getNumberFormat()->setFormatCode($format);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
      * @see \AnourValar\Office\Drivers\TemplateInterface::addRow()
      */
     public function addRow(int $rowBefore, int $qty = 1): self
@@ -263,15 +286,41 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
 
     /**
      * {@inheritDoc}
-     * @see \AnourValar\Office\Drivers\TemplateInterface::setWidth()
+     * @see \AnourValar\Office\Drivers\TemplateInterface::copyWidth()
      */
-    public function setWidth(string $column, int|string $width): self
+    public function copyWidth(string $columnFrom, string $columnTo): self
     {
-        if (is_string($width)) {
-            $width = $this->sheet->getColumnDimension($width)->getWidth();
-        }
+        $width = $this->sheet->getColumnDimension($columnFrom)->getWidth();
+        $this->setWidth($columnTo, $width);
 
+        return $this;
+    }
+
+    /**
+     * Set fixed width for a column
+     *
+     * @param string $column
+     * @param int $width
+     * @return self
+     */
+    public function setWidth(string $column, int $width): self
+    {
         $this->sheet->getColumnDimension($column)->setWidth($width);
+
+        return $this;
+    }
+
+    /**
+     * Copy row's height
+     *
+     * @param int $rowFrom
+     * @param int $rowTo
+     * @return self
+     */
+    public function copyHeight(int $rowFrom, int $rowTo): self
+    {
+        $height = $this->sheet->getRowDimension($rowFrom)->getRowHeight();
+        $this->setHeight($rowTo, $height);
 
         return $this;
     }
@@ -280,15 +329,11 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
      * Set fixed height for a row
      *
      * @param string $row
-     * @param int|string $height
+     * @param int $height
      * @return self
      */
-    public function setHeight(string $row, int|string $height): self
+    public function setHeight(string $row, int $height): self
     {
-        if (mb_substr($height, 0, 1) == '#') {
-            $height = $this->sheet->getRowDimension(mb_substr($height, 1))->getRowHeight();
-        }
-
         $this->sheet->getRowDimension($row)->setRowHeight($height);
 
         return $this;

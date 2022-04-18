@@ -8,9 +8,10 @@ interface TemplateInterface extends SaveInterface, LoadInterface
      * Set values
      *
      * @param array $data
+     * @param bool $autoCellFormat
      * @return self
      */
-    public function setValues(array $data): self;
+    public function setValues(array $data, bool $autoCellFormat = true): self;
 
     /**
      * Get values (range)
@@ -36,13 +37,22 @@ interface TemplateInterface extends SaveInterface, LoadInterface
     public function mergeCells(string $ceilRange): self;
 
     /**
-     * Apple cell`s style to another
+     * Apple cell`s style
      *
      * @param string $cellFrom
      * @param string $rangeTo
      * @return self
      */
     public function copyStyle(string $cellFrom, string $rangeTo): self;
+
+    /**
+     * Copy cell`s format
+     *
+     * @param string $cellFrom
+     * @param string $rangeTo
+     * @return self
+     */
+    public function copyCellFormat(string $cellFrom, string $rangeTo): self;
 
     /**
      * Add a row
@@ -63,11 +73,11 @@ interface TemplateInterface extends SaveInterface, LoadInterface
     public function deleteRow(int $row, int $qty = 1): self;
 
     /**
-     * Set fixed width for a column
+     * Copy column's width
      *
-     * @param string $column
-     * @param int|string $width
+     * @param string $columnFrom
+     * @param string $columnTo
      * @return self
      */
-    public function setWidth(string $column, int|string $width): self;
+    public function copyWidth(string $columnFrom, string $columnTo): self;
 }

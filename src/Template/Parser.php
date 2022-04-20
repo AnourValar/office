@@ -230,6 +230,21 @@ class Parser
 
             $curr = $additionColumn;
             $additionColumnValue = ($columns[$curr] ?? null);
+
+            $mergeMapX = [];
+            foreach ($mergeCells as $item) {
+                if ($additionColumn.($row + $shift) == $item[0][0].$item[0][1] && $item[0][1] == $item[1][1]) {
+                    while ($item[0][0] < $item[1][0]) {
+                        $item[0][0]++;
+                        $mergeMapX[] = $item[0][0];
+                    }
+                }
+            }
+
+            foreach ($mergeMapX as $mergeItemX) {
+                $curr++;
+            }
+
             while ($additionColumns) {
                 $curr++;
                 $additionColumns--;
@@ -239,6 +254,19 @@ class Parser
                 $schema->copyStyle($additionColumn.($row + $shift), $curr.($row + $shift));
                 $schema->copyCellFormat($additionColumn.($row + $shift), $curr.($row + $shift));
                 $schema->copyWidth($additionColumn, $curr);
+
+                if ($mergeMapX) {
+                    $originalCurr = $curr;
+                    foreach ($mergeMapX as $mergeItemX) {
+                        $curr++;
+
+                        $schema->copyStyle($mergeItemX.($row + $shift), $curr.($row + $shift));
+                        $schema->copyWidth($mergeItemX, $curr);
+                    }
+
+                    $schema->mergeCells(sprintf('%s%s:%s%s', $originalCurr, ($row + $shift), $curr, ($row + $shift)));
+                    $mergeCells[] = [ [$originalCurr, ($row + $shift)], [$curr, ($row + $shift)] ]; // fill in
+                }
             }
 
             $dataSchema[$row + $shift] = $columns;
@@ -262,6 +290,11 @@ class Parser
                     foreach ($mergeCells as $item) {
                         if ($curr.$originalRow == $item[0][0].$item[0][1] && $item[0][1] == $item[1][1]) {
                             $schema->mergeCells(sprintf('%s%s:%s%s', $item[0][0], ($row + $shift), $item[1][0], ($row + $shift)));
+
+                            while ($item[0][0] < $item[1][0]) {
+                                $item[0][0]++;
+                                $schema->copyStyle($item[0][0].$item[0][1], $item[0][0].($row + $shift));
+                            }
                         }
                     }
                 }

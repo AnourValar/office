@@ -1059,6 +1059,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'D2', 'to' => 'D4'],
                         ['from' => 'E2', 'to' => 'E3'],
                         ['from' => 'E2', 'to' => 'E4'],
+                        ['from' => 'F2', 'to' => 'F3'],
+                        ['from' => 'F2', 'to' => 'F4'],
                         ['from' => 'G2', 'to' => 'G3'],
                         ['from' => 'G2', 'to' => 'G4'],
                         ['from' => 'H2', 'to' => 'H3'],
@@ -1435,6 +1437,9 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'E2', 'to' => 'E3'],
                         ['from' => 'E2', 'to' => 'E4'],
                         ['from' => 'E2', 'to' => 'E5'],
+                        ['from' => 'F2', 'to' => 'F3'],
+                        ['from' => 'F2', 'to' => 'F4'],
+                        ['from' => 'F2', 'to' => 'F5'],
                         ['from' => 'G2', 'to' => 'G3'],
                         ['from' => 'G2', 'to' => 'G4'],
                         ['from' => 'G2', 'to' => 'G5'],
@@ -1494,6 +1499,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -1523,6 +1529,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo [= test]',
@@ -1554,6 +1561,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'data' => [
                         1 => [
                             'B' => 'test1',
+                            'C' => '=SUM(A2:A2)',
                         ],
                         2 => [
                             'B' => 'test2',
@@ -1590,6 +1598,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -1615,6 +1624,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -1640,6 +1650,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -1665,6 +1676,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -1692,6 +1704,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'data' => [
                         1 => [
                             'B' => 'test1',
+                            'C' => '=SUM(A2:A2)',
                         ],
                         2 => [
                             'B' => 'test1',
@@ -1729,6 +1742,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -1754,6 +1768,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -1779,6 +1794,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -1804,6 +1820,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -1829,6 +1846,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -1854,6 +1872,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -1879,6 +1898,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -1906,6 +1926,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'data' => [
                         1 => [
                             'B' => 'test1',
+                            'C' => '=SUM(A2:A2)',
                         ],
                         2 => [
                             'B' => 'test1',
@@ -1943,6 +1964,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -1968,6 +1990,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -1993,6 +2016,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -2018,6 +2042,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -2045,6 +2070,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'data' => [
                         1 => [
                             'B' => 'test1',
+                            'C' => '=SUM(A2:A2)',
                         ],
                         2 => [
                             'B' => 'test1',
@@ -2176,6 +2202,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -2201,6 +2228,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -2226,6 +2254,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -2251,6 +2280,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -2278,6 +2308,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'data' => [
                         1 => [
                             'B' => 'test1',
+                            'C' => '=SUM(A2:A2)',
                         ],
                         2 => [
                             'B' => 'test1',
@@ -2326,6 +2357,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -2356,6 +2388,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -2386,6 +2419,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     1 => [
                         'A' => 'foo',
                         'B' => '[foo]',
+                        'C' => '=SUM(A2:A2)',
                     ],
                     2 => [
                         'A' => 'foo',
@@ -2418,6 +2452,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     'data' => [
                         1 => [
                             'B' => 'test1',
+                            'C' => '=SUM(A2:A4)',
                         ],
                         2 => [
                             'A' => 'foo',
@@ -3069,6 +3104,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'A2', 'to' => 'A3'],
                         ['from' => 'B2', 'to' => 'B3'],
                         ['from' => 'C2', 'to' => 'C3'],
+                        ['from' => 'D2', 'to' => 'D3'],
                         ['from' => 'E1', 'to' => 'F1'],
                         ['from' => 'E1', 'to' => 'G1'],
                         ['from' => 'E2', 'to' => 'E3'],
@@ -3317,8 +3353,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                             'D' => 753.14,
                             'E' => 'bar',
                             'G' => 15000,
-                            'H' => 20000,
-                            'I' => 30000,
+                            'I' => 20000,
+                            'K' => 30000,
                             'Q' => '=A1+B3+C4+D7',
                         ],
                         5 => [
@@ -3328,8 +3364,8 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                             'D' => 123,
                             'E' => 'bar',
                             'G' => null,
-                            'H' => null,
                             'I' => null,
+                            'K' => null,
                             'Q' => '=A1+B3+C5+D7',
                         ],
                         7 => [
@@ -3353,18 +3389,29 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'G3', 'to' => 'H3'],
                         ['from' => 'G3', 'to' => 'I3'],
                         ['from' => 'G4', 'to' => 'G5'],
-                        ['from' => 'G4', 'to' => 'H4'],
                         ['from' => 'G4', 'to' => 'I4'],
+                        ['from' => 'G4', 'to' => 'K4'],
                         ['from' => 'H4', 'to' => 'H5'],
+                        ['from' => 'H4', 'to' => 'J4'],
+                        ['from' => 'H4', 'to' => 'L4'],
                         ['from' => 'I4', 'to' => 'I5'],
+                        ['from' => 'J4', 'to' => 'J5'],
+                        ['from' => 'K4', 'to' => 'K5'],
+                        ['from' => 'L4', 'to' => 'L5'],
                         ['from' => 'Q4', 'to' => 'Q5'],
                     ],
 
-                    'merge_cells' => ['G5:H5'],
+                    'merge_cells' => [
+                        'I4:J4', 'K4:L4',
+                        'G5:H5', 'I5:J5', 'K5:L5',
+                    ],
 
                     'copy_width' => [
                         ['from' => 'G', 'to' => 'H'],
                         ['from' => 'G', 'to' => 'I'],
+                        ['from' => 'G', 'to' => 'K'],
+                        ['from' => 'H', 'to' => 'J'],
+                        ['from' => 'H', 'to' => 'L'],
                     ],
 
                     'copy_cell_format' => [
@@ -3376,10 +3423,10 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'G3', 'to' => 'H3'],
                         ['from' => 'G3', 'to' => 'I3'],
                         ['from' => 'G4', 'to' => 'G5'],
-                        ['from' => 'G4', 'to' => 'H4'],
                         ['from' => 'G4', 'to' => 'I4'],
-                        ['from' => 'H4', 'to' => 'H5'],
+                        ['from' => 'G4', 'to' => 'K4'],
                         ['from' => 'I4', 'to' => 'I5'],
+                        ['from' => 'K4', 'to' => 'K5'],
                         ['from' => 'Q4', 'to' => 'Q5'],
                     ],
                 ],
@@ -3938,6 +3985,907 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_matrix_merge_1x1()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '[foo]',
+                    ],
+                    2 => [
+                        'A' => '[matrix]',
+                    ],
+                    3 => [
+                        'A' => '[bar]',
+                    ],
+                ],
+
+                'data' => [
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                    'matrix' => [
+                        [['one', 'two', 'three', 'four']],
+                    ],
+                ],
+
+                'merge_cells' => [],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => 'test1',
+                        ],
+                        2 => [
+                            'A' => 'one',
+                            'B' => 'two',
+                            'C' => 'three',
+                            'D' => 'four',
+                        ],
+                        3 => [
+                            'A' => 'test2',
+                        ],
+                    ],
+
+                    'rows' => [],
+
+                    'copy_style' => [
+                        ['from' => 'A2', 'to' => 'B2'],
+                        ['from' => 'A2', 'to' => 'C2'],
+                        ['from' => 'A2', 'to' => 'D2'],
+                    ],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [
+                        ['from' => 'A', 'to' => 'B'],
+                        ['from' => 'A', 'to' => 'C'],
+                        ['from' => 'A', 'to' => 'D'],
+                    ],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'B2'],
+                        ['from' => 'A2', 'to' => 'C2'],
+                        ['from' => 'A2', 'to' => 'D2'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_matrix_merge_1x2()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '[foo]',
+                    ],
+                    2 => [
+                        'A' => '[matrix]',
+                    ],
+                    3 => [
+                        'A' => '[bar]',
+                    ],
+                ],
+
+                'data' => [
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                    'matrix' => [
+                        [['one', 'two', 'three', 'four']],
+                    ],
+                ],
+
+                'merge_cells' => ['A2:B2'],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => 'test1',
+                        ],
+                        2 => [
+                            'A' => 'one',
+                            'C' => 'two',
+                            'E' => 'three',
+                            'G' => 'four',
+                        ],
+                        3 => [
+                            'A' => 'test2',
+                        ],
+                    ],
+
+                    'rows' => [],
+
+                    'copy_style' => [
+                        ['from' => 'A2', 'to' => 'C2'],
+                        ['from' => 'A2', 'to' => 'E2'],
+                        ['from' => 'A2', 'to' => 'G2'],
+                        ['from' => 'B2', 'to' => 'D2'],
+                        ['from' => 'B2', 'to' => 'F2'],
+                        ['from' => 'B2', 'to' => 'H2'],
+                    ],
+
+                    'merge_cells' => ['C2:D2', 'E2:F2', 'G2:H2'],
+
+                    'copy_width' => [
+                        ['from' => 'A', 'to' => 'C'],
+                        ['from' => 'A', 'to' => 'E'],
+                        ['from' => 'A', 'to' => 'G'],
+                        ['from' => 'B', 'to' => 'D'],
+                        ['from' => 'B', 'to' => 'F'],
+                        ['from' => 'B', 'to' => 'H'],
+                    ],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'C2'],
+                        ['from' => 'A2', 'to' => 'E2'],
+                        ['from' => 'A2', 'to' => 'G2'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_matrix_merge_1x3()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '[foo]',
+                    ],
+                    2 => [
+                        'A' => '[matrix]',
+                    ],
+                    3 => [
+                        'A' => '[bar]',
+                    ],
+                ],
+
+                'data' => [
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                    'matrix' => [
+                        [['one', 'two', 'three', 'four']],
+                    ],
+                ],
+
+                'merge_cells' => ['A2:C2'],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => 'test1',
+                        ],
+                        2 => [
+                            'A' => 'one',
+                            'D' => 'two',
+                            'G' => 'three',
+                            'J' => 'four',
+                        ],
+                        3 => [
+                            'A' => 'test2',
+                        ],
+                    ],
+
+                    'rows' => [],
+
+                    'copy_style' => [
+                        ['from' => 'A2', 'to' => 'D2'],
+                        ['from' => 'A2', 'to' => 'G2'],
+                        ['from' => 'A2', 'to' => 'J2'],
+                        ['from' => 'B2', 'to' => 'E2'],
+                        ['from' => 'B2', 'to' => 'H2'],
+                        ['from' => 'B2', 'to' => 'K2'],
+                        ['from' => 'C2', 'to' => 'F2'],
+                        ['from' => 'C2', 'to' => 'I2'],
+                        ['from' => 'C2', 'to' => 'L2'],
+                    ],
+
+                    'merge_cells' => ['D2:F2', 'G2:I2', 'J2:L2'],
+
+                    'copy_width' => [
+                        ['from' => 'A', 'to' => 'D'],
+                        ['from' => 'A', 'to' => 'G'],
+                        ['from' => 'A', 'to' => 'J'],
+                        ['from' => 'B', 'to' => 'E'],
+                        ['from' => 'B', 'to' => 'H'],
+                        ['from' => 'B', 'to' => 'K'],
+                        ['from' => 'C', 'to' => 'F'],
+                        ['from' => 'C', 'to' => 'I'],
+                        ['from' => 'C', 'to' => 'L'],
+                    ],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'D2'],
+                        ['from' => 'A2', 'to' => 'G2'],
+                        ['from' => 'A2', 'to' => 'J2'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_matrix_merge_3x1()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '[foo]',
+                    ],
+                    2 => [
+                        'A' => '[matrix]',
+                    ],
+                    3 => [
+                        'A' => '[bar]',
+                    ],
+                ],
+
+                'data' => [
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                    'matrix' => [
+                        [['one', 'two', 'three', 'four']],
+                        [['one-b', 'two-b', 'three-b', 'four-b']],
+                        [['one-c', 'two-c', 'three-c', 'four-c']],
+                    ],
+                ],
+
+                'merge_cells' => [],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => 'test1',
+                        ],
+                        2 => [
+                            'A' => 'one',
+                            'B' => 'two',
+                            'C' => 'three',
+                            'D' => 'four',
+                        ],
+                        3 => [
+                            'A' => 'one-b',
+                            'B' => 'two-b',
+                            'C' => 'three-b',
+                            'D' => 'four-b',
+                        ],
+                        4 => [
+                            'A' => 'one-c',
+                            'B' => 'two-c',
+                            'C' => 'three-c',
+                            'D' => 'four-c',
+                        ],
+                        5 => [
+                            'A' => 'test2',
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 3],
+                        ['action' => 'add', 'row' => 4],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'B2'],
+                        ['from' => 'A2', 'to' => 'C2'],
+                        ['from' => 'A2', 'to' => 'D2'],
+                        ['from' => 'B2', 'to' => 'B3'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'C2', 'to' => 'C3'],
+                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'D2', 'to' => 'D3'],
+                        ['from' => 'D2', 'to' => 'D4'],
+                    ],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [
+                        ['from' => 'A', 'to' => 'B'],
+                        ['from' => 'A', 'to' => 'C'],
+                        ['from' => 'A', 'to' => 'D'],
+                    ],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'B2'],
+                        ['from' => 'A2', 'to' => 'C2'],
+                        ['from' => 'A2', 'to' => 'D2'],
+                        ['from' => 'B2', 'to' => 'B3'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'C2', 'to' => 'C3'],
+                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'D2', 'to' => 'D3'],
+                        ['from' => 'D2', 'to' => 'D4'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_matrix_merge_3x2()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '[foo]',
+                    ],
+                    2 => [
+                        'A' => '[matrix]',
+                    ],
+                    3 => [
+                        'A' => '[bar]',
+                    ],
+                ],
+
+                'data' => [
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                    'matrix' => [
+                        [['one', 'two', 'three', 'four']],
+                        [['one-b', 'two-b', 'three-b', 'four-b']],
+                        [['one-c', 'two-c', 'three-c', 'four-c']],
+                    ],
+                ],
+
+                'merge_cells' => ['A2:B2'],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => 'test1',
+                        ],
+                        2 => [
+                            'A' => 'one',
+                            'C' => 'two',
+                            'E' => 'three',
+                            'G' => 'four',
+                        ],
+                        3 => [
+                            'A' => 'one-b',
+                            'C' => 'two-b',
+                            'E' => 'three-b',
+                            'G' => 'four-b',
+                        ],
+                        4 => [
+                            'A' => 'one-c',
+                            'C' => 'two-c',
+                            'E' => 'three-c',
+                            'G' => 'four-c',
+                        ],
+                        5 => [
+                            'A' => 'test2',
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 3],
+                        ['action' => 'add', 'row' => 4],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'C2'],
+                        ['from' => 'A2', 'to' => 'E2'],
+                        ['from' => 'A2', 'to' => 'G2'],
+                        ['from' => 'B2', 'to' => 'B3'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'B2', 'to' => 'D2'],
+                        ['from' => 'B2', 'to' => 'F2'],
+                        ['from' => 'B2', 'to' => 'H2'],
+                        ['from' => 'C2', 'to' => 'C3'],
+                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'D2', 'to' => 'D3'],
+                        ['from' => 'D2', 'to' => 'D4'],
+                        ['from' => 'E2', 'to' => 'E3'],
+                        ['from' => 'E2', 'to' => 'E4'],
+                        ['from' => 'F2', 'to' => 'F3'],
+                        ['from' => 'F2', 'to' => 'F4'],
+                        ['from' => 'G2', 'to' => 'G3'],
+                        ['from' => 'G2', 'to' => 'G4'],
+                        ['from' => 'H2', 'to' => 'H3'],
+                        ['from' => 'H2', 'to' => 'H4'],
+                    ],
+
+                    'merge_cells' => [
+                        'C2:D2', 'E2:F2', 'G2:H2',
+                        'A3:B3', 'C3:D3', 'E3:F3', 'G3:H3',
+                        'A4:B4', 'C4:D4', 'E4:F4', 'G4:H4',
+                    ],
+
+                    'copy_width' => [
+                        ['from' => 'A', 'to' => 'C'],
+                        ['from' => 'A', 'to' => 'E'],
+                        ['from' => 'A', 'to' => 'G'],
+                        ['from' => 'B', 'to' => 'D'],
+                        ['from' => 'B', 'to' => 'F'],
+                        ['from' => 'B', 'to' => 'H'],
+                    ],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'C2'],
+                        ['from' => 'A2', 'to' => 'E2'],
+                        ['from' => 'A2', 'to' => 'G2'],
+                        ['from' => 'C2', 'to' => 'C3'],
+                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'E2', 'to' => 'E3'],
+                        ['from' => 'E2', 'to' => 'E4'],
+                        ['from' => 'G2', 'to' => 'G3'],
+                        ['from' => 'G2', 'to' => 'G4'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_matrix_merge_3x3()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '[foo]',
+                    ],
+                    2 => [
+                        'A' => '[matrix]',
+                    ],
+                    3 => [
+                        'A' => '[bar]',
+                    ],
+                ],
+
+                'data' => [
+                    'foo' => 'test1',
+                    'bar' => 'test2',
+                    'matrix' => [
+                        [['one', 'two', 'three', 'four']],
+                        [['one-b', 'two-b', 'three-b', 'four-b']],
+                        [['one-c', 'two-c', 'three-c', 'four-c']],
+                    ],
+                ],
+
+                'merge_cells' => ['A2:C2'],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => 'test1',
+                        ],
+                        2 => [
+                            'A' => 'one',
+                            'D' => 'two',
+                            'G' => 'three',
+                            'J' => 'four',
+                        ],
+                        3 => [
+                            'A' => 'one-b',
+                            'D' => 'two-b',
+                            'G' => 'three-b',
+                            'J' => 'four-b',
+                        ],
+                        4 => [
+                            'A' => 'one-c',
+                            'D' => 'two-c',
+                            'G' => 'three-c',
+                            'J' => 'four-c',
+                        ],
+                        5 => [
+                            'A' => 'test2',
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 3],
+                        ['action' => 'add', 'row' => 4],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'D2'],
+                        ['from' => 'A2', 'to' => 'G2'],
+                        ['from' => 'A2', 'to' => 'J2'],
+                        ['from' => 'B2', 'to' => 'B3'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'B2', 'to' => 'E2'],
+                        ['from' => 'B2', 'to' => 'H2'],
+                        ['from' => 'B2', 'to' => 'K2'],
+                        ['from' => 'C2', 'to' => 'C3'],
+                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'C2', 'to' => 'F2'],
+                        ['from' => 'C2', 'to' => 'I2'],
+                        ['from' => 'C2', 'to' => 'L2'],
+                        ['from' => 'D2', 'to' => 'D3'],
+                        ['from' => 'D2', 'to' => 'D4'],
+                        ['from' => 'E2', 'to' => 'E3'],
+                        ['from' => 'E2', 'to' => 'E4'],
+                        ['from' => 'F2', 'to' => 'F3'],
+                        ['from' => 'F2', 'to' => 'F4'],
+                        ['from' => 'G2', 'to' => 'G3'],
+                        ['from' => 'G2', 'to' => 'G4'],
+                        ['from' => 'H2', 'to' => 'H3'],
+                        ['from' => 'H2', 'to' => 'H4'],
+                        ['from' => 'I2', 'to' => 'I3'],
+                        ['from' => 'I2', 'to' => 'I4'],
+                        ['from' => 'J2', 'to' => 'J3'],
+                        ['from' => 'J2', 'to' => 'J4'],
+                        ['from' => 'K2', 'to' => 'K3'],
+                        ['from' => 'K2', 'to' => 'K4'],
+                        ['from' => 'L2', 'to' => 'L3'],
+                        ['from' => 'L2', 'to' => 'L4'],
+                    ],
+
+                    'merge_cells' => [
+                        'D2:F2', 'G2:I2', 'J2:L2',
+                        'A3:C3', 'D3:F3', 'G3:I3', 'J3:L3',
+                        'A4:C4', 'D4:F4', 'G4:I4', 'J4:L4',
+                    ],
+
+                    'copy_width' => [
+                        ['from' => 'A', 'to' => 'D'],
+                        ['from' => 'A', 'to' => 'G'],
+                        ['from' => 'A', 'to' => 'J'],
+                        ['from' => 'B', 'to' => 'E'],
+                        ['from' => 'B', 'to' => 'H'],
+                        ['from' => 'B', 'to' => 'K'],
+                        ['from' => 'C', 'to' => 'F'],
+                        ['from' => 'C', 'to' => 'I'],
+                        ['from' => 'C', 'to' => 'L'],
+                    ],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'D2'],
+                        ['from' => 'A2', 'to' => 'G2'],
+                        ['from' => 'A2', 'to' => 'J2'],
+                        ['from' => 'D2', 'to' => 'D3'],
+                        ['from' => 'D2', 'to' => 'D4'],
+                        ['from' => 'G2', 'to' => 'G3'],
+                        ['from' => 'G2', 'to' => 'G4'],
+                        ['from' => 'J2', 'to' => 'J3'],
+                        ['from' => 'J2', 'to' => 'J4'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_matrix_merge_multi1()
+    {
+        $data = [
+            [
+                'values' => [
+                    2 => [
+                        'C' => '[project.months]',
+                    ],
+                    3 => [
+                        'A' => '[project.name]',
+                        'C' => '[project.amount]',
+                    ],
+                ],
+
+                'data' => [
+                    'project' => [
+                        'name' => ['N1', 'N2', 'N3'],
+                        'months' => [['01', '02', '03']],
+                        'amount' => [
+                            [101, 201, 301],
+                            [102, 202, 302],
+                            [103, 203, 303],
+                        ],
+                    ],
+                ],
+
+                'merge_cells' => ['C2:D2', 'A3:B3', 'C3:D3'],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        2 => [
+                            'C' => '01',
+                            'E' => '02',
+                            'G' => '03',
+                        ],
+                        3 => [
+                            'A' => 'N1',
+                            'C' => 101,
+                            'E' => 201,
+                            'G' => 301,
+                        ],
+                        4 => [
+                            'A' => 'N2',
+                            'C' => 102,
+                            'E' => 202,
+                            'G' => 302,
+                        ],
+                        5 => [
+                            'A' => 'N3',
+                            'C' => 103,
+                            'E' => 203,
+                            'G' => 303,
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 4],
+                        ['action' => 'add', 'row' => 5],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A3', 'to' => 'A4'],
+                        ['from' => 'A3', 'to' => 'A5'],
+                        ['from' => 'B3', 'to' => 'B4'],
+                        ['from' => 'B3', 'to' => 'B5'],
+                        ['from' => 'C2', 'to' => 'E2'],
+                        ['from' => 'C2', 'to' => 'G2'],
+                        ['from' => 'C3', 'to' => 'C4'],
+                        ['from' => 'C3', 'to' => 'C5'],
+                        ['from' => 'C3', 'to' => 'E3'],
+                        ['from' => 'C3', 'to' => 'G3'],
+                        ['from' => 'D2', 'to' => 'F2'],
+                        ['from' => 'D2', 'to' => 'H2'],
+                        ['from' => 'D3', 'to' => 'D4'],
+                        ['from' => 'D3', 'to' => 'D5'],
+                        ['from' => 'D3', 'to' => 'F3'],
+                        ['from' => 'D3', 'to' => 'H3'],
+                        ['from' => 'E3', 'to' => 'E4'],
+                        ['from' => 'E3', 'to' => 'E5'],
+                        ['from' => 'F3', 'to' => 'F4'],
+                        ['from' => 'F3', 'to' => 'F5'],
+                        ['from' => 'G3', 'to' => 'G4'],
+                        ['from' => 'G3', 'to' => 'G5'],
+                        ['from' => 'H3', 'to' => 'H4'],
+                        ['from' => 'H3', 'to' => 'H5'],
+                    ],
+
+                    'merge_cells' => [
+                        'E2:F2', 'G2:H2',
+                        'E3:F3', 'G3:H3',
+                        'A4:B4', 'C4:D4', 'E4:F4', 'G4:H4',
+                        'A5:B5', 'C5:D5', 'E5:F5', 'G5:H5',
+                    ],
+
+                    'copy_width' => [
+                        ['from' => 'C', 'to' => 'E'],
+                        ['from' => 'C', 'to' => 'G'],
+                        ['from' => 'D', 'to' => 'F'],
+                        ['from' => 'D', 'to' => 'H'],
+                    ],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A3', 'to' => 'A4'],
+                        ['from' => 'A3', 'to' => 'A5'],
+                        ['from' => 'C2', 'to' => 'E2'],
+                        ['from' => 'C2', 'to' => 'G2'],
+                        ['from' => 'C3', 'to' => 'C4'],
+                        ['from' => 'C3', 'to' => 'C5'],
+                        ['from' => 'C3', 'to' => 'E3'],
+                        ['from' => 'C3', 'to' => 'G3'],
+                        ['from' => 'E3', 'to' => 'E4'],
+                        ['from' => 'E3', 'to' => 'E5'],
+                        ['from' => 'G3', 'to' => 'G4'],
+                        ['from' => 'G3', 'to' => 'G5'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_matrix_merge_multi2()
+    {
+        $data = [
+            [
+                'values' => [
+                    2 => [
+                        'D' => '[project.months]',
+                    ],
+                    3 => [
+                        'A' => '[project.name]',
+                        'D' => '[project.amount]',
+                    ],
+                ],
+
+                'data' => [
+                    'project' => [
+                        'name' => ['N1', 'N2', 'N3'],
+                        'months' => [['01', '02', '03']],
+                        'amount' => [
+                            [101, 201, 301],
+                            [102, 202, 302],
+                            [103, 203, 303],
+                        ],
+                    ],
+                ],
+
+                'merge_cells' => ['D2:F2', 'A3:C3', 'D3:F3'],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        2 => [
+                            'D' => '01',
+                            'G' => '02',
+                            'J' => '03',
+                        ],
+                        3 => [
+                            'A' => 'N1',
+                            'D' => 101,
+                            'G' => 201,
+                            'J' => 301,
+                        ],
+                        4 => [
+                            'A' => 'N2',
+                            'D' => 102,
+                            'G' => 202,
+                            'J' => 302,
+                        ],
+                        5 => [
+                            'A' => 'N3',
+                            'D' => 103,
+                            'G' => 203,
+                            'J' => 303,
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 4],
+                        ['action' => 'add', 'row' => 5],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A3', 'to' => 'A4'],
+                        ['from' => 'A3', 'to' => 'A5'],
+                        ['from' => 'B3', 'to' => 'B4'],
+                        ['from' => 'B3', 'to' => 'B5'],
+                        ['from' => 'C3', 'to' => 'C4'],
+                        ['from' => 'C3', 'to' => 'C5'],
+                        ['from' => 'D2', 'to' => 'G2'],
+                        ['from' => 'D2', 'to' => 'J2'],
+                        ['from' => 'D3', 'to' => 'D4'],
+                        ['from' => 'D3', 'to' => 'D5'],
+                        ['from' => 'D3', 'to' => 'G3'],
+                        ['from' => 'D3', 'to' => 'J3'],
+                        ['from' => 'E2', 'to' => 'H2'],
+                        ['from' => 'E2', 'to' => 'K2'],
+                        ['from' => 'E3', 'to' => 'E4'],
+                        ['from' => 'E3', 'to' => 'E5'],
+                        ['from' => 'E3', 'to' => 'H3'],
+                        ['from' => 'E3', 'to' => 'K3'],
+                        ['from' => 'F2', 'to' => 'I2'],
+                        ['from' => 'F2', 'to' => 'L2'],
+                        ['from' => 'F3', 'to' => 'F4'],
+                        ['from' => 'F3', 'to' => 'F5'],
+                        ['from' => 'F3', 'to' => 'I3'],
+                        ['from' => 'F3', 'to' => 'L3'],
+                        ['from' => 'G3', 'to' => 'G4'],
+                        ['from' => 'G3', 'to' => 'G5'],
+                        ['from' => 'H3', 'to' => 'H4'],
+                        ['from' => 'H3', 'to' => 'H5'],
+                        ['from' => 'I3', 'to' => 'I4'],
+                        ['from' => 'I3', 'to' => 'I5'],
+                        ['from' => 'J3', 'to' => 'J4'],
+                        ['from' => 'J3', 'to' => 'J5'],
+                        ['from' => 'K3', 'to' => 'K4'],
+                        ['from' => 'K3', 'to' => 'K5'],
+                        ['from' => 'L3', 'to' => 'L4'],
+                        ['from' => 'L3', 'to' => 'L5'],
+                    ],
+
+                    'merge_cells' => [
+                        'G2:I2', 'J2:L2',
+                        'G3:I3', 'J3:L3',
+                        'A4:C4', 'D4:F4', 'G4:I4', 'J4:L4',
+                        'A5:C5', 'D5:F5', 'G5:I5', 'J5:L5',
+                    ],
+
+                    'copy_width' => [
+                        ['from' => 'D', 'to' => 'G'],
+                        ['from' => 'D', 'to' => 'J'],
+                        ['from' => 'E', 'to' => 'H'],
+                        ['from' => 'E', 'to' => 'K'],
+                        ['from' => 'F', 'to' => 'I'],
+                        ['from' => 'F', 'to' => 'L'],
+                    ],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A3', 'to' => 'A4'],
+                        ['from' => 'A3', 'to' => 'A5'],
+                        ['from' => 'D2', 'to' => 'G2'],
+                        ['from' => 'D2', 'to' => 'J2'],
+                        ['from' => 'D3', 'to' => 'D4'],
+                        ['from' => 'D3', 'to' => 'D5'],
+                        ['from' => 'D3', 'to' => 'G3'],
+                        ['from' => 'D3', 'to' => 'J3'],
+                        ['from' => 'G3', 'to' => 'G4'],
+                        ['from' => 'G3', 'to' => 'G5'],
+                        ['from' => 'J3', 'to' => 'J4'],
+                        ['from' => 'J3', 'to' => 'J5'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
                 "$id"
             );
         }

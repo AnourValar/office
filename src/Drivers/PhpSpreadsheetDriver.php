@@ -212,7 +212,7 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
 
     /**
      * {@inheritDoc}
-     * @see \AnourValar\Office\Drivers\TemplateInterface::copyCellFormat($cellFrom, $rangeTo)
+     * @see \AnourValar\Office\Drivers\TemplateInterface::copyCellFormat()
      */
     public function copyCellFormat(string $cellFrom, string $rangeTo): self
     {

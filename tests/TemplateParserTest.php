@@ -4890,4 +4890,1224 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
             );
         }
     }
+
+    /**
+     * @return void
+     */
+    public function test_schema_list_merge_0x2()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '=SUM(A2:A2)',
+                        'B' => '=SUM(B3:B3)',
+                    ],
+                    2 => [
+                        'A' => '[project.id]',
+                        'B' => '[project.name]',
+                    ],
+                    3 => [
+                        'B' => '[project.amount_1]',
+                        'C' => '[project.amount_2]',
+                    ],
+                    4 => [
+                        'A' => '[foo]',
+                    ],
+                ],
+
+                'data' => [
+                    'project' => [],
+                    'foo' => 'test1',
+                ],
+
+                'merge_cells' => ['A2:A3'],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => '=SUM(A2:A2)',
+                            'B' => '=SUM(B3:B3)',
+                        ],
+                        2 => [
+                            'A' => null,
+                            'B' => null,
+                        ],
+                        3 => [
+                            'B' => null,
+                            'C' => null,
+                        ],
+                        4 => [
+                            'A' => 'test1',
+                        ],
+                    ],
+
+                    'rows' => [],
+
+                    'copy_style' => [],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
+
+                    'copy_cell_format' => [],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_list_merge_1x2()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '=SUM(A2:A2)',
+                        'B' => '=SUM(B3:B3)',
+                    ],
+                    2 => [
+                        'A' => '[project.id]',
+                        'B' => '[project.name]',
+                    ],
+                    3 => [
+                        'B' => '[project.amount_1]',
+                        'C' => '[project.amount_2]',
+                    ],
+                    4 => [
+                        'A' => '[foo]',
+                    ],
+                ],
+
+                'data' => [
+                    'project' => [
+                        ['id' => 1, 'name' => 'project 1', 'amount_1' => 101, 'amount_2' => 102],
+                    ],
+                    'foo' => 'test1',
+                ],
+
+                'merge_cells' => ['A2:A3'],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => '=SUM(A2:A2)',
+                            'B' => '=SUM(B3:B3)',
+                        ],
+                        2 => [
+                            'A' => 1,
+                            'B' => 'project 1',
+                        ],
+                        3 => [
+                            'B' => 101,
+                            'C' => 102,
+                        ],
+                        4 => [
+                            'A' => 'test1',
+                        ],
+                    ],
+
+                    'rows' => [],
+
+                    'copy_style' => [],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
+
+                    'copy_cell_format' => [],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_list_merge_2x2()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '=SUM(A2:A2)',
+                        'B' => '=SUM(B3:B3)',
+                    ],
+                    2 => [
+                        'A' => '[project.id]',
+                        'B' => '[project.name]',
+                    ],
+                    3 => [
+                        'B' => '[project.amount_1]',
+                        'C' => '[project.amount_2]',
+                    ],
+                    4 => [
+                        'A' => '[foo]',
+                    ],
+                ],
+
+                'data' => [
+                    'project' => [
+                        ['id' => 1, 'name' => 'project 1', 'amount_1' => 101, 'amount_2' => 102],
+                        ['id' => 2, 'name' => 'project 2', 'amount_1' => 201, 'amount_2' => 202],
+                    ],
+                    'foo' => 'test1',
+                ],
+
+                'merge_cells' => ['A2:A3'],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => '=SUM(A2:A2)',
+                            'B' => '=SUM(B3:B3)',
+                        ],
+                        2 => [
+                            'A' => 1,
+                            'B' => 'project 1',
+                        ],
+                        3 => [
+                            'B' => 101,
+                            'C' => 102,
+                        ],
+                        4 => [
+                            'A' => 2,
+                            'B' => 'project 2',
+                        ],
+                        5 => [
+                            'B' => 201,
+                            'C' => 202,
+                        ],
+                        6 => [
+                            'A' => 'test1',
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 4],
+                        ['action' => 'add', 'row' => 5],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'B3', 'to' => 'B5'],
+                        ['from' => 'C3', 'to' => 'C5'],
+                    ],
+
+                    'merge_cells' => [
+                        'A4:A5',
+                    ],
+
+                    'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'B3', 'to' => 'B5'],
+                        ['from' => 'C3', 'to' => 'C5'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_list_merge_2x2_skip()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '=SUM(A2:A2)',
+                        'B' => '=SUM(B2:B2)',
+                    ],
+                    2 => [
+                        'A' => 'Hello',
+                        'B' => '[project.name]',
+                    ],
+                    4 => [
+                        'A' => '[foo]',
+                    ],
+                ],
+
+                'data' => [
+                    'project' => [
+                        ['name' => 'project 1'],
+                        ['name' => 'project 2'],
+                    ],
+                    'foo' => 'test1',
+                ],
+
+                'merge_cells' => ['A2:A3'],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            //var_dump( $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray()['copy_style']);exit;
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => '=SUM(A2:A3)',
+                            'B' => '=SUM(B2:B3)',
+                        ],
+                        2 => [
+                            'A' => 'Hello',
+                            'B' => 'project 1',
+                        ],
+                        3 => [
+                            'B' => 'project 2',
+                        ],
+                        5 => [
+                            'A' => 'test1',
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 3],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'B2', 'to' => 'B3'],
+                    ],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'B2', 'to' => 'B3'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_list_merge_3x2()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '=SUM(A2:A2)',
+                        'B' => '=SUM(B3:B3)',
+                    ],
+                    2 => [
+                        'A' => '[project.id]',
+                        'B' => '[project.name]',
+                    ],
+                    3 => [
+                        'B' => '[project.amount_1]',
+                        'C' => '[project.amount_2]',
+                    ],
+                    4 => [
+                        'A' => '[foo]',
+                    ],
+                ],
+
+                'data' => [
+                    'project' => [
+                        ['id' => 1, 'name' => 'project 1', 'amount_1' => 101, 'amount_2' => 102],
+                        ['id' => 2, 'name' => 'project 2', 'amount_1' => 201, 'amount_2' => 202],
+                        ['id' => 3, 'name' => 'project 3', 'amount_1' => 301, 'amount_2' => 302],
+                    ],
+                    'foo' => 'test1',
+                ],
+
+                'merge_cells' => ['A2:A3'],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => '=SUM(A2:A2)',
+                            'B' => '=SUM(B3:B3)',
+                        ],
+                        2 => [
+                            'A' => 1,
+                            'B' => 'project 1',
+                        ],
+                        3 => [
+                            'B' => 101,
+                            'C' => 102,
+                        ],
+                        4 => [
+                            'A' => 2,
+                            'B' => 'project 2',
+                        ],
+                        5 => [
+                            'B' => 201,
+                            'C' => 202,
+                        ],
+                        6 => [
+                            'A' => 3,
+                            'B' => 'project 3',
+                        ],
+                        7 => [
+                            'B' => 301,
+                            'C' => 302,
+                        ],
+                        8 => [
+                            'A' => 'test1',
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 4],
+                        ['action' => 'add', 'row' => 5],
+                        ['action' => 'add', 'row' => 6],
+                        ['action' => 'add', 'row' => 7],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'A6'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'B2', 'to' => 'B6'],
+                        ['from' => 'B3', 'to' => 'B5'],
+                        ['from' => 'B3', 'to' => 'B7'],
+                        ['from' => 'C3', 'to' => 'C5'],
+                        ['from' => 'C3', 'to' => 'C7'],
+                    ],
+
+                    'merge_cells' => [
+                        'A4:A5', 'A6:A7',
+                    ],
+
+                    'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'A6'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'B2', 'to' => 'B6'],
+                        ['from' => 'B3', 'to' => 'B5'],
+                        ['from' => 'B3', 'to' => 'B7'],
+                        ['from' => 'C3', 'to' => 'C5'],
+                        ['from' => 'C3', 'to' => 'C7'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_list_merge_4x2()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '=SUM(A2:A2)',
+                        'B' => '=SUM(B3:B3)',
+                    ],
+                    2 => [
+                        'A' => '[project.id]',
+                        'B' => '[project.name]',
+                    ],
+                    3 => [
+                        'B' => '[project.amount_1]',
+                        'C' => '[project.amount_2]',
+                    ],
+                    4 => [
+                        'A' => '[foo]',
+                    ],
+                ],
+
+                'data' => [
+                    'project' => [
+                        ['id' => 1, 'name' => 'project 1', 'amount_1' => 101, 'amount_2' => 102],
+                        ['id' => 2, 'name' => 'project 2', 'amount_1' => 201, 'amount_2' => 202],
+                        ['id' => 3, 'name' => 'project 3', 'amount_1' => 301, 'amount_2' => 302],
+                        ['id' => 4, 'name' => 'project 4', 'amount_1' => 401, 'amount_2' => 402],
+                    ],
+                    'foo' => 'test1',
+                ],
+
+                'merge_cells' => ['A2:A3'],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => '=SUM(A2:A2)',
+                            'B' => '=SUM(B3:B3)',
+                        ],
+                        2 => [
+                            'A' => 1,
+                            'B' => 'project 1',
+                        ],
+                        3 => [
+                            'B' => 101,
+                            'C' => 102,
+                        ],
+                        4 => [
+                            'A' => 2,
+                            'B' => 'project 2',
+                        ],
+                        5 => [
+                            'B' => 201,
+                            'C' => 202,
+                        ],
+                        6 => [
+                            'A' => 3,
+                            'B' => 'project 3',
+                        ],
+                        7 => [
+                            'B' => 301,
+                            'C' => 302,
+                        ],
+                        8 => [
+                            'A' => 4,
+                            'B' => 'project 4',
+                        ],
+                        9 => [
+                            'B' => 401,
+                            'C' => 402,
+                        ],
+                        10 => [
+                            'A' => 'test1',
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 4],
+                        ['action' => 'add', 'row' => 5],
+                        ['action' => 'add', 'row' => 6],
+                        ['action' => 'add', 'row' => 7],
+                        ['action' => 'add', 'row' => 8],
+                        ['action' => 'add', 'row' => 9],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'A6'],
+                        ['from' => 'A2', 'to' => 'A8'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'B2', 'to' => 'B6'],
+                        ['from' => 'B2', 'to' => 'B8'],
+                        ['from' => 'B3', 'to' => 'B5'],
+                        ['from' => 'B3', 'to' => 'B7'],
+                        ['from' => 'B3', 'to' => 'B9'],
+                        ['from' => 'C3', 'to' => 'C5'],
+                        ['from' => 'C3', 'to' => 'C7'],
+                        ['from' => 'C3', 'to' => 'C9'],
+                    ],
+
+                    'merge_cells' => [
+                        'A4:A5', 'A6:A7', 'A8:A9',
+                    ],
+
+                    'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'A6'],
+                        ['from' => 'A2', 'to' => 'A8'],
+                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'B2', 'to' => 'B6'],
+                        ['from' => 'B2', 'to' => 'B8'],
+                        ['from' => 'B3', 'to' => 'B5'],
+                        ['from' => 'B3', 'to' => 'B7'],
+                        ['from' => 'B3', 'to' => 'B9'],
+                        ['from' => 'C3', 'to' => 'C5'],
+                        ['from' => 'C3', 'to' => 'C7'],
+                        ['from' => 'C3', 'to' => 'C9'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_list_merge_4x3()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '=SUM(A2:A2)',
+                        'B' => '=SUM(B3:B3)',
+                        'C' => '=SUM(C4:C4)',
+                    ],
+                    2 => [
+                        'A' => '[project.id]',
+                        'B' => '[project.name]',
+                    ],
+                    3 => [
+                        'B' => '[project.amount_1]',
+                    ],
+                    4 => [
+                        'C' => '[project.amount_2]',
+                    ],
+                    6 => [
+                        'A' => '[foo]',
+                    ],
+                ],
+
+                'data' => [
+                    'project' => [
+                        ['id' => 1, 'name' => 'project 1', 'amount_1' => 101, 'amount_2' => 102],
+                        ['id' => 2, 'name' => 'project 2', 'amount_1' => 201, 'amount_2' => 202],
+                        ['id' => 3, 'name' => 'project 3', 'amount_1' => 301, 'amount_2' => 302],
+                        ['id' => 4, 'name' => 'project 4', 'amount_1' => 401, 'amount_2' => 402],
+                    ],
+                    'foo' => 'test1',
+                ],
+
+                'merge_cells' => ['A2:A4'],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => '=SUM(A2:A2)',
+                            'B' => '=SUM(B3:B3)',
+                            'C' => '=SUM(C4:C4)',
+                        ],
+                        2 => [
+                            'A' => 1,
+                            'B' => 'project 1',
+                        ],
+                        3 => [
+                            'B' => 101,
+                        ],
+                        4 => [
+                            'C' => 102,
+                        ],
+                        5 => [
+                            'A' => 2,
+                            'B' => 'project 2',
+                        ],
+                        6 => [
+                            'B' => 201,
+                        ],
+                        7 => [
+                            'C' => 202,
+                        ],
+                        8 => [
+                            'A' => 3,
+                            'B' => 'project 3',
+                        ],
+                        9 => [
+                            'B' => 301,
+                        ],
+                        10 => [
+                            'C' => 302,
+                        ],
+                        11 => [
+                            'A' => 4,
+                            'B' => 'project 4',
+                        ],
+                        12 => [
+                            'B' => 401,
+                        ],
+                        13 => [
+                            'C' => 402,
+                        ],
+                        15 => [
+                            'A' => 'test1',
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 5],
+                        ['action' => 'add', 'row' => 6],
+                        ['action' => 'add', 'row' => 7],
+                        ['action' => 'add', 'row' => 8],
+                        ['action' => 'add', 'row' => 9],
+                        ['action' => 'add', 'row' => 10],
+                        ['action' => 'add', 'row' => 11],
+                        ['action' => 'add', 'row' => 12],
+                        ['action' => 'add', 'row' => 13],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A2', 'to' => 'A5'],
+                        ['from' => 'A2', 'to' => 'A8'],
+                        ['from' => 'A2', 'to' => 'A11'],
+                        ['from' => 'B2', 'to' => 'B5'],
+                        ['from' => 'B2', 'to' => 'B8'],
+                        ['from' => 'B2', 'to' => 'B11'],
+                        ['from' => 'B3', 'to' => 'B6'],
+                        ['from' => 'B3', 'to' => 'B9'],
+                        ['from' => 'B3', 'to' => 'B12'],
+                        ['from' => 'C4', 'to' => 'C7'],
+                        ['from' => 'C4', 'to' => 'C10'],
+                        ['from' => 'C4', 'to' => 'C13'],
+                    ],
+
+                    'merge_cells' => [
+                        'A5:A7', 'A8:A10', 'A11:A13',
+                    ],
+
+                    'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'A5'],
+                        ['from' => 'A2', 'to' => 'A8'],
+                        ['from' => 'A2', 'to' => 'A11'],
+                        ['from' => 'B2', 'to' => 'B5'],
+                        ['from' => 'B2', 'to' => 'B8'],
+                        ['from' => 'B2', 'to' => 'B11'],
+                        ['from' => 'B3', 'to' => 'B6'],
+                        ['from' => 'B3', 'to' => 'B9'],
+                        ['from' => 'B3', 'to' => 'B12'],
+                        ['from' => 'C4', 'to' => 'C7'],
+                        ['from' => 'C4', 'to' => 'C10'],
+                        ['from' => 'C4', 'to' => 'C13'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_list_merge_4x4()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '=SUM(A2:A2)',
+                        'B' => '=SUM(B3:B3)',
+                        'C' => '=SUM(C4:C4)',
+                        'D' => '=SUM(D5:D5)',
+                    ],
+                    2 => [
+                        'A' => '[project.id]',
+                        'B' => '[project.name]',
+                    ],
+                    3 => [
+                        'B' => '[project.amount_1]',
+                    ],
+                    4 => [
+                        'C' => '[project.amount_2]',
+                    ],
+                    6 => [
+                        'A' => '[foo]',
+                    ],
+                ],
+
+                'data' => [
+                    'project' => [
+                        ['id' => 1, 'name' => 'project 1', 'amount_1' => 101, 'amount_2' => 102],
+                        ['id' => 2, 'name' => 'project 2', 'amount_1' => 201, 'amount_2' => 202],
+                        ['id' => 3, 'name' => 'project 3', 'amount_1' => 301, 'amount_2' => 302],
+                        ['id' => 4, 'name' => 'project 4', 'amount_1' => 401, 'amount_2' => 402],
+                    ],
+                    'foo' => 'test1',
+                ],
+
+                'merge_cells' => ['A2:A5'],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => '=SUM(A2:A2)',
+                            'B' => '=SUM(B3:B3)',
+                            'C' => '=SUM(C4:C4)',
+                            'D' => '=SUM(D5:D5)',
+                        ],
+                        2 => [
+                            'A' => 1,
+                            'B' => 'project 1',
+                        ],
+                        3 => [
+                            'B' => 101,
+                        ],
+                        4 => [
+                            'C' => 102,
+                        ],
+                        6 => [
+                            'A' => 2,
+                            'B' => 'project 2',
+                        ],
+                        7 => [
+                            'B' => 201,
+                        ],
+                        8 => [
+                            'C' => 202,
+                        ],
+                        10 => [
+                            'A' => 3,
+                            'B' => 'project 3',
+                        ],
+                        11 => [
+                            'B' => 301,
+                        ],
+                        12 => [
+                            'C' => 302,
+                        ],
+                        14 => [
+                            'A' => 4,
+                            'B' => 'project 4',
+                        ],
+                        15 => [
+                            'B' => 401,
+                        ],
+                        16 => [
+                            'C' => 402,
+                        ],
+                        18 => [
+                            'A' => 'test1',
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 6],
+                        ['action' => 'add', 'row' => 7],
+                        ['action' => 'add', 'row' => 8],
+                        ['action' => 'add', 'row' => 9],
+                        ['action' => 'add', 'row' => 10],
+                        ['action' => 'add', 'row' => 11],
+                        ['action' => 'add', 'row' => 12],
+                        ['action' => 'add', 'row' => 13],
+                        ['action' => 'add', 'row' => 14],
+                        ['action' => 'add', 'row' => 15],
+                        ['action' => 'add', 'row' => 16],
+                        ['action' => 'add', 'row' => 17],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A2', 'to' => 'A6'],
+                        ['from' => 'A2', 'to' => 'A10'],
+                        ['from' => 'A2', 'to' => 'A14'],
+                        ['from' => 'B2', 'to' => 'B6'],
+                        ['from' => 'B2', 'to' => 'B10'],
+                        ['from' => 'B2', 'to' => 'B14'],
+                        ['from' => 'B3', 'to' => 'B7'],
+                        ['from' => 'B3', 'to' => 'B11'],
+                        ['from' => 'B3', 'to' => 'B15'],
+                        ['from' => 'C4', 'to' => 'C8'],
+                        ['from' => 'C4', 'to' => 'C12'],
+                        ['from' => 'C4', 'to' => 'C16'],
+                    ],
+
+                    'merge_cells' => [
+                        'A6:A9', 'A10:A13', 'A14:A17',
+                    ],
+
+                    'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'A6'],
+                        ['from' => 'A2', 'to' => 'A10'],
+                        ['from' => 'A2', 'to' => 'A14'],
+                        ['from' => 'B2', 'to' => 'B6'],
+                        ['from' => 'B2', 'to' => 'B10'],
+                        ['from' => 'B2', 'to' => 'B14'],
+                        ['from' => 'B3', 'to' => 'B7'],
+                        ['from' => 'B3', 'to' => 'B11'],
+                        ['from' => 'B3', 'to' => 'B15'],
+                        ['from' => 'C4', 'to' => 'C8'],
+                        ['from' => 'C4', 'to' => 'C12'],
+                        ['from' => 'C4', 'to' => 'C16'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_list_merge_4x5()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '=SUM(A2:A2)',
+                        'B' => '=SUM(B3:B3)',
+                        'C' => '=SUM(C4:C4)',
+                        'D' => '=SUM(D5:D5)',
+                        'E' => '=SUM(E6:E6)',
+                    ],
+                    2 => [
+                        'A' => '[project.id]',
+                        'B' => '[project.name]',
+                    ],
+                    3 => [
+                        'B' => '[project.amount_1]',
+                    ],
+                    5 => [
+                        'C' => '[project.amount_2]',
+                    ],
+                    7 => [
+                        'A' => '[foo]',
+                    ],
+                ],
+
+                'data' => [
+                    'project' => [
+                        ['id' => 1, 'name' => 'project 1', 'amount_1' => 101, 'amount_2' => 102],
+                        ['id' => 2, 'name' => 'project 2', 'amount_1' => 201, 'amount_2' => 202],
+                        ['id' => 3, 'name' => 'project 3', 'amount_1' => 301, 'amount_2' => 302],
+                        ['id' => 4, 'name' => 'project 4', 'amount_1' => 401, 'amount_2' => 402],
+                    ],
+                    'foo' => 'test1',
+                ],
+
+                'merge_cells' => ['A2:A6'],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => '=SUM(A2:A2)',
+                            'B' => '=SUM(B3:B3)',
+                            'C' => '=SUM(C4:C4)',
+                            'D' => '=SUM(D5:D5)',
+                            'E' => '=SUM(E6:E6)',
+                        ],
+                        2 => [
+                            'A' => 1,
+                            'B' => 'project 1',
+                        ],
+                        3 => [
+                            'B' => 101,
+                        ],
+                        5 => [
+                            'C' => 102,
+                        ],
+                        7 => [
+                            'A' => 2,
+                            'B' => 'project 2',
+                        ],
+                        8 => [
+                            'B' => 201,
+                        ],
+                        10 => [
+                            'C' => 202,
+                        ],
+                        12 => [
+                            'A' => 3,
+                            'B' => 'project 3',
+                        ],
+                        13 => [
+                            'B' => 301,
+                        ],
+                        15 => [
+                            'C' => 302,
+                        ],
+                        17 => [
+                            'A' => 4,
+                            'B' => 'project 4',
+                        ],
+                        18 => [
+                            'B' => 401,
+                        ],
+                        20 => [
+                            'C' => 402,
+                        ],
+                        22 => [
+                            'A' => 'test1',
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 7],
+                        ['action' => 'add', 'row' => 8],
+                        ['action' => 'add', 'row' => 9],
+                        ['action' => 'add', 'row' => 10],
+                        ['action' => 'add', 'row' => 11],
+                        ['action' => 'add', 'row' => 12],
+                        ['action' => 'add', 'row' => 13],
+                        ['action' => 'add', 'row' => 14],
+                        ['action' => 'add', 'row' => 15],
+                        ['action' => 'add', 'row' => 16],
+                        ['action' => 'add', 'row' => 17],
+                        ['action' => 'add', 'row' => 18],
+                        ['action' => 'add', 'row' => 19],
+                        ['action' => 'add', 'row' => 20],
+                        ['action' => 'add', 'row' => 21],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A2', 'to' => 'A7'],
+                        ['from' => 'A2', 'to' => 'A12'],
+                        ['from' => 'A2', 'to' => 'A17'],
+                        ['from' => 'B2', 'to' => 'B7'],
+                        ['from' => 'B2', 'to' => 'B12'],
+                        ['from' => 'B2', 'to' => 'B17'],
+                        ['from' => 'B3', 'to' => 'B8'],
+                        ['from' => 'B3', 'to' => 'B13'],
+                        ['from' => 'B3', 'to' => 'B18'],
+                        ['from' => 'C5', 'to' => 'C10'],
+                        ['from' => 'C5', 'to' => 'C15'],
+                        ['from' => 'C5', 'to' => 'C20'],
+                    ],
+
+                    'merge_cells' => [
+                        'A7:A11', 'A12:A16', 'A17:A21',
+                    ],
+
+                    'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'A7'],
+                        ['from' => 'A2', 'to' => 'A12'],
+                        ['from' => 'A2', 'to' => 'A17'],
+                        ['from' => 'B2', 'to' => 'B7'],
+                        ['from' => 'B2', 'to' => 'B12'],
+                        ['from' => 'B2', 'to' => 'B17'],
+                        ['from' => 'B3', 'to' => 'B8'],
+                        ['from' => 'B3', 'to' => 'B13'],
+                        ['from' => 'B3', 'to' => 'B18'],
+                        ['from' => 'C5', 'to' => 'C10'],
+                        ['from' => 'C5', 'to' => 'C15'],
+                        ['from' => 'C5', 'to' => 'C20'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_list_merge_multi()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'B' => '[names]',
+                    ],
+                    2 => [
+                        'A' => '[months]',
+                        'B' => '[amounts.p1]',
+                    ],
+                    4 => [
+                        'B' => '[amounts.p2]',
+                    ],
+                    '5' => [
+                        'A' => '=A1',
+                    ],
+                ],
+
+                'data' => [
+                    'names' => [['One', 'Two', 'Three']],
+                    'months' => ['01', '02', '03'],
+                    'amounts' => [
+                        'p1' => [
+                            ['One R1 P1', 'Two R1 P1', 'Three R1 P1'],
+                            ['One R2 P1', 'Two R2 P1', 'Three R2 P1'],
+                            ['One R3 P1', 'Two R3 P1', 'Three R3 P1'],
+                        ],
+                        'p2' => [
+                            ['One R1 P2', 'Two R1 P2', 'Three R1 P2'],
+                            ['One R2 P2', 'Two R2 P2', 'Three R2 P2'],
+                            ['One R3 P2', 'Two R3 P2', 'Three R3 P2'],
+                        ],
+                    ],
+                ],
+
+                'merge_cells' => ['A2:A4', 'B1:C1', 'B2:C2', 'B4:C4'],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'B' => 'One',
+                            'D' => 'Two',
+                            'F' => 'Three',
+                        ],
+                        2 => [
+                            'A' => '01',
+                            'B' => 'One R1 P1',
+                            'D' => 'Two R1 P1',
+                            'F' => 'Three R1 P1',
+                        ],
+                        4 => [
+                            'B' => 'One R1 P2',
+                            'D' => 'Two R1 P2',
+                            'F' => 'Three R1 P2',
+                        ],
+                        5 => [
+                            'A' => '02',
+                            'B' => 'One R2 P1',
+                            'D' => 'Two R2 P1',
+                            'F' => 'Three R2 P1',
+                        ],
+                        7 => [
+                            'B' => 'One R2 P2',
+                            'D' => 'Two R2 P2',
+                            'F' => 'Three R2 P2',
+                        ],
+                        8 => [
+                            'A' => '03',
+                            'B' => 'One R3 P1',
+                            'D' => 'Two R3 P1',
+                            'F' => 'Three R3 P1',
+                        ],
+                        10 => [
+                            'B' => 'One R3 P2',
+                            'D' => 'Two R3 P2',
+                            'F' => 'Three R3 P2',
+                        ],
+                        11 => [
+                            'A' => '=A1',
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 5],
+                        ['action' => 'add', 'row' => 6],
+                        ['action' => 'add', 'row' => 7],
+                        ['action' => 'add', 'row' => 8],
+                        ['action' => 'add', 'row' => 9],
+                        ['action' => 'add', 'row' => 10],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A2', 'to' => 'A5'],
+                        ['from' => 'A2', 'to' => 'A8'],
+                        ['from' => 'B1', 'to' => 'D1'],
+                        ['from' => 'B1', 'to' => 'F1'],
+                        ['from' => 'B2', 'to' => 'B5'],
+                        ['from' => 'B2', 'to' => 'B8'],
+                        ['from' => 'B2', 'to' => 'D2'],
+                        ['from' => 'B2', 'to' => 'F2'],
+                        ['from' => 'B4', 'to' => 'B7'],
+                        ['from' => 'B4', 'to' => 'B10'],
+                        ['from' => 'B4', 'to' => 'D4'],
+                        ['from' => 'B4', 'to' => 'F4'],
+                        ['from' => 'C1', 'to' => 'E1'],
+                        ['from' => 'C1', 'to' => 'G1'],
+                        ['from' => 'C2', 'to' => 'C5'],
+                        ['from' => 'C2', 'to' => 'C8'],
+                        ['from' => 'C2', 'to' => 'E2'],
+                        ['from' => 'C2', 'to' => 'G2'],
+                        ['from' => 'C4', 'to' => 'C7'],
+                        ['from' => 'C4', 'to' => 'C10'],
+                        ['from' => 'C4', 'to' => 'E4'],
+                        ['from' => 'C4', 'to' => 'G4'],
+                        ['from' => 'D2', 'to' => 'D5'],
+                        ['from' => 'D2', 'to' => 'D8'],
+                        ['from' => 'D4', 'to' => 'D7'],
+                        ['from' => 'D4', 'to' => 'D10'],
+                        ['from' => 'E2', 'to' => 'E5'],
+                        ['from' => 'E2', 'to' => 'E8'],
+                        ['from' => 'E4', 'to' => 'E7'],
+                        ['from' => 'E4', 'to' => 'E10'],
+                        ['from' => 'F2', 'to' => 'F5'],
+                        ['from' => 'F2', 'to' => 'F8'],
+                        ['from' => 'F4', 'to' => 'F7'],
+                        ['from' => 'F4', 'to' => 'F10'],
+                        ['from' => 'G2', 'to' => 'G5'],
+                        ['from' => 'G2', 'to' => 'G8'],
+                        ['from' => 'G4', 'to' => 'G7'],
+                        ['from' => 'G4', 'to' => 'G10'],
+                    ],
+
+                    'merge_cells' => [
+                        'D1:E1', 'F1:G1',
+                        'D2:E2', 'F2:G2',
+                        'A5:A7', 'B5:C5', 'D5:E5', 'F5:G5',
+                        'A8:A10', 'B8:C8', 'D8:E8', 'F8:G8',
+                        'D4:E4', 'F4:G4',
+                        'B7:C7', 'D7:E7', 'F7:G7',
+                        'B10:C10', 'D10:E10', 'F10:G10',
+                    ],
+
+                    'copy_width' => [
+                        ['from' => 'B', 'to' => 'D'],
+                        ['from' => 'B', 'to' => 'F'],
+                        ['from' => 'C', 'to' => 'E'],
+                        ['from' => 'C', 'to' => 'G'],
+                    ],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'A5'],
+                        ['from' => 'A2', 'to' => 'A8'],
+                        ['from' => 'B1', 'to' => 'D1'],
+                        ['from' => 'B1', 'to' => 'F1'],
+                        ['from' => 'B2', 'to' => 'B5'],
+                        ['from' => 'B2', 'to' => 'B8'],
+                        ['from' => 'B2', 'to' => 'D2'],
+                        ['from' => 'B2', 'to' => 'F2'],
+                        ['from' => 'B4', 'to' => 'B7'],
+                        ['from' => 'B4', 'to' => 'B10'],
+                        ['from' => 'B4', 'to' => 'D4'],
+                        ['from' => 'B4', 'to' => 'F4'],
+                        ['from' => 'D2', 'to' => 'D5'],
+                        ['from' => 'D2', 'to' => 'D8'],
+                        ['from' => 'D4', 'to' => 'D7'],
+                        ['from' => 'D4', 'to' => 'D10'],
+                        ['from' => 'F2', 'to' => 'F5'],
+                        ['from' => 'F2', 'to' => 'F8'],
+                        ['from' => 'F4', 'to' => 'F7'],
+                        ['from' => 'F4', 'to' => 'F10'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
 }

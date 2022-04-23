@@ -157,14 +157,71 @@ $data = [
 
 // Available hooks:
 // hookLoad: Closure(TemplateInterface $driver, string $templateFile, Format $templateFormat)
-// hookBefore: Closure(TemplateInterface $templateDriver, array &$data)
-// hookValue: Closure(TemplateInterface $templateDriver, string $cell, mixed $value)
-// hookAfter: Closure(TemplateInterface $templateDriver)
+// hookBefore: Closure(TemplateInterface $driver, array &$data)
+// hookValue: Closure(TemplateInterface $driver, string $cell, mixed $value)
+// hookAfter: Closure(TemplateInterface $driver)
 ```
 
 **generated_document.xlsx:**
 
 ![Demo](https://anour.ru/resources/office-v1-31.png)
+
+### Dynamic templates
+
+```php
+$data = [
+    'group1' => [
+        'name' => 'Group 1',
+        'products' => [
+            ['name' => 'Product 1', 'stock' => 101],
+            ['name' => 'Product 2', 'stock' => 102],
+        ],
+    ],
+    'group2' => [
+        'name' => 'Group 2',
+        'products' => [
+            ['name' => 'Product 3', 'stock' => 103],
+            ['name' => 'Product 4', 'stock' => 104],
+        ],
+    ],
+];
+
+(new \AnourValar\Office\TemplateService())
+    ->hookLoad(function ($driver, string $templateFile, $templateFormat)
+    {
+        // create empty document instead of using existing
+        $driver->create();
+    })
+    ->hookBefore(function ($driver, array &$data)
+    {
+        // place markers on-fly
+        $row = 1;
+        foreach (array_keys($data) as $group) {
+            // group's title
+            $driver
+                ->setValue("A$row", "[{$group}.name]")
+                ->mergeCells("A$row:B$row")
+                ->setStyle("A$row", ['align' => 'center', 'bold' => true]);
+            $row++;
+
+            // group's products
+            $driver
+                ->setValue("A$row", "[$group.products.name]")
+                ->setValue("B$row", "[$group.products.stock]");
+            $row++;
+        }
+    })
+    ->generate('', $data)
+    ->saveAs('generated_document.xlsx'));
+```
+
+**Dynamic template overview**
+
+![Demo](https://anour.ru/resources/office-v1-61.png)
+
+**generated_document.xlsx:**
+
+![Demo](https://anour.ru/resources/office-v1-62.png)
 
 ### Merge (union) few documents to a single file
 
@@ -219,17 +276,17 @@ $data = function () {
 
 // Save as XLSX (Excel)
 (new \AnourValar\Office\GridService())
-    ->hookHeader(function (GridInterface $gridDriver, mixed $header, $key, $column)
+    ->hookHeader(function (GridInterface $driver, mixed $header, $key, $column)
     {
         if (isset($header['width'])) {
-            $gridDriver->setWidth($column, $header['width']); // column with fixed width
+            $driver->setWidth($column, $header['width']); // column with fixed width
         } else {
-            $gridDriver->autoWidth($column); // column with auto width
+            $driver->autoWidth($column); // column with auto width
         }
 
         return $header['title'];
     })
-    ->hookRow(function (GridInterface $gridDriver, mixed $row, $key)
+    ->hookRow(function (GridInterface $driver, mixed $row, $key)
     {
         return [
             $row['name'],
@@ -237,20 +294,20 @@ $data = function () {
         ];
     })
     ->hookAfter(function (
-        GridInterface $gridDriver,
+        GridInterface $driver,
         string $headersRange,
         string $dataRange,
         string $totalRange,
         array $columns
     ) {
-        $gridDriver->setSheetTitle('Foo');
+        $driver->setSheetTitle('Foo');
 
-        $gridDriver->setStyle(
+        $driver->setStyle(
             $headersRange, // A1:B1
             ['bold' => true, 'background_color' => 'EEEEEE']
         );
 
-        $gridDriver->setStyle(
+        $driver->setStyle(
             $totalRange, // A1:B4
             ['borders' => true, 'align' => 'left']
         );

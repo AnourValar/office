@@ -12,28 +12,28 @@ class GridService
     /**
      * Actions with template before data inserted
      *
-     * @var \Closure(GridInterface $gridDriver, array &$headers, iterable &$data, string $leftTopCorner)|null
+     * @var \Closure(GridInterface $driver, array &$headers, iterable &$data, string $leftTopCorner)|null
      */
     protected ?\Closure $hookBefore = null;
 
     /**
      * Header handler
      *
-     * @var \Closure(GridInterface $gridDriver, mixed $header, string|int $key, string $column)|null
+     * @var \Closure(GridInterface $driver, mixed $header, string|int $key, string $column)|null
      */
     protected ?\Closure $hookHeader = null;
 
     /**
      * Row data handler
      *
-     * @var \Closure(GridInterface $gridDriver, mixed $row, string|int $key)|null
+     * @var \Closure(GridInterface $driver, mixed $row, string|int $key)|null
      */
     protected ?\Closure $hookRow = null;
 
     /**
      * Actions with template after data inserted
      *
-     * @var \Closure(GridInterface $gridDriver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)|null
+     * @var \Closure(GridInterface $driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)|null
      */
     protected ?\Closure $hookAfter = null;
 

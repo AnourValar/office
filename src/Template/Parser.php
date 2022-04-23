@@ -43,7 +43,7 @@ class Parser
         $dataSchema = $this->calculateDataSchema($values, $data, $mergeCells, $schema);
 
         // Step 3: Shift formulas
-        $this->shiftFormulas($dataSchema, $schema);
+        $this->shiftFormulas($dataSchema, $schema, $mergeCells);
 
         // Step 4: Replace markers with data
         $this->replaceMarkers($dataSchema, $data, $schema);
@@ -171,8 +171,27 @@ class Parser
     {
         $dataSchema = [];
         $shift = 0;
+        $step = 0;
+        $stepLeft = 0;
+        $stepOrigin = 0;
+        $stepRows = 0;
+
+        // fill in missing rows
+        $prevRow = 0;
+        foreach (array_keys($values) as $row) {
+            $diff = ($row - $prevRow);
+            while ($diff > 1) {
+                $values[$row - $diff + 1] = [];
+                $diff--;
+            }
+
+            $prevRow = $row;
+        }
+        ksort($values);
 
         foreach ($values as $row => $columns) {
+            $maxMergeY = 0;
+
             $additionRows = 0;
             $additionColumns = 0;
             $additionColumn = null;
@@ -211,6 +230,10 @@ class Parser
                 $schema->deleteRow($row + $shift);
                 $shift--;
                 continue;
+            }
+
+            if ($stepRows) {
+                $additionRows = $stepRows;
             }
 
             if (! $additionRows) {
@@ -271,7 +294,30 @@ class Parser
 
             $dataSchema[$row + $shift] = $columns;
             $originalRow = ($row + $shift);
+
+            if ($additionRows) {
+                foreach ($columns as $currKey => $currValue) {
+                    $hasMarker = preg_match('#\[([a-z][a-z\d\.\_]+)\]#i', $currValue);
+
+                    foreach ($mergeCells as $item) {
+                        if ($currKey.$originalRow == $item[0][0].$item[0][1]) {
+                            if (! $hasMarker) {
+                                unset($columns[$currKey]);
+                                continue;
+                            }
+
+                            $maxMergeY = max($maxMergeY, ($item[1][1] - $item[0][1]));
+                        }
+                    }
+                }
+
+                $shift += $maxMergeY;
+            }
+
+            $currAdditionRows = $additionRows;
+
             while ($additionRows) {
+                $shift += $step;
                 $shift++;
                 $additionRows--;
 
@@ -281,15 +327,20 @@ class Parser
                 unset($column);
 
                 $dataSchema[$row + $shift] = $columns;
-                $schema->addRow($row + $shift);
+                if (! $step) {
+                    $schema->addRow($row + $shift);
+                }
 
                 foreach (array_keys($columns) as $curr) {
                     $schema->copyStyle($curr.$originalRow, $curr.($row + $shift));
                     $schema->copyCellFormat($curr.$originalRow, $curr.($row + $shift));
 
                     foreach ($mergeCells as $item) {
-                        if ($curr.$originalRow == $item[0][0].$item[0][1] && $item[0][1] == $item[1][1]) {
-                            $schema->mergeCells(sprintf('%s%s:%s%s', $item[0][0], ($row + $shift), $item[1][0], ($row + $shift)));
+                        if ($curr.$originalRow == $item[0][0].$item[0][1]) {
+                            $diff = $item[1][1] - $item[0][1];
+                            $schema->mergeCells(
+                                sprintf('%s%s:%s%s', $item[0][0], ($row + $shift), $item[1][0], ($row + $shift + $diff))
+                            );
 
                             while ($item[0][0] < $item[1][0]) {
                                 $item[0][0]++;
@@ -298,6 +349,32 @@ class Parser
                         }
                     }
                 }
+
+                $iterate = $maxMergeY;
+                while ($iterate) {
+                    $shift++;
+                    $schema->addRow($row + $shift);
+                    $iterate--;
+                }
+            }
+
+            if ($stepLeft) {
+                $stepLeft--;
+            }
+            if (! $stepLeft) {
+                $step = 0;
+                $stepRows = 0;
+            } else {
+                $stepOrigin--;
+                $shift -= $stepOrigin - $stepLeft;
+            }
+
+            if ($maxMergeY) {
+                $stepRows = $currAdditionRows;
+                $step = $maxMergeY;
+                $stepLeft = $step;
+                $stepOrigin = (($maxMergeY + 1) * ($currAdditionRows)) + $step;
+                $shift -= $stepOrigin;
             }
         }
         unset($values);
@@ -308,9 +385,10 @@ class Parser
     /**
      * @param array $values
      * @param \AnourValar\Office\Template\SchemaMapper $schema
+     * @param array $mergeCells
      * @return void
      */
-    protected function shiftFormulas(array &$values, SchemaMapper &$schema): void
+    protected function shiftFormulas(array &$values, SchemaMapper &$schema, array &$mergeCells): void
     {
         $ranges = [];
 
@@ -398,6 +476,19 @@ class Parser
         }
 
         // Dynamic table ranges
+        foreach ($ranges as $key => $value) {
+            foreach ($mergeCells as $merge) {
+                if (
+                    $value['from'] >= $merge[0][1]
+                    && $value['from'] <= $merge[1][1]
+                    && $merge[0][1] != $merge[1][1]
+                    && preg_match('#\[([a-z][a-z\d\.\_]+)\]#i', $values[$merge[0][1]][$merge[0][0]])
+                ) {
+                    unset($ranges[$key]);
+                }
+            }
+        }
+
         foreach ($values as $row => &$columns) {
             foreach ($columns as &$value) {
                 if (! preg_match('#^\=[A-Z][A-Z\.\d]#', $value)) {

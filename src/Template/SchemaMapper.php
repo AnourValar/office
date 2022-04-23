@@ -26,9 +26,15 @@ class SchemaMapper
      */
     public function toArray(): array
     {
-        sort($this->payload['copy_style']);
+        ksort($this->payload['data']);
+
+        ksort($this->payload['copy_style'], SORT_NATURAL);
+        $this->payload['copy_style'] = array_values($this->payload['copy_style']);
+
         sort($this->payload['copy_width']);
-        sort($this->payload['copy_cell_format']);
+
+        ksort($this->payload['copy_cell_format'], SORT_NATURAL);
+        $this->payload['copy_cell_format'] = array_values($this->payload['copy_cell_format']);
 
         return $this->payload;
     }
@@ -75,7 +81,7 @@ class SchemaMapper
      */
     public function copyStyle(string $from, string $to): self
     {
-        $this->payload['copy_style'][] = ['from' => $from, 'to' => $to];
+        $this->payload['copy_style'][$from.$to] = ['from' => $from, 'to' => $to];
 
         return $this;
     }
@@ -110,7 +116,7 @@ class SchemaMapper
      */
     public function copyCellFormat(string $from, string $to): self
     {
-        $this->payload['copy_cell_format'][] = ['from' => $from, 'to' => $to];
+        $this->payload['copy_cell_format'][$from.$to] = ['from' => $from, 'to' => $to];
 
         return $this;
     }

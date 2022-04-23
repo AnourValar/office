@@ -24,21 +24,21 @@ class TemplateService
     /**
      * Actions with template before data inserted
      *
-     * @var \Closure(TemplateInterface $templateDriver, array &$data)|null
+     * @var \Closure(TemplateInterface $driver, array &$data)|null
      */
     protected ?\Closure $hookBefore = null;
 
     /**
      * Cell's value handler (on set)
      *
-     * @var \Closure(TemplateInterface $templateDriver, string $cell, mixed $value)|null
+     * @var \Closure(TemplateInterface $driver, string $cell, mixed $value)|null
      */
     protected ?\Closure $hookValue = null;
 
     /**
      * Actions with template after data inserted
      *
-     * @var \Closure(TemplateInterface $templateDriver)|null
+     * @var \Closure(TemplateInterface $driver)|null
      */
     protected ?\Closure $hookAfter = null;
 

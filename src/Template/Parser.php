@@ -226,7 +226,7 @@ class Parser
             }
 
 
-            if ($this->shouldBeDeleted($columns, $data)) {
+            if (!$stepRows && $this->shouldBeDeleted($columns, $data)) {
                 $schema->deleteRow($row + $shift);
                 $shift--;
                 continue;
@@ -235,6 +235,7 @@ class Parser
             if ($stepRows) {
                 $additionRows = $stepRows;
             }
+            $currAdditionRows = $additionRows;
 
             if (! $additionRows) {
                 foreach ($columns as $column => $value) {
@@ -313,8 +314,6 @@ class Parser
 
                 $shift += $maxMergeY;
             }
-
-            $currAdditionRows = $additionRows;
 
             while ($additionRows) {
                 $shift += $step;

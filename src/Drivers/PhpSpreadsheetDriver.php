@@ -252,6 +252,13 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
      */
     public function deleteRow(int $row, int $qty = 1): self
     {
+        foreach ($this->getMergeCells() as $merge) {
+            preg_match('#(\d+)#', $merge, $details);
+            if ($details[1] == $row) {
+                $this->sheet->unmergeCells($merge);
+            }
+        }
+
         $this->sheet->removeRow($row, $qty);
 
         return $this;

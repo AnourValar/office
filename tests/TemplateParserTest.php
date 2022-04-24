@@ -6110,4 +6110,203 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
             );
         }
     }
+
+    /**
+     * @return void
+     */
+    public function test_schema_multi_shift1()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '[list.qty]',
+                    ],
+                    2 => [
+                        'A' => '=SUM(A1:A1)',
+                        'B' => '=SUM(A1:A10)',
+                    ],
+                    3 => [
+                        'A' => '-',
+                        'b' => '[! list]',
+                    ],
+                ],
+
+                'data' => [
+                    'list' => [ ['qty' => 1], ['qty' => 2] ],
+                ],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => 1,
+                        ],
+                        2 => [
+                            'A' => 2,
+                        ],
+                        3 => [
+                            'A' => '=SUM(A1:A2)',
+                            'B' => '=SUM(A1:A10)',
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 2],
+                        ['action' => 'delete', 'row' => 4],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A1', 'to' => 'A2'],
+                    ],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A1', 'to' => 'A2'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_multi_shift2()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '=SUM(A2:A2)',
+                        'B' => '=SUM(A2:A20)',
+                    ],
+                    2 => [
+                        'A' => '[list.qty]',
+                    ],
+                    3 => [
+                        'A' => '=SUM(A2:A2)',
+                        'B' => '=SUM(A2:A20)',
+                    ],
+                    4 => [
+                        'A' => '-',
+                        'b' => '[! list]',
+                    ],
+                ],
+
+                'data' => [
+                    'list' => [ ['qty' => 1], ['qty' => 2] ],
+                ],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => '=SUM(A2:A3)',
+                            'B' => '=SUM(A2:A20)',
+                        ],
+                        2 => [
+                            'A' => 1,
+                        ],
+                        3 => [
+                            'A' => 2,
+                        ],
+                        4 => [
+                            'A' => '=SUM(A2:A3)',
+                            'B' => '=SUM(A2:A20)',
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 3],
+                        ['action' => 'delete', 'row' => 5],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                    ],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A2', 'to' => 'A3'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_multi_shift3()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '[list.qty]',
+                    ],
+                    2 => [
+                        'A' => '=SUM(A1:A1)',
+                    ],
+                ],
+
+                'data' => [
+                    'list' => [ ['qty' => 1], ['qty' => 2] ],
+                ],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => 1,
+                        ],
+                        2 => [
+                            'A' => 2,
+                        ],
+                        3 => [
+                            'A' => '=SUM(A1:A2)',
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 2],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A1', 'to' => 'A2'],
+                    ],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A1', 'to' => 'A2'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
+                "$id"
+            );
+        }
+    }
 }

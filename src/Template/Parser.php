@@ -240,7 +240,7 @@ class Parser
                 foreach ($columns as $column => $value) {
                     if (
                         !preg_match('#\[(\$?\!\s*|\$?\=\s*)?[a-z][a-z\d\_\.]+\]#i', (string) $value)
-                        && !preg_match('#^\=[A-Z][A-Z\.\d]#',  (string) $value)
+                        && !preg_match('#^\=[A-Z][A-Z\.\d]#', (string) $value)
                     ) {
                         unset($columns[$column]);
                     }
@@ -435,7 +435,7 @@ class Parser
             if ($prevAction && $prevAction['row'] + 1 == $action['row'] && $action['action'] == 'add' && $prevAction['action'] == 'add') {
                 $prev++;
             } else {
-                if ($prev) {
+                if ($prevAction && $prevAction['action'] == 'add') {
                     $ranges[] = ['from' => ($prevAction['row'] - $prev - 1), 'to' => ($prevAction['row'])];
                 }
 

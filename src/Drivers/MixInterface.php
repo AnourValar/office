@@ -2,7 +2,7 @@
 
 namespace AnourValar\Office\Drivers;
 
-interface MixInterface
+interface MixInterface extends MultiSheetInterface
 {
     /**
      * Set title for an active sheet

@@ -2,12 +2,12 @@
 
 namespace AnourValar\Office;
 
-enum Format
+enum Format: string
 {
-    case Xlsx;
-    case Pdf; // only writer
-    case Html;
-    case Ods;
+    case Xlsx = 'xlsx'; // sheets | grid => reader + write
+    case Pdf = 'pdf'; // sheets | grid => writer
+    case Html = 'html'; // sheets | grid => reader + write
+    case Ods = 'ods'; // sheets | grid => reader + write
 
     /**
      * @return string

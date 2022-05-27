@@ -11,7 +11,7 @@ composer require anourvalar/office
 ### To work with default driver - Phpspreadsheet is required:
 
 ```bash
-composer require phpoffice/phpspreadsheet "^1.22"
+composer require phpoffice/phpspreadsheet "^1.23"
 ```
 
 
@@ -57,7 +57,7 @@ $data = [
 ];
 
 // Save as XLSX (Excel)
-(new \AnourValar\Office\TemplateService())
+(new \AnourValar\Office\SheetsService())
     ->generate(
         'template1.xlsx', // path to template
         $data // input data
@@ -116,9 +116,9 @@ $data = [
 ];
 
 // Save as XLSX (Excel)
-(new \AnourValar\Office\TemplateService())
+(new \AnourValar\Office\SheetsService())
     ->generate('template2.xlsx', $data)
-    ->saveAs('generated_document.xlsx'); // xlsx as save format is set by default
+    ->saveAs('generated_document.xlsx'); // second argument (format) is optional
 ```
 
 **generated_document.xlsx:**
@@ -134,32 +134,32 @@ $data = [
 ```php
 $data = [
     'foo' => 'Hello',
-    
-    'bar' => function (\AnourValar\Office\Drivers\TemplateInterface $driver, $cell) {
+
+    'bar' => function (\AnourValar\Office\Drivers\SheetsInterface $driver, $cell) {
         $driver->insertImage('logo.png', $cell, ['width' => 100, 'offset_y' => -45]);
         return 'Logo!'; // replace marker "[bar]" with return value
     }
 ];
 
-(new \AnourValar\Office\TemplateService())
-    ->hookValue(function (TemplateInterface $driver, $cell, $value) {
-        // Hook will be called for every cell's value which is changing
-    
+(new \AnourValar\Office\SheetsService())
+    ->hookValue(function (SheetsInterface $driver, $cell, $value, int $sheetIndex) {
+        // Hook will be called for every cell which is changing
+
         $value .= ' world';
         return $value;
     })
     ->generate(
-        'template3.ods',
+        'template3.ods', // ods template
         $data,
-        \AnourValar\Office\Format::Ods // template's format
+        true // cells auto format instead of template setup
     )
     ->saveAs('generated_document.xlsx');
 
 // Available hooks:
-// hookLoad: Closure(TemplateInterface $driver, string $templateFile, Format $templateFormat)
-// hookBefore: Closure(TemplateInterface $driver, array &$data)
-// hookValue: Closure(TemplateInterface $driver, string $cell, mixed $value)
-// hookAfter: Closure(TemplateInterface $driver)
+// hookLoad: Closure(SheetsInterface $driver, string $templateFile, Format $templateFormat)
+// hookBefore: Closure(SheetsInterface $driver, array &$data)
+// hookValue: Closure(SheetsInterface $driver, string $cell, mixed $value, int $sheetIndex)
+// hookAfter: Closure(SheetsInterface $driver)
 ```
 
 **generated_document.xlsx:**
@@ -186,11 +186,11 @@ $data = [
     ],
 ];
 
-(new \AnourValar\Office\TemplateService())
+(new \AnourValar\Office\SheetsService())
     ->hookLoad(function ($driver, string $templateFile, $templateFormat)
     {
         // create empty document instead of using existing
-        $driver->create();
+        return $driver->create();
     })
     ->hookBefore(function ($driver, array &$data)
     {
@@ -212,7 +212,7 @@ $data = [
         }
     })
     ->generate('', $data)
-    ->saveAs('generated_document.xlsx'));
+    ->saveAs('generated_document.xlsx');
 ```
 
 **Dynamic template overview**
@@ -229,10 +229,10 @@ $data = [
 $dataA = ['foo' => 'hello'];
 $dataB = ['foo' => 'world'];
 
-$documentA = (new \AnourValar\Office\TemplateService())->generate('template.xlsx', $dataA);
-$documentB = (new \AnourValar\Office\TemplateService())->generate('template.xlsx', $dataB);
+$documentA = (new \AnourValar\Office\SheetsService())->generate('template.xlsx', $dataA);
+$documentB = (new \AnourValar\Office\SheetsService())->generate('template.xlsx', $dataB);
 
-$mixer = new \AnourValar\Office\MixerService();
+$mixer = new \AnourValar\Office\Mixer();
 $mixer($documentA, $documentB)->saveAs('generated_document.xlsx');
 ```
 

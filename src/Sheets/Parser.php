@@ -1,6 +1,6 @@
 <?php
 
-namespace AnourValar\Office\Template;
+namespace AnourValar\Office\Sheets;
 
 class Parser
 {
@@ -25,7 +25,7 @@ class Parser
      * @param array $values
      * @param array $data
      * @param array $mergeCells
-     * @return \AnourValar\Office\Template\SchemaMapper
+     * @return \AnourValar\Office\Sheets\SchemaMapper
      */
     public function schema(array $values, array $data, array $mergeCells): SchemaMapper
     {
@@ -164,7 +164,7 @@ class Parser
      * @param array $values
      * @param array $data
      * @param array $mergeCells
-     * @param \AnourValar\Office\Template\SchemaMapper $schema
+     * @param \AnourValar\Office\Sheets\SchemaMapper $schema
      * @return array
      */
     protected function calculateDataSchema(array &$values, array &$data, array &$mergeCells, SchemaMapper &$schema): array
@@ -383,7 +383,7 @@ class Parser
 
     /**
      * @param array $values
-     * @param \AnourValar\Office\Template\SchemaMapper $schema
+     * @param \AnourValar\Office\Sheets\SchemaMapper $schema
      * @param array $mergeCells
      * @return void
      */
@@ -519,7 +519,7 @@ class Parser
     /**
      * @param array $dataSchema
      * @param array $data
-     * @param \AnourValar\Office\Template\SchemaMapper $schema
+     * @param \AnourValar\Office\Sheets\SchemaMapper $schema
      * @return void
      */
     protected function replaceMarkers(array &$dataSchema, array &$data, SchemaMapper &$schema): void

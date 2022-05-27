@@ -2,7 +2,7 @@
 
 namespace AnourValar\Office\Drivers;
 
-interface TemplateInterface extends SaveInterface, LoadInterface
+interface SheetsInterface extends SaveInterface, LoadInterface, MultiSheetInterface
 {
     /**
      * Set values

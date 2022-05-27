@@ -9,8 +9,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function test_generate_statistic_with_headers()
     {
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('A1:A1', $headersRange);
@@ -23,8 +22,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 [ ],
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('A1:A1', $headersRange);
@@ -37,8 +35,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 [ ['111'] ],
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('A1:A1', $headersRange);
@@ -51,8 +48,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 [ ['foo-1'], ['foo-2'] ],
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('A1:A1', $headersRange);
@@ -65,8 +61,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 [ ['foo-1'], ['foo-2'], ['foo-3'] ],
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('A1:B1', $headersRange);
@@ -79,8 +74,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 [ ],
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('A1:B1', $headersRange);
@@ -93,8 +87,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 [ ['foo-1', 'bar-1'] ],
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('A1:B1', $headersRange);
@@ -107,8 +100,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 [ ['foo-1', 'bar-1'], ['foo-2', 'bar-2'] ],
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('A1:B1', $headersRange);
@@ -121,8 +113,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 [ ['foo-1', 'bar-1'], ['foo-2', 'bar-2'], ['foo-3', 'bar-3'] ],
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('A1:C1', $headersRange);
@@ -135,8 +126,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 [  ],
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('A1:C1', $headersRange);
@@ -149,8 +139,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 [ ['foo-1', 'bar-1', 'baz-1']  ],
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('A1:C1', $headersRange);
@@ -163,8 +152,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 [ ['foo-1', 'bar-1', 'baz-1'], ['foo-2', 'bar-2', 'baz-2']  ],
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('A1:C1', $headersRange);
@@ -183,8 +171,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function test_generate_statistic_with_headers_with_shift()
     {
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('C5:C5', $headersRange);
@@ -198,8 +185,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 'C5'
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('C5:C5', $headersRange);
@@ -213,8 +199,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 'C5'
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('C5:C5', $headersRange);
@@ -228,8 +213,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 'C5'
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('C5:C5', $headersRange);
@@ -243,8 +227,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 'C5'
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('C5:D5', $headersRange);
@@ -258,8 +241,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 'C5'
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('C5:D5', $headersRange);
@@ -273,8 +255,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 'C5'
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('C5:D5', $headersRange);
@@ -288,8 +269,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 'C5'
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('C5:D5', $headersRange);
@@ -303,8 +283,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 'C5'
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('C5:E5', $headersRange);
@@ -318,8 +297,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 'C5'
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('C5:E5', $headersRange);
@@ -333,8 +311,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 'C5'
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('C5:E5', $headersRange);
@@ -348,8 +325,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 'C5'
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame('C5:E5', $headersRange);
@@ -369,8 +345,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function test_generate_statistic_without_headers()
     {
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame(null, $headersRange);
@@ -383,8 +358,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 [ ],
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame(null, $headersRange);
@@ -397,8 +371,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 [ ['111'] ],
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame(null, $headersRange);
@@ -411,8 +384,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 [ ['foo-1'], ['foo-2'] ],
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame(null, $headersRange);
@@ -425,8 +397,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 [ ['foo-1'], ['foo-2'], ['foo-3'] ],
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame(null, $headersRange);
@@ -439,8 +410,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 [ ['foo-1', 'bar-1'] ],
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame(null, $headersRange);
@@ -453,8 +423,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 [ ['foo-1', 'bar-1'], ['foo-2', 'bar-2'] ],
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame(null, $headersRange);
@@ -467,8 +436,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 [ ['foo-1', 'bar-1'], ['foo-2', 'bar-2'], ['foo-3', 'bar-3'] ],
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame(null, $headersRange);
@@ -481,8 +449,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 [ ['foo-1', 'bar-1', 'baz-1']  ],
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame(null, $headersRange);
@@ -495,8 +462,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 [ ['foo-1', 'bar-1', 'baz-1'], ['foo-2', 'bar-2', 'baz-2']  ],
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame(null, $headersRange);
@@ -515,8 +481,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function test_generate_statistic_without_headers_with_shift()
     {
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame(null, $headersRange);
@@ -530,8 +495,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 'D4'
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame(null, $headersRange);
@@ -545,8 +509,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 'D4'
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame(null, $headersRange);
@@ -560,8 +523,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 'D4'
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame(null, $headersRange);
@@ -575,8 +537,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 'D4'
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame(null, $headersRange);
@@ -590,8 +551,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 'D4'
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame(null, $headersRange);
@@ -605,8 +565,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 'D4'
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame(null, $headersRange);
@@ -620,8 +579,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 'D4'
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame(null, $headersRange);
@@ -635,8 +593,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 'D4'
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame(null, $headersRange);
@@ -650,8 +607,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
                 'D4'
             );
 
-        (new \AnourValar\Office\GridService)
-            ->setDriverClass($this->getDriverClass())
+        (new \AnourValar\Office\GridService($this->getDriver()))
             ->hookAfter(function ($driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
             {
                 $this->assertSame(null, $headersRange);
@@ -667,11 +623,11 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return string
+     * @return \AnourValar\Office\Drivers\GridInterface
      */
-    protected function getDriverClass(): string
+    protected function getDriver(): \AnourValar\Office\Drivers\GridInterface
     {
-        $class = new class implements \AnourValar\Office\Drivers\GridInterface
+        return new class implements \AnourValar\Office\Drivers\GridInterface
         {
             public function create(): self
             {
@@ -693,7 +649,5 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
 
             }
         };
-
-        return get_class($class);
     }
 }

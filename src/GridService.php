@@ -2,48 +2,50 @@
 
 namespace AnourValar\Office;
 
+use AnourValar\Office\Drivers\GridInterface;
+
 class GridService
 {
     /**
-     * @var string
+     * @var \AnourValar\Office\Drivers\GridInterface
      */
-    protected string $driverClass;
+    protected \AnourValar\Office\Drivers\GridInterface $driver;
 
     /**
      * Actions with template before data inserted
      *
-     * @var \Closure(GridInterface $driver, array &$headers, iterable &$data, string $leftTopCorner)|null
+     * @var \Closure(GridInterface $driver, array &$headers, iterable &$data, string $leftTopCorner)
      */
     protected ?\Closure $hookBefore = null;
 
     /**
      * Header handler
      *
-     * @var \Closure(GridInterface $driver, mixed $header, string|int $key, string $column)|null
+     * @var \Closure(GridInterface $driver, mixed $header, string|int $key, string $column)
      */
     protected ?\Closure $hookHeader = null;
 
     /**
      * Row data handler
      *
-     * @var \Closure(GridInterface $driver, mixed $row, string|int $key)|null
+     * @var \Closure(GridInterface $driver, mixed $row, string|int $key)
      */
     protected ?\Closure $hookRow = null;
 
     /**
      * Actions with template after data inserted
      *
-     * @var \Closure(GridInterface $driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)|null
+     * @var \Closure(GridInterface $driver, ?string $headersRange, ?string $dataRange, ?string $totalRange, array $columns)
      */
     protected ?\Closure $hookAfter = null;
 
     /**
-     * @param string $driverClass
+     * @param \AnourValar\Office\Drivers\GridInterface $driver
      * @return void
      */
-    public function __construct(string $driverClass = \AnourValar\Office\Drivers\PhpSpreadsheetDriver::class)
+    public function __construct(GridInterface $driver = new \AnourValar\Office\Drivers\PhpSpreadsheetDriver())
     {
-        $this->driverClass = $driverClass;
+        $this->driver = $driver;
     }
 
     /**
@@ -56,19 +58,13 @@ class GridService
      */
     public function generate(array $headers, iterable|\Closure $data, string $leftTopCorner = 'A1'): Generated
     {
-        // Get instance of driver
-        $driver = new $this->driverClass();
-        if (! $driver instanceof \AnourValar\Office\Drivers\GridInterface) {
-            throw new \LogicException('Driver must implements GridInterface.');
-        }
-
         // Handle with data
         if ($data instanceof \Closure) {
             $data = $data();
         }
 
         // Create new document
-        $driver->create();
+        $driver = $this->driver->create();
 
         // Hook: before
         if ($this->hookBefore) {
@@ -136,19 +132,6 @@ class GridService
     public function hookAfter(?\Closure $closure): self
     {
         $this->hookAfter = $closure;
-
-        return $this;
-    }
-
-    /**
-     * Set driver class
-     *
-     * @param string $driverClass
-     * @return self
-     */
-    public function setDriverClass(string $driverClass): self
-    {
-        $this->driverClass = $driverClass;
 
         return $this;
     }
@@ -263,7 +246,13 @@ class GridService
 
             $totalRange = null;
             if ($hasHeaders || $dataRow != $headerRow) {
-                $totalRange = sprintf("%s%d:%s%d", $firstColumn, ($hasHeaders ? $headerRow : ($headerRow + 1)), $lastColumn, $dataRow);
+                $totalRange = sprintf(
+                    "%s%d:%s%d",
+                    $firstColumn,
+                    ($hasHeaders ? $headerRow : ($headerRow + 1)),
+                    $lastColumn,
+                    $dataRow
+                );
             }
 
             $columns = [];

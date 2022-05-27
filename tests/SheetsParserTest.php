@@ -2,12 +2,12 @@
 
 namespace AnourValar\Office\Tests;
 
-class TemplateParserTest extends \PHPUnit\Framework\TestCase
+class SheetsParserTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \AnourValar\Office\Template\Parser
+     * @var \AnourValar\Office\Sheets\Parser
      */
-    protected \AnourValar\Office\Template\Parser $service;
+    protected \AnourValar\Office\Sheets\Parser $service;
 
     /**
      * @see \PHPUnit\Framework\TestCase
@@ -16,7 +16,7 @@ class TemplateParserTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->service = new \AnourValar\Office\Template\Parser();
+        $this->service = new \AnourValar\Office\Sheets\Parser();
     }
 
     /**

@@ -2,9 +2,11 @@
 
 namespace AnourValar\Office\Drivers;
 
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 
-class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInterface
+class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterface
 {
     /**
      * @var string
@@ -27,9 +29,17 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
     public readonly \PhpOffice\PhpSpreadsheet\Spreadsheet $spreadsheet;
 
     /**
-     * @var \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet
+     * @var int
      */
-    public readonly \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $sheet;
+    protected int $sourceActiveSheetIndex;
+
+    /**
+     * @return \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet
+     */
+    public function sheet(): \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet
+    {
+        return $this->spreadsheet->getActiveSheet();
+    }
 
     /**
      * {@inheritDoc}
@@ -37,10 +47,11 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
      */
     public function create(): self
     {
-        $this->spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
-        $this->sheet = $this->spreadsheet->getActiveSheet();
+        $instance = new static;
+        $instance->spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $instance->sourceActiveSheetIndex = 0;
 
-        return $this;
+        return $instance;
     }
 
     /**
@@ -49,10 +60,11 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
      */
     public function load(string $file, \AnourValar\Office\Format $format): self
     {
-        $this->spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($this->getFormat($format))->load($file);
-        $this->sheet = $this->spreadsheet->getActiveSheet();
+        $instance = new static;
+        $instance->spreadsheet = IOFactory::createReader($instance->getFormat($format))->load($file);
+        $instance->sourceActiveSheetIndex = $instance->spreadsheet->getActiveSheetIndex();
 
-        return $this;
+        return $instance;
     }
 
     /**
@@ -62,13 +74,38 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
     public function save(string $file, \AnourValar\Office\Format $format): void
     {
         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($this->spreadsheet, $this->getFormat($format));
-        $this->sheet->setSelectedCells('A1');
+
+        $count = $this->spreadsheet->getSheetCount();
+        for ($i = 0; $i < $count; $i++) {
+            $this->spreadsheet->getSheet($i)->setSelectedCells('A1');
+        }
+        $this->spreadsheet->setActiveSheetIndex($this->sourceActiveSheetIndex);
 
         if (method_exists($writer, 'writeAllSheets')) {
             $writer->writeAllSheets();
         }
 
         $writer->save($file);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \AnourValar\Office\Drivers\MultiSheetInterface::setSheet()
+     */
+    public function setSheet(int $index): self
+    {
+        $this->spreadsheet->setActiveSheetIndex($index);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \AnourValar\Office\Drivers\MultiSheetInterface::getSheetCount()
+     */
+    public function getSheetCount(): int
+    {
+        return $this->spreadsheet->getSheetCount();
     }
 
     /**
@@ -83,7 +120,7 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
     {
         if ($value instanceof \DateTimeInterface) {
 
-            $this->sheet->setCellValue($cell, \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($value));
+            $this->sheet()->setCellValue($cell, \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($value));
             if ($autoCellFormat) {
                 $this->setCellFormat($cell, static::FORMAT_DATE);
             }
@@ -91,9 +128,9 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
         } elseif (is_string($value) || is_null($value)) {
 
             if (is_numeric($value)) {
-                $this->sheet->getCell($cell)->setValueExplicit($value, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                $this->sheet()->getCell($cell)->setValueExplicit($value, DataType::TYPE_STRING);
             } else {
-                $this->sheet->setCellValue($cell, $value);
+                $this->sheet()->setCellValue($cell, $value);
             }
 
         } else {
@@ -104,7 +141,7 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
                 $this->setCellFormat($cell, static::FORMAT_INT);
             }
 
-            $this->sheet->getCell($cell)->setValueExplicit($value, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+            $this->sheet()->getCell($cell)->setValueExplicit($value, DataType::TYPE_NUMERIC);
 
         }
 
@@ -113,7 +150,7 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
 
     /**
      * {@inheritDoc}
-     * @see \AnourValar\Office\Drivers\TemplateInterface::setValues()
+     * @see \AnourValar\Office\Drivers\SheetsInterface::setValues()
      */
     public function setValues(array $data, bool $autoCellFormat = true): self
     {
@@ -157,20 +194,20 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
      */
     public function getValue(string $cell)
     {
-        return $this->sheet->getCell($cell)->getValue();
+        return $this->sheet()->getCell($cell)->getValue();
     }
 
     /**
      * {@inheritDoc}
-     * @see \AnourValar\Office\Drivers\TemplateInterface::getValues()
+     * @see \AnourValar\Office\Drivers\SheetsInterface::getValues()
      */
     public function getValues(?string $ceilRange): array
     {
         if (! $ceilRange) {
-            $ceilRange = sprintf('A1:%s%s', $this->sheet->getHighestColumn(), $this->sheet->getHighestRow());
+            $ceilRange = sprintf('A1:%s%s', $this->sheet()->getHighestColumn(), $this->sheet()->getHighestRow());
         }
 
-        return $this->sheet->rangeToArray(
+        return $this->sheet()->rangeToArray(
             $ceilRange, // The worksheet range that we want to retrieve
             null,       // Value that should be returned for empty cells
             false,      // Should formulas be calculated (the equivalent of getCalculatedValue() for each cell)
@@ -181,42 +218,42 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
 
     /**
      * {@inheritDoc}
-     * @see \AnourValar\Office\Drivers\TemplateInterface::getMergeCells()
+     * @see \AnourValar\Office\Drivers\SheetsInterface::getMergeCells()
      */
     public function getMergeCells(): array
     {
-        return array_values( $this->sheet->getMergeCells() );
+        return array_values( $this->sheet()->getMergeCells() );
     }
 
     /**
      * {@inheritDoc}
-     * @see \AnourValar\Office\Drivers\TemplateInterface::mergeCells()
+     * @see \AnourValar\Office\Drivers\SheetsInterface::mergeCells()
      */
     public function mergeCells(string $ceilRange): self
     {
-        $this->sheet->mergeCells($ceilRange);
+        $this->sheet()->mergeCells($ceilRange);
 
         return $this;
     }
 
     /**
      * {@inheritDoc}
-     * @see \AnourValar\Office\Drivers\TemplateInterface::copyStyle()
+     * @see \AnourValar\Office\Drivers\SheetsInterface::copyStyle()
      */
     public function copyStyle(string $cellFrom, string $rangeTo): self
     {
-        $this->sheet->duplicateStyle($this->sheet->getStyle($cellFrom), $rangeTo);
+        $this->sheet()->duplicateStyle($this->sheet()->getStyle($cellFrom), $rangeTo);
 
         return $this;
     }
 
     /**
      * {@inheritDoc}
-     * @see \AnourValar\Office\Drivers\TemplateInterface::copyCellFormat()
+     * @see \AnourValar\Office\Drivers\SheetsInterface::copyCellFormat()
      */
     public function copyCellFormat(string $cellFrom, string $rangeTo): self
     {
-        $this->setCellFormat($rangeTo, $this->sheet->getStyle($cellFrom)->getNumberFormat()->getFormatCode());
+        $this->setCellFormat($rangeTo, $this->sheet()->getStyle($cellFrom)->getNumberFormat()->getFormatCode());
 
         return $this;
     }
@@ -230,36 +267,36 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
      */
     public function setCellFormat(string $range, string $format): self
     {
-        $this->sheet->getStyle($range)->getNumberFormat()->setFormatCode($format);
+        $this->sheet()->getStyle($range)->getNumberFormat()->setFormatCode($format);
 
         return $this;
     }
 
     /**
      * {@inheritDoc}
-     * @see \AnourValar\Office\Drivers\TemplateInterface::addRow()
+     * @see \AnourValar\Office\Drivers\SheetsInterface::addRow()
      */
     public function addRow(int $rowBefore, int $qty = 1): self
     {
-        $this->sheet->insertNewRowBefore($rowBefore, $qty);
+        $this->sheet()->insertNewRowBefore($rowBefore, $qty);
 
         return $this;
     }
 
     /**
      * {@inheritDoc}
-     * @see \AnourValar\Office\Drivers\TemplateInterface::deleteRow()
+     * @see \AnourValar\Office\Drivers\SheetsInterface::deleteRow()
      */
     public function deleteRow(int $row, int $qty = 1): self
     {
         foreach ($this->getMergeCells() as $merge) {
             preg_match('#(\d+)#', $merge, $details);
             if ($details[1] == $row) {
-                $this->sheet->unmergeCells($merge);
+                $this->sheet()->unmergeCells($merge);
             }
         }
 
-        $this->sheet->removeRow($row, $qty);
+        $this->sheet()->removeRow($row, $qty);
 
         return $this;
     }
@@ -273,7 +310,7 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
      */
     public function addColumn(string $columnBefore, int $qty = 1): self
     {
-        $this->sheet->insertNewColumnBefore($columnBefore, $qty);
+        $this->sheet()->insertNewColumnBefore($columnBefore, $qty);
 
         return $this;
     }
@@ -286,18 +323,18 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
      */
     public function autoWidth(string $column): self
     {
-        $this->sheet->getColumnDimension($column)->setAutoSize(true);
+        $this->sheet()->getColumnDimension($column)->setAutoSize(true);
 
         return $this;
     }
 
     /**
      * {@inheritDoc}
-     * @see \AnourValar\Office\Drivers\TemplateInterface::copyWidth()
+     * @see \AnourValar\Office\Drivers\SheetsInterface::copyWidth()
      */
     public function copyWidth(string $columnFrom, string $columnTo): self
     {
-        $width = $this->sheet->getColumnDimension($columnFrom)->getWidth();
+        $width = $this->sheet()->getColumnDimension($columnFrom)->getWidth();
         $this->setWidth($columnTo, $width);
 
         return $this;
@@ -312,7 +349,7 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
      */
     public function setWidth(string $column, int $width): self
     {
-        $this->sheet->getColumnDimension($column)->setWidth($width);
+        $this->sheet()->getColumnDimension($column)->setWidth($width);
 
         return $this;
     }
@@ -326,7 +363,7 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
      */
     public function copyHeight(int $rowFrom, int $rowTo): self
     {
-        $height = $this->sheet->getRowDimension($rowFrom)->getRowHeight();
+        $height = $this->sheet()->getRowDimension($rowFrom)->getRowHeight();
         $this->setHeight($rowTo, $height);
 
         return $this;
@@ -341,7 +378,7 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
      */
     public function setHeight(string $row, int $height): self
     {
-        $this->sheet->getRowDimension($row)->setRowHeight($height);
+        $this->sheet()->getRowDimension($row)->setRowHeight($height);
 
         return $this;
     }
@@ -352,7 +389,7 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
      */
     public function setSheetTitle(string $title): self
     {
-        $this->sheet->setTitle($title);
+        $this->sheet()->setTitle($title);
 
         return $this;
     }
@@ -363,7 +400,7 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
      */
     public function getSheetTitle(): string
     {
-        return $this->sheet->getTitle();
+        return $this->sheet()->getTitle();
     }
 
     /**
@@ -372,7 +409,9 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
      */
     public function mergeDriver(\AnourValar\Office\Drivers\MixInterface $driver): self
     {
-        $this->spreadsheet->addExternalSheet($driver->sheet);
+        $index = $driver->spreadsheet->getActiveSheetIndex();
+        $this->spreadsheet->addExternalSheet($driver->sheet());
+        $driver->spreadsheet->createSheet($index);
 
         return $this;
     }
@@ -387,28 +426,28 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
     public function setStyle(string $range, array $style): self
     {
         if (isset($style['bold'])) {
-            $this->sheet->getStyle($range)->getFont()->setBold($style['bold']);
+            $this->sheet()->getStyle($range)->getFont()->setBold($style['bold']);
         }
 
         if (isset($style['italic'])) {
-            $this->sheet->getStyle($range)->getFont()->setItalic($style['italic']);
+            $this->sheet()->getStyle($range)->getFont()->setItalic($style['italic']);
         }
 
         if (isset($style['size'])) {
-            $this->sheet->getStyle($range)->getFont()->setSize($style['size']);
+            $this->sheet()->getStyle($range)->getFont()->setSize($style['size']);
         }
 
         if (isset($style['underline'])) {
-            $this->sheet->getStyle($range)->getFont()->setUnderline($style['underline']);
+            $this->sheet()->getStyle($range)->getFont()->setUnderline($style['underline']);
         }
 
         if (isset($style['color'])) {
-            $this->sheet->getStyle($range)->getFont()->getColor()->setRGB($style['color']);
+            $this->sheet()->getStyle($range)->getFont()->getColor()->setRGB($style['color']);
         }
 
         if (isset($style['background_color'])) {
             $this
-                ->sheet
+                ->sheet()
                 ->getStyle($range)
                 ->getFill()
                 ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
@@ -418,7 +457,7 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
 
         if (isset($style['borders'])) {
             $this
-                ->sheet
+                ->sheet()
                 ->getStyle($range)
                 ->getBorders()
                 ->getAllBorders()
@@ -427,7 +466,7 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
 
         if (isset($style['borders_outline'])) {
             $this
-                ->sheet
+                ->sheet()
                 ->getStyle($range)
                 ->getBorders()
                 ->getOutline()
@@ -443,7 +482,7 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
             };
 
             $this
-                ->sheet
+                ->sheet()
                 ->getStyle($range)
                 ->getAlignment()->setHorizontal($align);
         }
@@ -457,7 +496,7 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
             };
 
             $this
-                ->sheet
+                ->sheet()
                 ->getStyle($range)
                 ->getAlignment()->setVertical($valign);
         }
@@ -507,7 +546,7 @@ class PhpSpreadsheetDriver implements TemplateInterface, GridInterface, MixInter
             $drawing->setHeight($options['height']);
         }
 
-        $drawing->setWorksheet($this->sheet);
+        $drawing->setWorksheet($this->sheet());
 
         return $this;
     }

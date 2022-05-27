@@ -2,7 +2,7 @@
 
 namespace AnourValar\Office;
 
-class MixerService
+class Mixer
 {
     /**
      * Mix generated documents
@@ -23,7 +23,13 @@ class MixerService
             throw new \LogicException('Driver must implements MixInterface.');
         }
 
-        $titles = [ $referenceDriver->getSheetTitle() ];
+        $titles = [];
+        $count = $referenceDriver->getSheetCount();
+        for ($i = 0; $i < $count; $i++) {
+            $referenceDriver->setSheet($i);
+
+            $titles[] = $referenceDriver->getSheetTitle();
+        }
 
         foreach ($generated as $driver) {
             if (! $driver instanceof \AnourValar\Office\Generated) {
@@ -35,9 +41,13 @@ class MixerService
                 throw new \LogicException('All drivers must instances of the same implementation.');
             }
 
-            $driver->setSheetTitle( $titles[] = $this->getTitle($driver->getSheetTitle(), $titles) );
+            $count = $driver->getSheetCount();
+            for ($i = 0; $i < $count; $i++) {
+                $driver->setSheet($i);
 
-            $referenceDriver->mergeDriver($driver);
+                $driver->setSheetTitle( $titles[] = $this->getTitle($driver->getSheetTitle(), $titles) );
+                $referenceDriver->mergeDriver($driver);
+            }
         }
 
         return new Generated($referenceDriver);

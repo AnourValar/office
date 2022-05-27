@@ -1,6 +1,6 @@
 <?php
 
-namespace AnourValar\Office\Template;
+namespace AnourValar\Office\Sheets;
 
 class SchemaMapper
 {

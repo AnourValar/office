@@ -279,6 +279,13 @@ class Parser
                 $schema->copyCellFormat($additionColumn.($row + $shift), $curr.($row + $shift));
                 $schema->copyWidth($additionColumn, $curr);
 
+                foreach ($mergeCells as $item) {
+                    if ($item[0][0] == $additionColumn && $item[0][0] == $item[1][0]) {
+                        $mergeCells[] = [ [$curr, ($row + $shift)], [$curr, $item[1][1]] ];
+                        $schema->mergeCells(sprintf('%s%s:%s%s', $curr, ($row + $shift), $curr, $item[1][1]));
+                    }
+                }
+
                 if ($mergeMapX) {
                     $originalCurr = $curr;
                     foreach ($mergeMapX as $mergeItemX) {

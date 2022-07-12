@@ -281,7 +281,10 @@ class Parser
 
                 foreach ($mergeCells as $item) {
                     if ($item[0][0] == $additionColumn && $item[0][0] == $item[1][0]) {
-                        $schema->mergeCells(sprintf('%s%s:%s%s', $curr, $item[0][1], $curr, $item[1][1]));
+                        $range = sprintf('%s%s:%s%s', $curr, $item[0][1], $curr, $item[1][1]);
+                        $fromRange = sprintf('%s%s:%s%s', $item[0][0], $item[0][1], $item[1][0], $item[1][1]);
+                        $schema->mergeCells($range);
+                        $schema->copyStyle($fromRange, $range);
                     }
                 }
 

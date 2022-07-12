@@ -281,8 +281,7 @@ class Parser
 
                 foreach ($mergeCells as $item) {
                     if ($item[0][0] == $additionColumn && $item[0][0] == $item[1][0]) {
-                        $mergeCells[] = [ [$curr, ($row + $shift)], [$curr, $item[1][1]] ];
-                        $schema->mergeCells(sprintf('%s%s:%s%s', $curr, ($row + $shift), $curr, $item[1][1]));
+                        $schema->mergeCells(sprintf('%s%s:%s%s', $curr, $item[0][1], $curr, $item[1][1]));
                     }
                 }
 

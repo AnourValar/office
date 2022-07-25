@@ -11,7 +11,7 @@ composer require anourvalar/office
 ### To work with default driver - Phpspreadsheet is required:
 
 ```bash
-composer require phpoffice/phpspreadsheet "^1.23"
+composer require phpoffice/phpspreadsheet "^1.24"
 ```
 
 

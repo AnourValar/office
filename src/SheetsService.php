@@ -222,7 +222,7 @@ class SheetsService
                     $value = ($this->hookValue)($driver, $column.$row, $value, $sheetIndex);
                 }
 
-                if (!$isNull && is_null($value)) {
+                if (! $isNull && is_null($value)) {
                     unset($data[$row][$column]);
                 }
             }

@@ -71,7 +71,7 @@ class Parser
         $result = [];
 
         foreach ($this->dot($data) as $key => $value) {
-            if (is_array($value) && !$value) {
+            if (is_array($value) && ! $value) {
                 continue;
             }
 
@@ -90,8 +90,8 @@ class Parser
         foreach ($mergeCells as &$item) {
             $item = explode(':', $item);
 
-            $item[0] = preg_split('#([A-Z]+)([\d]+)#', $item[0], -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
-            $item[1] = preg_split('#([A-Z]+)([\d]+)#', $item[1], -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
+            $item[0] = preg_split('#([A-Z]+)([\d]+)#', $item[0], -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+            $item[1] = preg_split('#([A-Z]+)([\d]+)#', $item[1], -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
         }
         unset($item);
 
@@ -113,8 +113,7 @@ class Parser
 
                 $value = preg_replace_callback(
                     '#\[(\$?\!\s*|\$?\=\s*)?([a-z\d\.\_\*]+)\]#i',
-                    function ($patterns) use ($data)
-                    {
+                    function ($patterns) use ($data) {
                         if (array_key_exists($patterns[2], $data)) {
                             return $patterns[0];
                         }
@@ -145,9 +144,9 @@ class Parser
                             }
                         }
 
-                        if ($result && array_key_exists($result, $data) && !is_array($data[$result])) {
+                        if ($result && array_key_exists($result, $data) && ! is_array($data[$result])) {
                             $result = preg_replace('#\.0(\.|$)#', '.*$1', $result);
-                            return sprintf("[%s%s]", $patterns[1], $result);
+                            return sprintf('[%s%s]', $patterns[1], $result);
                         }
 
                         return $patterns[0];
@@ -226,7 +225,7 @@ class Parser
             }
 
 
-            if (!$stepRows && $this->shouldBeDeleted($columns, $data)) {
+            if (! $stepRows && $this->shouldBeDeleted($columns, $data)) {
                 $schema->deleteRow($row + $shift);
                 $shift--;
                 continue;
@@ -240,8 +239,8 @@ class Parser
             if (! $additionRows) {
                 foreach ($columns as $column => $value) {
                     if (
-                        !preg_match('#\[(\$?\!\s*|\$?\=\s*)?[a-z][a-z\d\_\.]+\]#i', (string) $value)
-                        && !preg_match('#^\=[A-Z][A-Z\.\d]#', (string) $value)
+                        ! preg_match('#\[(\$?\!\s*|\$?\=\s*)?[a-z][a-z\d\_\.]+\]#i', (string) $value)
+                        && ! preg_match('#^\=[A-Z][A-Z\.\d]#', (string) $value)
                     ) {
                         unset($columns[$column]);
                     }
@@ -401,8 +400,7 @@ class Parser
 
                     $value = preg_replace_callback(
                         '#([A-Z]+)([\d]+)#',
-                        function ($patterns) use ($action, $row)
-                        {
+                        function ($patterns) use ($action) {
                             if ($action['action'] == 'add') {
 
                                 if ($patterns[2] >= $action['row']) {
@@ -449,8 +447,7 @@ class Parser
 
                     $value = preg_replace_callback(
                         '#([A-Z]+)([\d]+)#',
-                        function ($patterns) use ($action, $row, $prev)
-                        {
+                        function ($patterns) use ($action, $row, $prev) {
                             if ($action['action'] == 'add') {
 
                                 if ($action['row'] == $row && ($row - $prev) == ($patterns[2] + 1)) {
@@ -496,8 +493,7 @@ class Parser
 
                 $value = preg_replace_callback(
                     '#([A-Z]+)([\d]+)\:([A-Z]+)([\d]+)#',
-                    function ($patterns) use ($ranges)
-                    {
+                    function ($patterns) use ($ranges) {
                         if ($patterns[2] == $patterns[4]) {
                             foreach ($ranges as $range) {
                                 if ($patterns[2] == $range['from']) {
@@ -546,7 +542,7 @@ class Parser
                     $value = trim($value);
                 }
 
-                if (is_string($value) && !mb_strlen($value)) {
+                if (is_string($value) && ! mb_strlen($value)) {
                     $value = null;
                 }
 
@@ -640,7 +636,7 @@ class Parser
                 }
 
                 foreach ($data as $key => $value) {
-                    if (strpos($key, $marker.'.') === 0 && !empty($value)) {
+                    if (strpos($key, $marker.'.') === 0 && ! empty($value)) {
                         continue 2;
                     }
                 }
@@ -655,7 +651,7 @@ class Parser
                 }
 
                 foreach ($data as $key => $value) {
-                    if (strpos($key, $marker.'.') === 0 && !empty($value)) {
+                    if (strpos($key, $marker.'.') === 0 && ! empty($value)) {
                         return true;
                     }
                 }
@@ -719,8 +715,7 @@ class Parser
     {
         return preg_replace_callback(
             '#\[([a-z][a-z\d\.\_]+)\]#i',
-            function ($patterns) use ($first, $shift)
-            {
+            function ($patterns) use ($first, $shift) {
                 $patterns[1] = $this->increment($patterns[1], $first, $shift);
                 if ($patterns[1]) {
                     return '[' . $patterns[1] . ']';

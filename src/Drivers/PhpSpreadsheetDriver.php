@@ -51,6 +51,7 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
         $instance->spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $instance->sourceActiveSheetIndex = 0;
 
+        $this->customization($instance);
         return $instance;
     }
 
@@ -64,6 +65,7 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
         $instance->spreadsheet = IOFactory::createReader($instance->getFormat($format))->load($file);
         $instance->sourceActiveSheetIndex = $instance->spreadsheet->getActiveSheetIndex();
 
+        $this->customization($instance);
         return $instance;
     }
 
@@ -474,8 +476,7 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
         }
 
         if (isset($style['align'])) {
-            $align = match($style['align'])
-            {
+            $align = match($style['align']) {
                 \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT => 'left',
                 \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER => 'center',
                 \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT => 'right',
@@ -488,8 +489,7 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
         }
 
         if (isset($style['valign'])) {
-            $valign = match($style['valign'])
-            {
+            $valign = match($style['valign']) {
                 \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP => 'top',
                 \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER => 'center',
                 \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_BOTTOM => 'bottom',
@@ -549,6 +549,16 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
         $drawing->setWorksheet($this->sheet());
 
         return $this;
+    }
+
+    /**
+     * Instance configuration
+     *
+     * @param  \AnourValar\Office\Drivers\PhpSpreadsheetDriver  $instance
+     */
+    protected function customization(PhpSpreadsheetDriver $instance): void
+    {
+        //
     }
 
     /**

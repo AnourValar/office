@@ -157,8 +157,7 @@ class GridService
         &$totalRange = null,
         &$columns = null
     ): \Closure {
-        return function () use ($driver, &$headers, &$data, $leftTopCorner, &$headersRange, &$dataRange, &$totalRange, &$columns)
-        {
+        return function () use ($driver, &$headers, &$data, $leftTopCorner, &$headersRange, &$dataRange, &$totalRange, &$columns) {
             $ltc = preg_split('|([A-Z]+)|', $leftTopCorner, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
 
             // left top corner: row
@@ -236,18 +235,18 @@ class GridService
             // Statistic
             $headersRange = null;
             if ($hasHeaders) {
-                $headersRange = sprintf("%s%d:%s%d", $firstColumn, $headerRow, $lastColumn, $headerRow);
+                $headersRange = sprintf('%s%d:%s%d', $firstColumn, $headerRow, $lastColumn, $headerRow);
             }
 
             $dataRange = null;
             if ($dataRow != $headerRow) {
-                $dataRange = sprintf("%s%d:%s%d", $firstColumn, ($headerRow + 1), $lastColumn, $dataRow);
+                $dataRange = sprintf('%s%d:%s%d', $firstColumn, ($headerRow + 1), $lastColumn, $dataRow);
             }
 
             $totalRange = null;
             if ($hasHeaders || $dataRow != $headerRow) {
                 $totalRange = sprintf(
-                    "%s%d:%s%d",
+                    '%s%d:%s%d',
                     $firstColumn,
                     ($hasHeaders ? $headerRow : ($headerRow + 1)),
                     $lastColumn,

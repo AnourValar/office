@@ -49,7 +49,7 @@ class Generated
      *
      * @param string $filename
      * @param \AnourValar\Office\Format $format
-     * @return int|NULL
+     * @return int|null
      */
     public function saveAs(string $filename, Format $format = null): ?int
     {

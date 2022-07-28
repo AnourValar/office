@@ -51,7 +51,7 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
         $instance->spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $instance->sourceActiveSheetIndex = 0;
 
-        $this->customization($instance);
+        $this->readConfiguration($instance);
         return $instance;
     }
 
@@ -65,7 +65,7 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
         $instance->spreadsheet = IOFactory::createReader($instance->getFormat($format))->load($file);
         $instance->sourceActiveSheetIndex = $instance->spreadsheet->getActiveSheetIndex();
 
-        $this->customization($instance);
+        $this->readConfiguration($instance);
         return $instance;
     }
 
@@ -76,6 +76,7 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
     public function save(string $file, \AnourValar\Office\Format $format): void
     {
         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($this->spreadsheet, $this->getFormat($format));
+        $this->writeConfiguration($writer);
 
         $count = $this->spreadsheet->getSheetCount();
         for ($i = 0; $i < $count; $i++) {
@@ -552,11 +553,23 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
     }
 
     /**
-     * Instance configuration
+     * "Reader" configuration
      *
-     * @param  \AnourValar\Office\Drivers\PhpSpreadsheetDriver  $instance
+     * @param \AnourValar\Office\Drivers\PhpSpreadsheetDriver $instance
+     * @return void
      */
-    protected function customization(PhpSpreadsheetDriver $instance): void
+    protected function readConfiguration(PhpSpreadsheetDriver $instance): void
+    {
+        //
+    }
+
+    /**
+     * "Writer" configuration
+     *
+     * @param \PhpOffice\PhpSpreadsheet\Writer\IWriter $writer
+     * @return void
+     */
+    protected function writeConfiguration(\PhpOffice\PhpSpreadsheet\Writer\IWriter $writer): void
     {
         //
     }

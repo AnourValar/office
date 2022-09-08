@@ -8,14 +8,19 @@
 composer require anourvalar/office
 ```
 
-### To work with default driver - Phpspreadsheet is required:
+### Phpspreadsheet is required to work with Excel (xlsx).
 
 ```bash
 composer require phpoffice/phpspreadsheet "^1.24"
 ```
 
+### Zipstream-php is required to work with Word (docx).
 
-### To save documents as PDF - Mpdf is required:
+```bash
+composer require maennchen/zipstream-php "^2.2"
+```
+
+### Mpdf is required to work with PDF.
 
 ```bash
 composer require mpdf/mpdf: "^8.0"
@@ -236,6 +241,7 @@ $mixer = new \AnourValar\Office\Mixer();
 $mixer($documentA, $documentB)->saveAs('generated_document.xlsx');
 ```
 
+
 ## Generate a document from an DOCX (Word) template
 
 ```php
@@ -251,6 +257,7 @@ $mixer($documentA, $documentB)->saveAs('generated_document.xlsx');
 **generated_document.docx:**
 
 ![Demo](https://anour.ru/resources/office-v1-71.png)
+
 
 ## Export table (Grid)
 

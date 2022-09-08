@@ -236,6 +236,22 @@ $mixer = new \AnourValar\Office\Mixer();
 $mixer($documentA, $documentB)->saveAs('generated_document.xlsx');
 ```
 
+## Generate a document from an DOCX (Word) template
+
+```php
+(new \AnourValar\Office\DocumentService)
+    ->generate('template.docx', ['foo' => 'bar'])
+    ->saveAs('generated_document.docx');
+```
+
+**template.docx:**
+
+![Demo](https://anour.ru/resources/office-v1-70.png)
+
+**generated_document.docx:**
+
+![Demo](https://anour.ru/resources/office-v1-71.png)
+
 ## Export table (Grid)
 
 ### Simple usage

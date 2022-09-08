@@ -4,6 +4,8 @@ namespace AnourValar\Office\Sheets;
 
 class Parser
 {
+    use \AnourValar\Office\Traits\Parser;
+
     /**
      * Handle with special types of data
      *
@@ -573,26 +575,6 @@ class Parser
         }
 
         return false;
-    }
-
-    /**
-     * @param array $data
-     * @param string $prefix
-     * @return array
-     */
-    private function dot(array $data, string $prefix = ''): array
-    {
-        $result = [];
-
-        foreach ($data as $key => $value) {
-            if (is_array($value)) {
-                $result = array_replace($result, $this->dot($value, $prefix.$key.'.'));
-            } else {
-                $result[$prefix.$key] = $value;
-            }
-        }
-
-        return $result;
     }
 
     /**

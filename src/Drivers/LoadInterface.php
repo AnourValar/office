@@ -9,7 +9,7 @@ interface LoadInterface
      *
      * @param string $file
      * @param \AnourValar\Office\Format $format
-     * @return self
+     * @return \AnourValar\Office\Drivers\SaveInterface
      */
-    public function load(string $file, \AnourValar\Office\Format $format): self;
+    public function load(string $file, \AnourValar\Office\Format $format): SaveInterface;
 }

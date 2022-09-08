@@ -49,7 +49,7 @@ class GridService
     }
 
     /**
-     * Generate a document from data (grid)
+     * Generate a document from the template (grid)
      *
      * @param array $headers
      * @param iterable|\Closure<iterable> $data

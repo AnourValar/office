@@ -4,10 +4,11 @@ namespace AnourValar\Office;
 
 enum Format: string
 {
-    case Xlsx = 'xlsx'; // sheets | grid => reader + write
+    case Xlsx = 'xlsx'; // sheets | grid => reader + writer
     case Pdf = 'pdf'; // sheets | grid => writer
-    case Html = 'html'; // sheets | grid => reader + write
-    case Ods = 'ods'; // sheets | grid => reader + write
+    case Html = 'html'; // sheets | grid => reader + writer
+    case Ods = 'ods'; // sheets | grid => reader + writer
+    case Docx = 'docx'; // document => reader + writer
 
     /**
      * @return string
@@ -19,6 +20,7 @@ enum Format: string
             Format::Pdf => 'pdf',
             Format::Html => 'html',
             Format::Ods => 'ods',
+            Format::Docx => 'docx',
         };
     }
 
@@ -34,6 +36,7 @@ enum Format: string
             Format::Pdf => 'application/pdf',
             Format::Html => 'text/html',
             Format::Ods => 'application/vnd.oasis.opendocument.spreadsheet',
+            Format::Docx => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         };
     }
 }

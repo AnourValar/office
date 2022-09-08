@@ -58,14 +58,14 @@ class SheetsService
     }
 
     /**
-     * Generate a document from template
+     * Generate a document from the template (sheets)
      *
-     * @param string $templateFile
+     * @param string|\Stringable $templateFile
      * @param mixed $data
      * @param bool $autoCellFormat
      * @return \AnourValar\Office\Generated
      */
-    public function generate(string $templateFile, mixed $data, bool $autoCellFormat = false): Generated
+    public function generate(string|\Stringable $templateFile, mixed $data, bool $autoCellFormat = false): Generated
     {
         // Handle with input data
         $data = $this->parser->canonizeData($data);

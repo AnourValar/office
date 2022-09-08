@@ -26,15 +26,19 @@ class ZipDriver implements DocumentInterface
 
         $zipArchive = new \ZipArchive;
         $zipArchive->open($file);
-        $count = $zipArchive->numFiles;
+        try {
+            $count = $zipArchive->numFiles;
 
-        for ($i = 0; $i < $count; $i++) {
-            $filename = $zipArchive->getNameIndex($i);
-            $content = $zipArchive->getFromName($filename);
+            for ($i = 0; $i < $count; $i++) {
+                $filename = $zipArchive->getNameIndex($i);
+                $content = $zipArchive->getFromName($filename);
 
-            $fileSystem[$filename] = $content;
+                $fileSystem[$filename] = $content;
+            }
+        } catch (\Throwable $e) {
+            $zipArchive->close();
+            throw $e;
         }
-
         $zipArchive->close();
 
         $instance->fileSystem = $fileSystem;
@@ -49,21 +53,25 @@ class ZipDriver implements DocumentInterface
     {
         $this->getFormat($format); // check
 
-        ob_start();
-
         $options = \App::make(\ZipStream\Option\Archive::class);
         $zipStream = new \ZipStream\ZipStream(null, $options);
+        ob_start();
 
-        foreach ($this->fileSystem as $filename => $content) {
-            if ($content && mb_strtolower(pathinfo($filename, PATHINFO_EXTENSION)) == 'xml') {
-                $content = $this->handleReplace($content);
-            }
+        try {
+            foreach ($this->fileSystem as $filename => $content) {
+                if ($content && mb_strtolower(pathinfo($filename, PATHINFO_EXTENSION)) == 'xml') {
+                    $content = $this->handleReplace($content);
+                }
 
-            $zipStream->addFile($filename, $content);
-         }
+                $zipStream->addFile($filename, $content);
+             }
+        } catch (\Throwable $e) {
+            $zipStream->finish();
+            ob_get_clean();
+            throw $e;
+        }
 
         $zipStream->finish();
-
         file_put_contents($file, ob_get_clean());
     }
 

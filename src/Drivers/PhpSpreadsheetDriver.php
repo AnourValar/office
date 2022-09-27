@@ -517,8 +517,16 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
     {
         $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
 
-        $drawing->setPath($filename); // put your path and image here
+        if (isset($options['base64'])) {
+            $filename = 'data:image/' . $options['base64'] . ';base64,' . base64_encode(file_get_contents($filename));
+        }
+
+        $drawing->setPath($filename);
         $drawing->setCoordinates($cell);
+
+        if (isset($options['coordinates2'])) {
+            $drawing->setCoordinates2($options['coordinates2']);
+        }
 
         if (isset($options['name'])) {
             $drawing->setName($options['name']);
@@ -527,9 +535,15 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
         if (isset($options['offset_x'])) {
             $drawing->setOffsetX($options['offset_x']);
         }
+        if (isset($options['offset_x2'])) {
+            $drawing->setOffsetX2($options['offset_x2']);
+        }
 
         if (isset($options['offset_y'])) {
             $drawing->setOffsetY($options['offset_y']);
+        }
+        if (isset($options['offset_y2'])) {
+            $drawing->setOffsetY2($options['offset_y2']);
         }
 
         if (isset($options['rotation'])) {

@@ -299,7 +299,7 @@ class Parser
 
             if ($additionRows) {
                 foreach ($columns as $currKey => $currValue) {
-                    $hasMarker = preg_match('#\[([a-z][a-z\d\.\_]+)\]#i', $currValue);
+                    $hasMarker = preg_match('#\[([a-z][a-z\d\.\_]+)\]#i', (string) $currValue);
 
                     foreach ($mergeCells as $item) {
                         if ($currKey.$originalRow == $item[0][0].$item[0][1]) {

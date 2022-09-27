@@ -192,13 +192,11 @@ $data = [
 ];
 
 (new \AnourValar\Office\SheetsService())
-    ->hookLoad(function ($driver, string $templateFile, $templateFormat)
-    {
+    ->hookLoad(function ($driver, string $templateFile, $templateFormat) {
         // create empty document instead of using existing
         return $driver->create();
     })
-    ->hookBefore(function ($driver, array &$data)
-    {
+    ->hookBefore(function ($driver, array &$data) {
         // place markers on-fly
         $row = 1;
         foreach (array_keys($data) as $group) {
@@ -299,8 +297,7 @@ $data = function () {
 
 // Save as XLSX (Excel)
 (new \AnourValar\Office\GridService())
-    ->hookHeader(function (GridInterface $driver, mixed $header, $key, $column)
-    {
+    ->hookHeader(function (GridInterface $driver, mixed $header, $key, $column) {
         if (isset($header['width'])) {
             $driver->setWidth($column, $header['width']); // column with fixed width
         } else {
@@ -309,8 +306,7 @@ $data = function () {
 
         return $header['title'];
     })
-    ->hookRow(function (GridInterface $driver, mixed $row, $key)
-    {
+    ->hookRow(function (GridInterface $driver, mixed $row, $key) {
         return [
             $row['name'],
             $row['sales'],

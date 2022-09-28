@@ -33,7 +33,7 @@ class SheetsService
     /**
      * Cell's value handler (on set)
      *
-     * @var \Closure(SheetsInterface $driver, string $cell, mixed $value, int $sheetIndex)
+     * @var \Closure(SheetsInterface $driver, string $cell, mixed $value, int $sheetIndex, string $column, int $row)
      */
     protected ?\Closure $hookValue = null;
 
@@ -216,10 +216,10 @@ class SheetsService
 
                 if ($value instanceof \Closure) {
                     // Private Closure
-                    $value = $value($driver, $column.$row);
+                    $value = $value($driver, $column.$row, $column, $row);
                 } elseif ($this->hookValue) {
                     // Hook: value
-                    $value = ($this->hookValue)($driver, $column.$row, $value, $sheetIndex);
+                    $value = ($this->hookValue)($driver, $column.$row, $value, $sheetIndex, $column, $row);
                 }
 
                 if (! $isNull && is_null($value)) {

@@ -396,7 +396,7 @@ class Parser
         foreach ($schema->toArray()['rows'] as $action) {
             foreach ($values as $row => &$columns) {
                 foreach ($columns as &$value) {
-                    if (! preg_match('#^\=[A-Z][A-Z\.\d]#', $value)) {
+                    if (! preg_match('#^\=[A-Z][A-Z\.\d]#', (string) $value)) {
                         continue;
                     }
 
@@ -443,7 +443,7 @@ class Parser
 
             foreach ($values as $row => &$columns) {
                 foreach ($columns as &$value) {
-                    if (! preg_match('#^\=[A-Z][A-Z\.\d]#', $value)) {
+                    if (! preg_match('#^\=[A-Z][A-Z\.\d]#', (string) $value)) {
                         continue;
                     }
 
@@ -489,7 +489,7 @@ class Parser
 
         foreach ($values as $row => &$columns) {
             foreach ($columns as &$value) {
-                if (! preg_match('#^\=[A-Z][A-Z\.\d]#', $value)) {
+                if (! preg_match('#^\=[A-Z][A-Z\.\d]#', (string) $value)) {
                     continue;
                 }
 

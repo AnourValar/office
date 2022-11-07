@@ -176,6 +176,7 @@ class Parser
         $stepLeft = 0;
         $stepOrigin = 0;
         $stepRows = 0;
+        $dataKeys = array_keys($data); // static, outside tripple foreach loops
 
         // fill in missing rows
         $prevRow = 0;
@@ -198,7 +199,7 @@ class Parser
             $additionColumn = null;
 
             foreach ($columns as $column => $value) {
-                foreach (array_keys($data) as $markerName) {
+                foreach ($dataKeys as $markerName) {
                     if (! $this->hasMarker($markerName, $value)) {
                         continue;
                     }

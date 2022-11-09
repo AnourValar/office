@@ -193,8 +193,26 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
             );
         }
 
-        $this->expectException(\LogicException::class);
-        $this->service->schema([1 => ['A' => 'hello [world]']], ['world' => function () {}], []);
+        $this->assertSame(
+            [
+                'data' => [
+                    1 => [
+                        'A' => 'hello',
+                    ],
+                ],
+
+                'rows' => [],
+
+                'copy_style' => [],
+
+                'merge_cells' => [],
+
+                'copy_width' => [],
+
+                'copy_cell_format' => [],
+            ],
+            $this->service->schema([1 => ['A' => 'hello [world]']], ['world' => function () {}], [])->toArray()
+        );
     }
 
     /**

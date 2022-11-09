@@ -160,7 +160,7 @@ class SheetsService
      * @throws \LogicException
      * @return void
      */
-    protected function handleSheet(SheetsInterface &$driver, array $data, int $sheetIndex, bool $autoCellFormat): void
+    protected function handleSheet(SheetsInterface &$driver, array &$data, int $sheetIndex, bool $autoCellFormat): void
     {
         // Get schema of the document
         $schema = $this->parser->schema($driver->getValues(null), $data, $driver->getMergeCells())->toArray();

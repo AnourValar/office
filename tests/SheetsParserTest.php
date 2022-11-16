@@ -111,7 +111,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                         ],
                     ],
 
-                    'rows' => [['action' => 'delete', 'row' => 3]],
+                    'rows' => [['action' => 'delete', 'row' => 3, 'qty' => 1]],
 
                     'copy_style' => [],
 
@@ -176,8 +176,8 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'delete', 'row' => 4],
-                        ['action' => 'delete', 'row' => 4],
+                        ['action' => 'delete', 'row' => 4, 'qty' => 1],
+                        ['action' => 'delete', 'row' => 4, 'qty' => 1],
                     ],
 
                     'copy_style' => [],
@@ -280,10 +280,10 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'delete', 'row' => 1],
-                        ['action' => 'delete', 'row' => 1],
-                        ['action' => 'delete', 'row' => 2],
-                        ['action' => 'delete', 'row' => 3],
+                        ['action' => 'delete', 'row' => 1, 'qty' => 1],
+                        ['action' => 'delete', 'row' => 1, 'qty' => 1],
+                        ['action' => 'delete', 'row' => 2, 'qty' => 1],
+                        ['action' => 'delete', 'row' => 3, 'qty' => 1],
                     ],
 
                     'copy_style' => [],
@@ -395,7 +395,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'delete', 'row' => 1],
+                        ['action' => 'delete', 'row' => 1, 'qty' => 1],
                     ],
 
                     'copy_style' => [],
@@ -605,7 +605,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                         ],
                     ],
 
-                    'rows' => [['action' => 'delete', 'row' => 4]],
+                    'rows' => [['action' => 'delete', 'row' => 4, 'qty' => 1]],
 
                     'copy_style' => [],
 
@@ -821,7 +821,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 3],
+                        ['action' => 'add', 'row' => 3, 'qty' => 1],
                     ],
 
                     'copy_style' => [
@@ -1062,29 +1062,19 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 3],
-                        ['action' => 'add', 'row' => 4],
+                        ['action' => 'add', 'row' => 3, 'qty' => 2],
                     ],
 
                     'copy_style' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
-                        ['from' => 'B2', 'to' => 'B3'],
-                        ['from' => 'B2', 'to' => 'B4'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
-                        ['from' => 'D2', 'to' => 'D3'],
-                        ['from' => 'D2', 'to' => 'D4'],
-                        ['from' => 'E2', 'to' => 'E3'],
-                        ['from' => 'E2', 'to' => 'E4'],
-                        ['from' => 'F2', 'to' => 'F3'],
-                        ['from' => 'F2', 'to' => 'F4'],
-                        ['from' => 'G2', 'to' => 'G3'],
-                        ['from' => 'G2', 'to' => 'G4'],
-                        ['from' => 'H2', 'to' => 'H3'],
-                        ['from' => 'H2', 'to' => 'H4'],
-                        ['from' => 'I2', 'to' => 'I3'],
-                        ['from' => 'I2', 'to' => 'I4'],
+                        ['from' => 'A2', 'to' => 'A3:A4'],
+                        ['from' => 'B2', 'to' => 'B3:B4'],
+                        ['from' => 'C2', 'to' => 'C3:C4'],
+                        ['from' => 'D2', 'to' => 'D3:D4'],
+                        ['from' => 'E2', 'to' => 'E3:E4'],
+                        ['from' => 'F2', 'to' => 'F3:F4'],
+                        ['from' => 'G2', 'to' => 'G3:G4'],
+                        ['from' => 'H2', 'to' => 'H3:H4'],
+                        ['from' => 'I2', 'to' => 'I3:I4'],
                     ],
 
                     'merge_cells' => ['E3:F3', 'E4:F4'],
@@ -1092,22 +1082,14 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     'copy_width' => [],
 
                     'copy_cell_format' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
-                        ['from' => 'B2', 'to' => 'B3'],
-                        ['from' => 'B2', 'to' => 'B4'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
-                        ['from' => 'D2', 'to' => 'D3'],
-                        ['from' => 'D2', 'to' => 'D4'],
-                        ['from' => 'E2', 'to' => 'E3'],
-                        ['from' => 'E2', 'to' => 'E4'],
-                        ['from' => 'G2', 'to' => 'G3'],
-                        ['from' => 'G2', 'to' => 'G4'],
-                        ['from' => 'H2', 'to' => 'H3'],
-                        ['from' => 'H2', 'to' => 'H4'],
-                        ['from' => 'I2', 'to' => 'I3'],
-                        ['from' => 'I2', 'to' => 'I4'],
+                        ['from' => 'A2', 'to' => 'A3:A4'],
+                        ['from' => 'B2', 'to' => 'B3:B4'],
+                        ['from' => 'C2', 'to' => 'C3:C4'],
+                        ['from' => 'D2', 'to' => 'D3:D4'],
+                        ['from' => 'E2', 'to' => 'E3:E4'],
+                        ['from' => 'G2', 'to' => 'G3:G4'],
+                        ['from' => 'H2', 'to' => 'H3:H4'],
+                        ['from' => 'I2', 'to' => 'I3:I4'],
                     ],
                 ],
                 $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
@@ -1434,39 +1416,19 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 3],
-                        ['action' => 'add', 'row' => 4],
-                        ['action' => 'add', 'row' => 5],
+                        ['action' => 'add', 'row' => 3, 'qty' => 3],
                     ],
 
                     'copy_style' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
-                        ['from' => 'A2', 'to' => 'A5'],
-                        ['from' => 'B2', 'to' => 'B3'],
-                        ['from' => 'B2', 'to' => 'B4'],
-                        ['from' => 'B2', 'to' => 'B5'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
-                        ['from' => 'C2', 'to' => 'C5'],
-                        ['from' => 'D2', 'to' => 'D3'],
-                        ['from' => 'D2', 'to' => 'D4'],
-                        ['from' => 'D2', 'to' => 'D5'],
-                        ['from' => 'E2', 'to' => 'E3'],
-                        ['from' => 'E2', 'to' => 'E4'],
-                        ['from' => 'E2', 'to' => 'E5'],
-                        ['from' => 'F2', 'to' => 'F3'],
-                        ['from' => 'F2', 'to' => 'F4'],
-                        ['from' => 'F2', 'to' => 'F5'],
-                        ['from' => 'G2', 'to' => 'G3'],
-                        ['from' => 'G2', 'to' => 'G4'],
-                        ['from' => 'G2', 'to' => 'G5'],
-                        ['from' => 'H2', 'to' => 'H3'],
-                        ['from' => 'H2', 'to' => 'H4'],
-                        ['from' => 'H2', 'to' => 'H5'],
-                        ['from' => 'I2', 'to' => 'I3'],
-                        ['from' => 'I2', 'to' => 'I4'],
-                        ['from' => 'I2', 'to' => 'I5'],
+                        ['from' => 'A2', 'to' => 'A3:A5'],
+                        ['from' => 'B2', 'to' => 'B3:B5'],
+                        ['from' => 'C2', 'to' => 'C3:C5'],
+                        ['from' => 'D2', 'to' => 'D3:D5'],
+                        ['from' => 'E2', 'to' => 'E3:E5'],
+                        ['from' => 'F2', 'to' => 'F3:F5'],
+                        ['from' => 'G2', 'to' => 'G3:G5'],
+                        ['from' => 'H2', 'to' => 'H3:H5'],
+                        ['from' => 'I2', 'to' => 'I3:I5'],
                     ],
 
                     'merge_cells' => ['E3:F3', 'E4:F4', 'E5:F5'],
@@ -1474,30 +1436,14 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     'copy_width' => [],
 
                     'copy_cell_format' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
-                        ['from' => 'A2', 'to' => 'A5'],
-                        ['from' => 'B2', 'to' => 'B3'],
-                        ['from' => 'B2', 'to' => 'B4'],
-                        ['from' => 'B2', 'to' => 'B5'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
-                        ['from' => 'C2', 'to' => 'C5'],
-                        ['from' => 'D2', 'to' => 'D3'],
-                        ['from' => 'D2', 'to' => 'D4'],
-                        ['from' => 'D2', 'to' => 'D5'],
-                        ['from' => 'E2', 'to' => 'E3'],
-                        ['from' => 'E2', 'to' => 'E4'],
-                        ['from' => 'E2', 'to' => 'E5'],
-                        ['from' => 'G2', 'to' => 'G3'],
-                        ['from' => 'G2', 'to' => 'G4'],
-                        ['from' => 'G2', 'to' => 'G5'],
-                        ['from' => 'H2', 'to' => 'H3'],
-                        ['from' => 'H2', 'to' => 'H4'],
-                        ['from' => 'H2', 'to' => 'H5'],
-                        ['from' => 'I2', 'to' => 'I3'],
-                        ['from' => 'I2', 'to' => 'I4'],
-                        ['from' => 'I2', 'to' => 'I5'],
+                        ['from' => 'A2', 'to' => 'A3:A5'],
+                        ['from' => 'B2', 'to' => 'B3:B5'],
+                        ['from' => 'C2', 'to' => 'C3:C5'],
+                        ['from' => 'D2', 'to' => 'D3:D5'],
+                        ['from' => 'E2', 'to' => 'E3:E5'],
+                        ['from' => 'G2', 'to' => 'G3:G5'],
+                        ['from' => 'H2', 'to' => 'H3:H5'],
+                        ['from' => 'I2', 'to' => 'I3:I5'],
                     ],
                 ],
                 $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
@@ -1587,8 +1533,8 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'delete', 'row' => 2],
-                        ['action' => 'delete', 'row' => 2],
+                        ['action' => 'delete', 'row' => 2, 'qty' => 1],
+                        ['action' => 'delete', 'row' => 2, 'qty' => 1],
                     ],
 
                     'copy_style' => [],
@@ -2501,23 +2447,17 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 3],
-                        ['action' => 'add', 'row' => 4],
+                        ['action' => 'add', 'row' => 3, 'qty' => 2],
                     ],
 
                     'copy_style' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
-                        ['from' => 'B2', 'to' => 'B3'],
-                        ['from' => 'B2', 'to' => 'B4'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'A2', 'to' => 'A3:A4'],
+                        ['from' => 'B2', 'to' => 'B3:B4'],
+                        ['from' => 'C2', 'to' => 'C3:C4'],
                         ['from' => 'C2', 'to' => 'D2'],
                         ['from' => 'C2', 'to' => 'E2'],
-                        ['from' => 'D2', 'to' => 'D3'],
-                        ['from' => 'D2', 'to' => 'D4'],
-                        ['from' => 'E2', 'to' => 'E3'],
-                        ['from' => 'E2', 'to' => 'E4'],
+                        ['from' => 'D2', 'to' => 'D3:D4'],
+                        ['from' => 'E2', 'to' => 'E3:E4'],
                     ],
 
                     'merge_cells' => [],
@@ -2528,18 +2468,13 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'copy_cell_format' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
-                        ['from' => 'B2', 'to' => 'B3'],
-                        ['from' => 'B2', 'to' => 'B4'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'A2', 'to' => 'A3:A4'],
+                        ['from' => 'B2', 'to' => 'B3:B4'],
+                        ['from' => 'C2', 'to' => 'C3:C4'],
                         ['from' => 'C2', 'to' => 'D2'],
                         ['from' => 'C2', 'to' => 'E2'],
-                        ['from' => 'D2', 'to' => 'D3'],
-                        ['from' => 'D2', 'to' => 'D4'],
-                        ['from' => 'E2', 'to' => 'E3'],
-                        ['from' => 'E2', 'to' => 'E4'],
+                        ['from' => 'D2', 'to' => 'D3:D4'],
+                        ['from' => 'E2', 'to' => 'E3:E4'],
                     ],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
@@ -2722,23 +2657,17 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 3],
-                        ['action' => 'add', 'row' => 4],
+                        ['action' => 'add', 'row' => 3, 'qty' => 2],
                     ],
 
                     'copy_style' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
-                        ['from' => 'B2', 'to' => 'B3'],
-                        ['from' => 'B2', 'to' => 'B4'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'A2', 'to' => 'A3:A4'],
+                        ['from' => 'B2', 'to' => 'B3:B4'],
+                        ['from' => 'C2', 'to' => 'C3:C4'],
                         ['from' => 'C2', 'to' => 'D2'],
                         ['from' => 'C2', 'to' => 'E2'],
-                        ['from' => 'D2', 'to' => 'D3'],
-                        ['from' => 'D2', 'to' => 'D4'],
-                        ['from' => 'E2', 'to' => 'E3'],
-                        ['from' => 'E2', 'to' => 'E4'],
+                        ['from' => 'D2', 'to' => 'D3:D4'],
+                        ['from' => 'E2', 'to' => 'E3:E4'],
                     ],
 
                     'merge_cells' => [],
@@ -2749,18 +2678,13 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'copy_cell_format' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
-                        ['from' => 'B2', 'to' => 'B3'],
-                        ['from' => 'B2', 'to' => 'B4'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'A2', 'to' => 'A3:A4'],
+                        ['from' => 'B2', 'to' => 'B3:B4'],
+                        ['from' => 'C2', 'to' => 'C3:C4'],
                         ['from' => 'C2', 'to' => 'D2'],
                         ['from' => 'C2', 'to' => 'E2'],
-                        ['from' => 'D2', 'to' => 'D3'],
-                        ['from' => 'D2', 'to' => 'D4'],
-                        ['from' => 'E2', 'to' => 'E3'],
-                        ['from' => 'E2', 'to' => 'E4'],
+                        ['from' => 'D2', 'to' => 'D3:D4'],
+                        ['from' => 'E2', 'to' => 'E3:E4'],
                     ],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
@@ -2879,25 +2803,18 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 3],
-                        ['action' => 'add', 'row' => 4],
+                        ['action' => 'add', 'row' => 3, 'qty' => 2],
                     ],
 
                     'copy_style' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
-                        ['from' => 'B2', 'to' => 'B3'],
-                        ['from' => 'B2', 'to' => 'B4'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
-                        ['from' => 'E2', 'to' => 'E3'],
-                        ['from' => 'E2', 'to' => 'E4'],
+                        ['from' => 'A2', 'to' => 'A3:A4'],
+                        ['from' => 'B2', 'to' => 'B3:B4'],
+                        ['from' => 'C2', 'to' => 'C3:C4'],
+                        ['from' => 'E2', 'to' => 'E3:E4'],
                         ['from' => 'E2', 'to' => 'F2'],
                         ['from' => 'E2', 'to' => 'G2'],
-                        ['from' => 'F2', 'to' => 'F3'],
-                        ['from' => 'F2', 'to' => 'F4'],
-                        ['from' => 'G2', 'to' => 'G3'],
-                        ['from' => 'G2', 'to' => 'G4'],
+                        ['from' => 'F2', 'to' => 'F3:F4'],
+                        ['from' => 'G2', 'to' => 'G3:G4'],
                     ],
 
                     'merge_cells' => [],
@@ -2908,20 +2825,14 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'copy_cell_format' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
-                        ['from' => 'B2', 'to' => 'B3'],
-                        ['from' => 'B2', 'to' => 'B4'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
-                        ['from' => 'E2', 'to' => 'E3'],
-                        ['from' => 'E2', 'to' => 'E4'],
+                        ['from' => 'A2', 'to' => 'A3:A4'],
+                        ['from' => 'B2', 'to' => 'B3:B4'],
+                        ['from' => 'C2', 'to' => 'C3:C4'],
+                        ['from' => 'E2', 'to' => 'E3:E4'],
                         ['from' => 'E2', 'to' => 'F2'],
                         ['from' => 'E2', 'to' => 'G2'],
-                        ['from' => 'F2', 'to' => 'F3'],
-                        ['from' => 'F2', 'to' => 'F4'],
-                        ['from' => 'G2', 'to' => 'G3'],
-                        ['from' => 'G2', 'to' => 'G4'],
+                        ['from' => 'F2', 'to' => 'F3:F4'],
+                        ['from' => 'G2', 'to' => 'G3:G4'],
                     ],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
@@ -3115,7 +3026,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 3],
+                        ['action' => 'add', 'row' => 3, 'qty' => 1],
                     ],
 
                     'copy_style' => [
@@ -3395,7 +3306,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 5],
+                        ['action' => 'add', 'row' => 5, 'qty' => 1],
                     ],
 
                     'copy_style' => [
@@ -3643,27 +3554,15 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 3],
-                        ['action' => 'add', 'row' => 4],
-                        ['action' => 'add', 'row' => 5],
+                        ['action' => 'add', 'row' => 3, 'qty' => 3],
                     ],
 
                     'copy_style' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
-                        ['from' => 'A2', 'to' => 'A5'],
-                        ['from' => 'B2', 'to' => 'B3'],
-                        ['from' => 'B2', 'to' => 'B4'],
-                        ['from' => 'B2', 'to' => 'B5'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
-                        ['from' => 'C2', 'to' => 'C5'],
-                        ['from' => 'D2', 'to' => 'D3'],
-                        ['from' => 'D2', 'to' => 'D4'],
-                        ['from' => 'D2', 'to' => 'D5'],
-                        ['from' => 'E2', 'to' => 'E3'],
-                        ['from' => 'E2', 'to' => 'E4'],
-                        ['from' => 'E2', 'to' => 'E5'],
+                        ['from' => 'A2', 'to' => 'A3:A5'],
+                        ['from' => 'B2', 'to' => 'B3:B5'],
+                        ['from' => 'C2', 'to' => 'C3:C5'],
+                        ['from' => 'D2', 'to' => 'D3:D5'],
+                        ['from' => 'E2', 'to' => 'E3:E5'],
                     ],
 
                     'merge_cells' => [],
@@ -3671,21 +3570,11 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     'copy_width' => [],
 
                     'copy_cell_format' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
-                        ['from' => 'A2', 'to' => 'A5'],
-                        ['from' => 'B2', 'to' => 'B3'],
-                        ['from' => 'B2', 'to' => 'B4'],
-                        ['from' => 'B2', 'to' => 'B5'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
-                        ['from' => 'C2', 'to' => 'C5'],
-                        ['from' => 'D2', 'to' => 'D3'],
-                        ['from' => 'D2', 'to' => 'D4'],
-                        ['from' => 'D2', 'to' => 'D5'],
-                        ['from' => 'E2', 'to' => 'E3'],
-                        ['from' => 'E2', 'to' => 'E4'],
-                        ['from' => 'E2', 'to' => 'E5'],
+                        ['from' => 'A2', 'to' => 'A3:A5'],
+                        ['from' => 'B2', 'to' => 'B3:B5'],
+                        ['from' => 'C2', 'to' => 'C3:C5'],
+                        ['from' => 'D2', 'to' => 'D3:D5'],
+                        ['from' => 'E2', 'to' => 'E3:E5'],
                     ],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
@@ -3813,29 +3702,17 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'delete', 'row' => 2],
-                        ['action' => 'add', 'row' => 3],
-                        ['action' => 'add', 'row' => 4],
-                        ['action' => 'add', 'row' => 5],
-                        ['action' => 'add', 'row' => 6],
-                        ['action' => 'delete', 'row' => 7],
-                        ['action' => 'delete', 'row' => 7],
-                        ['action' => 'delete', 'row' => 7],
+                        ['action' => 'delete', 'row' => 2, 'qty' => 1],
+                        ['action' => 'add', 'row' => 3, 'qty' => 4],
+                        ['action' => 'delete', 'row' => 7, 'qty' => 1],
+                        ['action' => 'delete', 'row' => 7, 'qty' => 1],
+                        ['action' => 'delete', 'row' => 7, 'qty' => 1],
                     ],
 
                     'copy_style' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
-                        ['from' => 'A2', 'to' => 'A5'],
-                        ['from' => 'A2', 'to' => 'A6'],
-                        ['from' => 'B2', 'to' => 'B3'],
-                        ['from' => 'B2', 'to' => 'B4'],
-                        ['from' => 'B2', 'to' => 'B5'],
-                        ['from' => 'B2', 'to' => 'B6'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
-                        ['from' => 'C2', 'to' => 'C5'],
-                        ['from' => 'C2', 'to' => 'C6'],
+                        ['from' => 'A2', 'to' => 'A3:A6'],
+                        ['from' => 'B2', 'to' => 'B3:B6'],
+                        ['from' => 'C2', 'to' => 'C3:C6'],
                     ],
 
                     'merge_cells' => [],
@@ -3843,18 +3720,9 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     'copy_width' => [],
 
                     'copy_cell_format' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
-                        ['from' => 'A2', 'to' => 'A5'],
-                        ['from' => 'A2', 'to' => 'A6'],
-                        ['from' => 'B2', 'to' => 'B3'],
-                        ['from' => 'B2', 'to' => 'B4'],
-                        ['from' => 'B2', 'to' => 'B5'],
-                        ['from' => 'B2', 'to' => 'B6'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
-                        ['from' => 'C2', 'to' => 'C5'],
-                        ['from' => 'C2', 'to' => 'C6'],
+                        ['from' => 'A2', 'to' => 'A3:A6'],
+                        ['from' => 'B2', 'to' => 'B3:B6'],
+                        ['from' => 'C2', 'to' => 'C3:C6'],
                     ],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
@@ -3961,26 +3829,14 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'delete', 'row' => 2],
-                        ['action' => 'add', 'row' => 3],
-                        ['action' => 'add', 'row' => 4],
-                        ['action' => 'add', 'row' => 5],
-                        ['action' => 'add', 'row' => 6],
+                        ['action' => 'delete', 'row' => 2, 'qty' => 1],
+                        ['action' => 'add', 'row' => 3, 'qty' => 4],
                     ],
 
                     'copy_style' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
-                        ['from' => 'A2', 'to' => 'A5'],
-                        ['from' => 'A2', 'to' => 'A6'],
-                        ['from' => 'B2', 'to' => 'B3'],
-                        ['from' => 'B2', 'to' => 'B4'],
-                        ['from' => 'B2', 'to' => 'B5'],
-                        ['from' => 'B2', 'to' => 'B6'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
-                        ['from' => 'C2', 'to' => 'C5'],
-                        ['from' => 'C2', 'to' => 'C6'],
+                        ['from' => 'A2', 'to' => 'A3:A6'],
+                        ['from' => 'B2', 'to' => 'B3:B6'],
+                        ['from' => 'C2', 'to' => 'C3:C6'],
                     ],
 
                     'merge_cells' => [],
@@ -3988,18 +3844,9 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     'copy_width' => [],
 
                     'copy_cell_format' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
-                        ['from' => 'A2', 'to' => 'A5'],
-                        ['from' => 'A2', 'to' => 'A6'],
-                        ['from' => 'B2', 'to' => 'B3'],
-                        ['from' => 'B2', 'to' => 'B4'],
-                        ['from' => 'B2', 'to' => 'B5'],
-                        ['from' => 'B2', 'to' => 'B6'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
-                        ['from' => 'C2', 'to' => 'C5'],
-                        ['from' => 'C2', 'to' => 'C6'],
+                        ['from' => 'A2', 'to' => 'A3:A6'],
+                        ['from' => 'B2', 'to' => 'B3:B6'],
+                        ['from' => 'C2', 'to' => 'C3:C6'],
                     ],
                 ],
                 $this->service->schema($item['values'], $item['data'], [])->toArray(),
@@ -4321,22 +4168,17 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 3],
-                        ['action' => 'add', 'row' => 4],
+                        ['action' => 'add', 'row' => 3, 'qty' => 2],
                     ],
 
                     'copy_style' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'A3:A4'],
                         ['from' => 'A2', 'to' => 'B2'],
                         ['from' => 'A2', 'to' => 'C2'],
                         ['from' => 'A2', 'to' => 'D2'],
-                        ['from' => 'B2', 'to' => 'B3'],
-                        ['from' => 'B2', 'to' => 'B4'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
-                        ['from' => 'D2', 'to' => 'D3'],
-                        ['from' => 'D2', 'to' => 'D4'],
+                        ['from' => 'B2', 'to' => 'B3:B4'],
+                        ['from' => 'C2', 'to' => 'C3:C4'],
+                        ['from' => 'D2', 'to' => 'D3:D4'],
                     ],
 
                     'merge_cells' => [],
@@ -4348,17 +4190,13 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'copy_cell_format' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'A3:A4'],
                         ['from' => 'A2', 'to' => 'B2'],
                         ['from' => 'A2', 'to' => 'C2'],
                         ['from' => 'A2', 'to' => 'D2'],
-                        ['from' => 'B2', 'to' => 'B3'],
-                        ['from' => 'B2', 'to' => 'B4'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
-                        ['from' => 'D2', 'to' => 'D3'],
-                        ['from' => 'D2', 'to' => 'D4'],
+                        ['from' => 'B2', 'to' => 'B3:B4'],
+                        ['from' => 'C2', 'to' => 'C3:C4'],
+                        ['from' => 'D2', 'to' => 'D3:D4'],
                     ],
                 ],
                 $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
@@ -4431,33 +4269,24 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 3],
-                        ['action' => 'add', 'row' => 4],
+                        ['action' => 'add', 'row' => 3, 'qty' => 2],
                     ],
 
                     'copy_style' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'A3:A4'],
                         ['from' => 'A2', 'to' => 'C2'],
                         ['from' => 'A2', 'to' => 'E2'],
                         ['from' => 'A2', 'to' => 'G2'],
-                        ['from' => 'B2', 'to' => 'B3'],
-                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'B2', 'to' => 'B3:B4'],
                         ['from' => 'B2', 'to' => 'D2'],
                         ['from' => 'B2', 'to' => 'F2'],
                         ['from' => 'B2', 'to' => 'H2'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
-                        ['from' => 'D2', 'to' => 'D3'],
-                        ['from' => 'D2', 'to' => 'D4'],
-                        ['from' => 'E2', 'to' => 'E3'],
-                        ['from' => 'E2', 'to' => 'E4'],
-                        ['from' => 'F2', 'to' => 'F3'],
-                        ['from' => 'F2', 'to' => 'F4'],
-                        ['from' => 'G2', 'to' => 'G3'],
-                        ['from' => 'G2', 'to' => 'G4'],
-                        ['from' => 'H2', 'to' => 'H3'],
-                        ['from' => 'H2', 'to' => 'H4'],
+                        ['from' => 'C2', 'to' => 'C3:C4'],
+                        ['from' => 'D2', 'to' => 'D3:D4'],
+                        ['from' => 'E2', 'to' => 'E3:E4'],
+                        ['from' => 'F2', 'to' => 'F3:F4'],
+                        ['from' => 'G2', 'to' => 'G3:G4'],
+                        ['from' => 'H2', 'to' => 'H3:H4'],
                     ],
 
                     'merge_cells' => [
@@ -4476,17 +4305,13 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'copy_cell_format' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'A3:A4'],
                         ['from' => 'A2', 'to' => 'C2'],
                         ['from' => 'A2', 'to' => 'E2'],
                         ['from' => 'A2', 'to' => 'G2'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
-                        ['from' => 'E2', 'to' => 'E3'],
-                        ['from' => 'E2', 'to' => 'E4'],
-                        ['from' => 'G2', 'to' => 'G3'],
-                        ['from' => 'G2', 'to' => 'G4'],
+                        ['from' => 'C2', 'to' => 'C3:C4'],
+                        ['from' => 'E2', 'to' => 'E3:E4'],
+                        ['from' => 'G2', 'to' => 'G3:G4'],
                     ],
                 ],
                 $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
@@ -4559,44 +4384,31 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 3],
-                        ['action' => 'add', 'row' => 4],
+                        ['action' => 'add', 'row' => 3, 'qty' => 2],
                     ],
 
                     'copy_style' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'A3:A4'],
                         ['from' => 'A2', 'to' => 'D2'],
                         ['from' => 'A2', 'to' => 'G2'],
                         ['from' => 'A2', 'to' => 'J2'],
-                        ['from' => 'B2', 'to' => 'B3'],
-                        ['from' => 'B2', 'to' => 'B4'],
+                        ['from' => 'B2', 'to' => 'B3:B4'],
                         ['from' => 'B2', 'to' => 'E2'],
                         ['from' => 'B2', 'to' => 'H2'],
                         ['from' => 'B2', 'to' => 'K2'],
-                        ['from' => 'C2', 'to' => 'C3'],
-                        ['from' => 'C2', 'to' => 'C4'],
+                        ['from' => 'C2', 'to' => 'C3:C4'],
                         ['from' => 'C2', 'to' => 'F2'],
                         ['from' => 'C2', 'to' => 'I2'],
                         ['from' => 'C2', 'to' => 'L2'],
-                        ['from' => 'D2', 'to' => 'D3'],
-                        ['from' => 'D2', 'to' => 'D4'],
-                        ['from' => 'E2', 'to' => 'E3'],
-                        ['from' => 'E2', 'to' => 'E4'],
-                        ['from' => 'F2', 'to' => 'F3'],
-                        ['from' => 'F2', 'to' => 'F4'],
-                        ['from' => 'G2', 'to' => 'G3'],
-                        ['from' => 'G2', 'to' => 'G4'],
-                        ['from' => 'H2', 'to' => 'H3'],
-                        ['from' => 'H2', 'to' => 'H4'],
-                        ['from' => 'I2', 'to' => 'I3'],
-                        ['from' => 'I2', 'to' => 'I4'],
-                        ['from' => 'J2', 'to' => 'J3'],
-                        ['from' => 'J2', 'to' => 'J4'],
-                        ['from' => 'K2', 'to' => 'K3'],
-                        ['from' => 'K2', 'to' => 'K4'],
-                        ['from' => 'L2', 'to' => 'L3'],
-                        ['from' => 'L2', 'to' => 'L4'],
+                        ['from' => 'D2', 'to' => 'D3:D4'],
+                        ['from' => 'E2', 'to' => 'E3:E4'],
+                        ['from' => 'F2', 'to' => 'F3:F4'],
+                        ['from' => 'G2', 'to' => 'G3:G4'],
+                        ['from' => 'H2', 'to' => 'H3:H4'],
+                        ['from' => 'I2', 'to' => 'I3:I4'],
+                        ['from' => 'J2', 'to' => 'J3:J4'],
+                        ['from' => 'K2', 'to' => 'K3:K4'],
+                        ['from' => 'L2', 'to' => 'L3:L4'],
                     ],
 
                     'merge_cells' => [
@@ -4618,17 +4430,13 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'copy_cell_format' => [
-                        ['from' => 'A2', 'to' => 'A3'],
-                        ['from' => 'A2', 'to' => 'A4'],
+                        ['from' => 'A2', 'to' => 'A3:A4'],
                         ['from' => 'A2', 'to' => 'D2'],
                         ['from' => 'A2', 'to' => 'G2'],
                         ['from' => 'A2', 'to' => 'J2'],
-                        ['from' => 'D2', 'to' => 'D3'],
-                        ['from' => 'D2', 'to' => 'D4'],
-                        ['from' => 'G2', 'to' => 'G3'],
-                        ['from' => 'G2', 'to' => 'G4'],
-                        ['from' => 'J2', 'to' => 'J3'],
-                        ['from' => 'J2', 'to' => 'J4'],
+                        ['from' => 'D2', 'to' => 'D3:D4'],
+                        ['from' => 'G2', 'to' => 'G3:G4'],
+                        ['from' => 'J2', 'to' => 'J3:J4'],
                     ],
                 ],
                 $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
@@ -4700,35 +4508,26 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 4],
-                        ['action' => 'add', 'row' => 5],
+                        ['action' => 'add', 'row' => 4, 'qty' => 2],
                     ],
 
                     'copy_style' => [
-                        ['from' => 'A3', 'to' => 'A4'],
-                        ['from' => 'A3', 'to' => 'A5'],
-                        ['from' => 'B3', 'to' => 'B4'],
-                        ['from' => 'B3', 'to' => 'B5'],
+                        ['from' => 'A3', 'to' => 'A4:A5'],
+                        ['from' => 'B3', 'to' => 'B4:B5'],
                         ['from' => 'C2', 'to' => 'E2'],
                         ['from' => 'C2', 'to' => 'G2'],
-                        ['from' => 'C3', 'to' => 'C4'],
-                        ['from' => 'C3', 'to' => 'C5'],
+                        ['from' => 'C3', 'to' => 'C4:C5'],
                         ['from' => 'C3', 'to' => 'E3'],
                         ['from' => 'C3', 'to' => 'G3'],
                         ['from' => 'D2', 'to' => 'F2'],
                         ['from' => 'D2', 'to' => 'H2'],
-                        ['from' => 'D3', 'to' => 'D4'],
-                        ['from' => 'D3', 'to' => 'D5'],
+                        ['from' => 'D3', 'to' => 'D4:D5'],
                         ['from' => 'D3', 'to' => 'F3'],
                         ['from' => 'D3', 'to' => 'H3'],
-                        ['from' => 'E3', 'to' => 'E4'],
-                        ['from' => 'E3', 'to' => 'E5'],
-                        ['from' => 'F3', 'to' => 'F4'],
-                        ['from' => 'F3', 'to' => 'F5'],
-                        ['from' => 'G3', 'to' => 'G4'],
-                        ['from' => 'G3', 'to' => 'G5'],
-                        ['from' => 'H3', 'to' => 'H4'],
-                        ['from' => 'H3', 'to' => 'H5'],
+                        ['from' => 'E3', 'to' => 'E4:E5'],
+                        ['from' => 'F3', 'to' => 'F4:F5'],
+                        ['from' => 'G3', 'to' => 'G4:G5'],
+                        ['from' => 'H3', 'to' => 'H4:H5'],
                     ],
 
                     'merge_cells' => [
@@ -4746,18 +4545,14 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'copy_cell_format' => [
-                        ['from' => 'A3', 'to' => 'A4'],
-                        ['from' => 'A3', 'to' => 'A5'],
+                        ['from' => 'A3', 'to' => 'A4:A5'],
                         ['from' => 'C2', 'to' => 'E2'],
                         ['from' => 'C2', 'to' => 'G2'],
-                        ['from' => 'C3', 'to' => 'C4'],
-                        ['from' => 'C3', 'to' => 'C5'],
+                        ['from' => 'C3', 'to' => 'C4:C5'],
                         ['from' => 'C3', 'to' => 'E3'],
                         ['from' => 'C3', 'to' => 'G3'],
-                        ['from' => 'E3', 'to' => 'E4'],
-                        ['from' => 'E3', 'to' => 'E5'],
-                        ['from' => 'G3', 'to' => 'G4'],
-                        ['from' => 'G3', 'to' => 'G5'],
+                        ['from' => 'E3', 'to' => 'E4:E5'],
+                        ['from' => 'G3', 'to' => 'G4:G5'],
                     ],
                 ],
                 $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
@@ -4829,47 +4624,34 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 4],
-                        ['action' => 'add', 'row' => 5],
+                        ['action' => 'add', 'row' => 4, 'qty' => 2],
                     ],
 
                     'copy_style' => [
-                        ['from' => 'A3', 'to' => 'A4'],
-                        ['from' => 'A3', 'to' => 'A5'],
-                        ['from' => 'B3', 'to' => 'B4'],
-                        ['from' => 'B3', 'to' => 'B5'],
-                        ['from' => 'C3', 'to' => 'C4'],
-                        ['from' => 'C3', 'to' => 'C5'],
+                        ['from' => 'A3', 'to' => 'A4:A5'],
+                        ['from' => 'B3', 'to' => 'B4:B5'],
+                        ['from' => 'C3', 'to' => 'C4:C5'],
                         ['from' => 'D2', 'to' => 'G2'],
                         ['from' => 'D2', 'to' => 'J2'],
-                        ['from' => 'D3', 'to' => 'D4'],
-                        ['from' => 'D3', 'to' => 'D5'],
+                        ['from' => 'D3', 'to' => 'D4:D5'],
                         ['from' => 'D3', 'to' => 'G3'],
                         ['from' => 'D3', 'to' => 'J3'],
                         ['from' => 'E2', 'to' => 'H2'],
                         ['from' => 'E2', 'to' => 'K2'],
-                        ['from' => 'E3', 'to' => 'E4'],
-                        ['from' => 'E3', 'to' => 'E5'],
+                        ['from' => 'E3', 'to' => 'E4:E5'],
                         ['from' => 'E3', 'to' => 'H3'],
                         ['from' => 'E3', 'to' => 'K3'],
                         ['from' => 'F2', 'to' => 'I2'],
                         ['from' => 'F2', 'to' => 'L2'],
-                        ['from' => 'F3', 'to' => 'F4'],
-                        ['from' => 'F3', 'to' => 'F5'],
+                        ['from' => 'F3', 'to' => 'F4:F5'],
                         ['from' => 'F3', 'to' => 'I3'],
                         ['from' => 'F3', 'to' => 'L3'],
-                        ['from' => 'G3', 'to' => 'G4'],
-                        ['from' => 'G3', 'to' => 'G5'],
-                        ['from' => 'H3', 'to' => 'H4'],
-                        ['from' => 'H3', 'to' => 'H5'],
-                        ['from' => 'I3', 'to' => 'I4'],
-                        ['from' => 'I3', 'to' => 'I5'],
-                        ['from' => 'J3', 'to' => 'J4'],
-                        ['from' => 'J3', 'to' => 'J5'],
-                        ['from' => 'K3', 'to' => 'K4'],
-                        ['from' => 'K3', 'to' => 'K5'],
-                        ['from' => 'L3', 'to' => 'L4'],
-                        ['from' => 'L3', 'to' => 'L5'],
+                        ['from' => 'G3', 'to' => 'G4:G5'],
+                        ['from' => 'H3', 'to' => 'H4:H5'],
+                        ['from' => 'I3', 'to' => 'I4:I5'],
+                        ['from' => 'J3', 'to' => 'J4:J5'],
+                        ['from' => 'K3', 'to' => 'K4:K5'],
+                        ['from' => 'L3', 'to' => 'L4:L5'],
                     ],
 
                     'merge_cells' => [
@@ -4889,18 +4671,14 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'copy_cell_format' => [
-                        ['from' => 'A3', 'to' => 'A4'],
-                        ['from' => 'A3', 'to' => 'A5'],
+                        ['from' => 'A3', 'to' => 'A4:A5'],
                         ['from' => 'D2', 'to' => 'G2'],
                         ['from' => 'D2', 'to' => 'J2'],
-                        ['from' => 'D3', 'to' => 'D4'],
-                        ['from' => 'D3', 'to' => 'D5'],
+                        ['from' => 'D3', 'to' => 'D4:D5'],
                         ['from' => 'D3', 'to' => 'G3'],
                         ['from' => 'D3', 'to' => 'J3'],
-                        ['from' => 'G3', 'to' => 'G4'],
-                        ['from' => 'G3', 'to' => 'G5'],
-                        ['from' => 'J3', 'to' => 'J4'],
-                        ['from' => 'J3', 'to' => 'J5'],
+                        ['from' => 'G3', 'to' => 'G4:G5'],
+                        ['from' => 'J3', 'to' => 'J4:J5'],
                     ],
                 ],
                 $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
@@ -5120,8 +4898,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 4],
-                        ['action' => 'add', 'row' => 5],
+                        ['action' => 'add', 'row' => 4, 'qty' => 2],
                     ],
 
                     'copy_style' => [
@@ -5204,7 +4981,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 3],
+                        ['action' => 'add', 'row' => 3, 'qty' => 1],
                     ],
 
                     'copy_style' => [
@@ -5301,10 +5078,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 4],
-                        ['action' => 'add', 'row' => 5],
-                        ['action' => 'add', 'row' => 6],
-                        ['action' => 'add', 'row' => 7],
+                        ['action' => 'add', 'row' => 4, 'qty' => 4],
                     ],
 
                     'copy_style' => [
@@ -5426,12 +5200,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 4],
-                        ['action' => 'add', 'row' => 5],
-                        ['action' => 'add', 'row' => 6],
-                        ['action' => 'add', 'row' => 7],
-                        ['action' => 'add', 'row' => 8],
-                        ['action' => 'add', 'row' => 9],
+                        ['action' => 'add', 'row' => 4, 'qty' => 6],
                     ],
 
                     'copy_style' => [
@@ -5573,15 +5342,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 5],
-                        ['action' => 'add', 'row' => 6],
-                        ['action' => 'add', 'row' => 7],
-                        ['action' => 'add', 'row' => 8],
-                        ['action' => 'add', 'row' => 9],
-                        ['action' => 'add', 'row' => 10],
-                        ['action' => 'add', 'row' => 11],
-                        ['action' => 'add', 'row' => 12],
-                        ['action' => 'add', 'row' => 13],
+                        ['action' => 'add', 'row' => 5, 'qty' => 9],
                     ],
 
                     'copy_style' => [
@@ -5725,18 +5486,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 6],
-                        ['action' => 'add', 'row' => 7],
-                        ['action' => 'add', 'row' => 8],
-                        ['action' => 'add', 'row' => 9],
-                        ['action' => 'add', 'row' => 10],
-                        ['action' => 'add', 'row' => 11],
-                        ['action' => 'add', 'row' => 12],
-                        ['action' => 'add', 'row' => 13],
-                        ['action' => 'add', 'row' => 14],
-                        ['action' => 'add', 'row' => 15],
-                        ['action' => 'add', 'row' => 16],
-                        ['action' => 'add', 'row' => 17],
+                        ['action' => 'add', 'row' => 6, 'qty' => 12],
                     ],
 
                     'copy_style' => [
@@ -5882,21 +5632,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 7],
-                        ['action' => 'add', 'row' => 8],
-                        ['action' => 'add', 'row' => 9],
-                        ['action' => 'add', 'row' => 10],
-                        ['action' => 'add', 'row' => 11],
-                        ['action' => 'add', 'row' => 12],
-                        ['action' => 'add', 'row' => 13],
-                        ['action' => 'add', 'row' => 14],
-                        ['action' => 'add', 'row' => 15],
-                        ['action' => 'add', 'row' => 16],
-                        ['action' => 'add', 'row' => 17],
-                        ['action' => 'add', 'row' => 18],
-                        ['action' => 'add', 'row' => 19],
-                        ['action' => 'add', 'row' => 20],
-                        ['action' => 'add', 'row' => 21],
+                        ['action' => 'add', 'row' => 7, 'qty' => 15],
                     ],
 
                     'copy_style' => [
@@ -6033,12 +5769,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 5],
-                        ['action' => 'add', 'row' => 6],
-                        ['action' => 'add', 'row' => 7],
-                        ['action' => 'add', 'row' => 8],
-                        ['action' => 'add', 'row' => 9],
-                        ['action' => 'add', 'row' => 10],
+                        ['action' => 'add', 'row' => 5, 'qty' => 6],
                     ],
 
                     'copy_style' => [
@@ -6172,8 +5903,8 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 2],
-                        ['action' => 'delete', 'row' => 4],
+                        ['action' => 'add', 'row' => 2, 'qty' => 1],
+                        ['action' => 'delete', 'row' => 4, 'qty' => 1],
                     ],
 
                     'copy_style' => [
@@ -6246,8 +5977,8 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 3],
-                        ['action' => 'delete', 'row' => 5],
+                        ['action' => 'add', 'row' => 3, 'qty' => 1],
+                        ['action' => 'delete', 'row' => 5, 'qty' => 1],
                     ],
 
                     'copy_style' => [
@@ -6306,7 +6037,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 2],
+                        ['action' => 'add', 'row' => 2, 'qty' => 1],
                     ],
 
                     'copy_style' => [
@@ -6365,7 +6096,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 3],
+                        ['action' => 'add', 'row' => 3, 'qty' => 1],
                     ],
 
                     'copy_style' => [
@@ -6456,15 +6187,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 4],
-                        ['action' => 'add', 'row' => 5],
-                        ['action' => 'add', 'row' => 6],
-                        ['action' => 'add', 'row' => 7],
-                        ['action' => 'add', 'row' => 8],
-                        ['action' => 'add', 'row' => 9],
-                        ['action' => 'add', 'row' => 10],
-                        ['action' => 'add', 'row' => 11],
-                        ['action' => 'add', 'row' => 12],
+                        ['action' => 'add', 'row' => 4, 'qty' => 9],
                     ],
 
                     'copy_style' => [
@@ -6593,12 +6316,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     ],
 
                     'rows' => [
-                        ['action' => 'add', 'row' => 5],
-                        ['action' => 'add', 'row' => 6],
-                        ['action' => 'add', 'row' => 7],
-                        ['action' => 'add', 'row' => 8],
-                        ['action' => 'add', 'row' => 9],
-                        ['action' => 'add', 'row' => 10],
+                        ['action' => 'add', 'row' => 5, 'qty' => 6],
                     ],
 
                     'copy_style' => [
@@ -6680,6 +6398,128 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'F2', 'to' => 'F8'],
                         ['from' => 'F3', 'to' => 'F6'],
                         ['from' => 'F3', 'to' => 'F9'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_list_long()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '[foo1]',
+                        'B' => '[bar1]',
+                        'C' => 'foo1',
+                        'D' => 'bar1',
+                    ],
+                    10 => [
+                        'A' => '[foo2]',
+                        'B' => '[bar2]',
+                        'C' => 'foo2',
+                        'D' => 'bar2',
+                    ],
+                ],
+
+                'data' => [
+                    'foo1' => [
+                        'foo1-1', 'foo1-2', 'foo1-3', 'foo1-4', 'foo1-5', 'foo1-6', 'foo1-7', 'foo1-8',
+                        'foo1-9', 'foo1-10', 'foo1-11', 'foo1-12', 'foo1-13', 'foo1-14', 'foo1-15', 'foo1-16',
+                    ],
+                    'bar1' => [
+                        'bar1-1', 'bar1-2', 'bar1-3', 'bar1-4', 'bar1-5', 'bar1-6', 'bar1-7', 'bar1-8',
+                        'bar1-9', 'bar1-10', 'bar1-11', 'bar1-12', 'bar1-13', 'bar1-14', 'bar1-15', 'bar1-16',
+                    ],
+
+                    'foo2' => [
+                        'foo2-1', 'foo2-2', 'foo2-3', 'foo2-4', 'foo2-5', 'foo2-6', 'foo2-7', 'foo2-8',
+                        'foo2-9', 'foo2-10', 'foo2-11', 'foo2-12', 'foo2-13', 'foo2-14', 'foo2-15', 'foo2-16',
+                    ],
+                    'bar2' => [
+                        'bar2-1', 'bar2-2', 'bar2-3', 'bar2-4', 'bar2-5', 'bar2-6', 'bar2-7', 'bar2-8',
+                        'bar2-9', 'bar2-10', 'bar2-11', 'bar2-12', 'bar2-13', 'bar2-14', 'bar2-15', 'bar2-16',
+                    ],
+                ],
+
+                'merge_cells' => [],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => ['A' => 'foo1-1', 'B' => 'bar1-1', 'C' => 'foo1', 'D' => 'bar1'],
+                        2 => ['A' => 'foo1-2', 'B' => 'bar1-2', 'C' => 'foo1', 'D' => 'bar1'],
+                        3 => ['A' => 'foo1-3', 'B' => 'bar1-3', 'C' => 'foo1', 'D' => 'bar1'],
+                        4 => ['A' => 'foo1-4', 'B' => 'bar1-4', 'C' => 'foo1', 'D' => 'bar1'],
+                        5 => ['A' => 'foo1-5', 'B' => 'bar1-5', 'C' => 'foo1', 'D' => 'bar1'],
+                        6 => ['A' => 'foo1-6', 'B' => 'bar1-6', 'C' => 'foo1', 'D' => 'bar1'],
+                        7 => ['A' => 'foo1-7', 'B' => 'bar1-7', 'C' => 'foo1', 'D' => 'bar1'],
+                        8 => ['A' => 'foo1-8', 'B' => 'bar1-8', 'C' => 'foo1', 'D' => 'bar1'],
+                        9 => ['A' => 'foo1-9', 'B' => 'bar1-9', 'C' => 'foo1', 'D' => 'bar1'],
+                        10 => ['A' => 'foo1-10', 'B' => 'bar1-10', 'C' => 'foo1', 'D' => 'bar1'],
+                        11 => ['A' => 'foo1-11', 'B' => 'bar1-11', 'C' => 'foo1', 'D' => 'bar1'],
+                        12 => ['A' => 'foo1-12', 'B' => 'bar1-12', 'C' => 'foo1', 'D' => 'bar1'],
+                        13 => ['A' => 'foo1-13', 'B' => 'bar1-13', 'C' => 'foo1', 'D' => 'bar1'],
+                        14 => ['A' => 'foo1-14', 'B' => 'bar1-14', 'C' => 'foo1', 'D' => 'bar1'],
+                        15 => ['A' => 'foo1-15', 'B' => 'bar1-15', 'C' => 'foo1', 'D' => 'bar1'],
+                        16 => ['A' => 'foo1-16', 'B' => 'bar1-16', 'C' => 'foo1', 'D' => 'bar1'],
+
+                        25 => ['A' => 'foo2-1', 'B' => 'bar2-1', 'C' => 'foo2', 'D' => 'bar2'],
+                        26 => ['A' => 'foo2-2', 'B' => 'bar2-2', 'C' => 'foo2', 'D' => 'bar2'],
+                        27 => ['A' => 'foo2-3', 'B' => 'bar2-3', 'C' => 'foo2', 'D' => 'bar2'],
+                        28 => ['A' => 'foo2-4', 'B' => 'bar2-4', 'C' => 'foo2', 'D' => 'bar2'],
+                        29 => ['A' => 'foo2-5', 'B' => 'bar2-5', 'C' => 'foo2', 'D' => 'bar2'],
+                        30 => ['A' => 'foo2-6', 'B' => 'bar2-6', 'C' => 'foo2', 'D' => 'bar2'],
+                        31 => ['A' => 'foo2-7', 'B' => 'bar2-7', 'C' => 'foo2', 'D' => 'bar2'],
+                        32 => ['A' => 'foo2-8', 'B' => 'bar2-8', 'C' => 'foo2', 'D' => 'bar2'],
+                        33 => ['A' => 'foo2-9', 'B' => 'bar2-9', 'C' => 'foo2', 'D' => 'bar2'],
+                        34 => ['A' => 'foo2-10', 'B' => 'bar2-10', 'C' => 'foo2', 'D' => 'bar2'],
+                        35 => ['A' => 'foo2-11', 'B' => 'bar2-11', 'C' => 'foo2', 'D' => 'bar2'],
+                        36 => ['A' => 'foo2-12', 'B' => 'bar2-12', 'C' => 'foo2', 'D' => 'bar2'],
+                        37 => ['A' => 'foo2-13', 'B' => 'bar2-13', 'C' => 'foo2', 'D' => 'bar2'],
+                        38 => ['A' => 'foo2-14', 'B' => 'bar2-14', 'C' => 'foo2', 'D' => 'bar2'],
+                        39 => ['A' => 'foo2-15', 'B' => 'bar2-15', 'C' => 'foo2', 'D' => 'bar2'],
+                        40 => ['A' => 'foo2-16', 'B' => 'bar2-16', 'C' => 'foo2', 'D' => 'bar2'],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 2, 'qty' => 15],
+                        ['action' => 'add', 'row' => 26, 'qty' => 15],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A1', 'to' => 'A2:A16'],
+                        ['from' => 'A25', 'to' => 'A26:A40'],
+                        ['from' => 'B1', 'to' => 'B2:B16'],
+                        ['from' => 'B25', 'to' => 'B26:B40'],
+                        ['from' => 'C1', 'to' => 'C2:C16'],
+                        ['from' => 'C25', 'to' => 'C26:C40'],
+                        ['from' => 'D1', 'to' => 'D2:D16'],
+                        ['from' => 'D25', 'to' => 'D26:D40'],
+                    ],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A1', 'to' => 'A2:A16'],
+                        ['from' => 'A25', 'to' => 'A26:A40'],
+                        ['from' => 'B1', 'to' => 'B2:B16'],
+                        ['from' => 'B25', 'to' => 'B26:B40'],
+                        ['from' => 'C1', 'to' => 'C2:C16'],
+                        ['from' => 'C25', 'to' => 'C26:C40'],
+                        ['from' => 'D1', 'to' => 'D2:D16'],
+                        ['from' => 'D25', 'to' => 'D26:D40'],
                     ],
                 ],
                 $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),

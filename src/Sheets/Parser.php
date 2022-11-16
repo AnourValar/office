@@ -390,17 +390,23 @@ class Parser
      */
     protected function shiftFormulas(array &$values, SchemaMapper &$schema, array &$mergeCells): void
     {
+        // Prepares
         $ranges = [];
 
-        // "Outside" shifts
-        foreach ($schema->toArray()['rows'] as $action) {
-            foreach ($values as $row => &$columns) {
-                foreach ($columns as &$value) {
-                    if (! preg_match('#^\=[A-Z][A-Z\.\d]#', (string) $value)) {
-                        continue;
-                    }
+        $map = [];
+        foreach ($values as $row => $columns) {
+            foreach ($columns as $column => $value) {
+                if (preg_match('#^\=[A-Z][A-Z\.\d]#', (string) $value)) {
+                    $map[$row][$column] = $value;
+                }
+            }
+        }
 
-                    $value = preg_replace_callback(
+        // "Outside" shifts
+        foreach ($schema->getOriginal()['rows'] as $action) {
+            foreach ($map as $row => $columns) {
+                foreach ($columns as $column => $value) {
+                    $map[$row][$column] = $values[$row][$column] = preg_replace_callback(
                         '#([A-Z]+)([\d]+)#S',
                         function ($patterns) use ($action) {
                             if ($action['action'] == 'add') {
@@ -422,15 +428,13 @@ class Parser
                         $value
                     );
                 }
-                unset($value);
             }
-            unset($columns);
         }
 
         // "Inside" shifts
         $prev = 0;
         $prevAction = null;
-        foreach ($schema->toArray()['rows'] as $action) {
+        foreach ($schema->getOriginal()['rows'] as $action) {
             if ($prevAction && $prevAction['row'] + 1 == $action['row'] && $action['action'] == 'add' && $prevAction['action'] == 'add') {
                 $prev++;
             } else {
@@ -441,13 +445,9 @@ class Parser
                 $prev = 0;
             }
 
-            foreach ($values as $row => &$columns) {
-                foreach ($columns as &$value) {
-                    if (! preg_match('#^\=[A-Z][A-Z\.\d]#', (string) $value)) {
-                        continue;
-                    }
-
-                    $value = preg_replace_callback(
+            foreach ($map as $row => $columns) {
+                foreach ($columns as $column => $value) {
+                    $map[$row][$column] = $values[$row][$column] = preg_replace_callback(
                         '#([A-Z]+)([\d]+)#S',
                         function ($patterns) use ($action, $row, $prev) {
                             if ($action['action'] == 'add') {
@@ -463,9 +463,7 @@ class Parser
                         $value
                     );
                 }
-                unset($value);
             }
-            unset($columns);
 
             $prevAction = $action;
         }
@@ -487,13 +485,9 @@ class Parser
             }
         }
 
-        foreach ($values as $row => &$columns) {
-            foreach ($columns as &$value) {
-                if (! preg_match('#^\=[A-Z][A-Z\.\d]#', (string) $value)) {
-                    continue;
-                }
-
-                $value = preg_replace_callback(
+        foreach ($map as $row => $columns) {
+            foreach ($columns as $column => $value) {
+                $map[$row][$column] = $values[$row][$column] = preg_replace_callback(
                     '#([A-Z]+)([\d]+)\:([A-Z]+)([\d]+)#S',
                     function ($patterns) use ($ranges) {
                         if ($patterns[2] == $patterns[4]) {
@@ -509,9 +503,7 @@ class Parser
                     $value
                 );
             }
-            unset($value);
         }
-        unset($columns);
     }
 
     /**

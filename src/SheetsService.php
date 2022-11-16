@@ -168,9 +168,9 @@ class SheetsService
         // Rows
         foreach ($schema['rows'] as $row) {
             if ($row['action'] == 'add') {
-                $driver->addRow($row['row']);
+                $driver->addRow($row['row'], $row['qty']);
             } elseif ($row['action'] == 'delete') {
-                $driver->deleteRow($row['row']);
+                $driver->deleteRow($row['row'], $row['qty']);
             } else {
                 throw new \LogicException('Incorrect usage.');
             }

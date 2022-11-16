@@ -130,13 +130,14 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function test_schema_closure()
+    public function test_schema_not_scalar()
     {
         $data = [
             [
                 'values' => [
                     1 => [
                         'A' => '[foo]',
+                        'B' => '[baz]',
                     ],
                     2 => [
                         'A' => 'hello [bar] world',
@@ -154,6 +155,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
 
                 'data' => [
                     'foo' => function () {},
+                    'baz' => new \DateTime('2022-11-16'),
                     'test' => function () {},
                     'test2' => function () { throw new \LogicException('oops'); },
                 ],
@@ -166,6 +168,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     'data' => [
                         1 => [
                             'A' => $item['data']['foo'],
+                            'B' => $item['data']['baz'],
                         ],
                         2 => [
                             'A' => 'hello  world',

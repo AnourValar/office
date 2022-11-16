@@ -517,12 +517,12 @@ class Parser
         $canonizeKeys = ['scalar' => [], 'closure' => []];
         $canonizeValues = ['scalar' => [], 'closure' => []];
         foreach ($data as $from => $to) {
-            if ($to instanceof \Closure) {
-                $canonizeKeys['closure'][] = "[$from]";
-                $canonizeValues['closure'][] = $to;
-            } else {
+            if (is_scalar($to) || is_null($to)) {
                 $canonizeKeys['scalar'][] = "[$from]";
                 $canonizeValues['scalar'][] = $to;
+            } else {
+                $canonizeKeys['closure'][] = "[$from]";
+                $canonizeValues['closure'][] = $to;
             }
         }
 

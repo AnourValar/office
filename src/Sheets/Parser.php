@@ -228,7 +228,7 @@ class Parser
 
 
             if (! $stepRows && $this->shouldBeDeleted($columns, $data)) {
-                $schema->deleteRow($row + $shift);
+                $this->deleteRow($schema, $mergeCells, $row + $shift);
                 $shift--;
                 continue;
             }
@@ -294,7 +294,7 @@ class Parser
                 }
             }
 
-            $dataSchema[$row + $shift] = $columns;
+            $dataSchema[$row + $shift] = array_filter($columns);
             $originalRow = ($row + $shift);
 
             if ($additionRows) {
@@ -326,9 +326,9 @@ class Parser
                 }
                 unset($column);
 
-                $dataSchema[$row + $shift] = $columns;
+                $dataSchema[$row + $shift] = array_filter($columns);
                 if (! $step) {
-                    $schema->addRow($row + $shift);
+                    $this->addRow($schema, $mergeCells, $row + $shift);
                 }
 
                 foreach (array_keys($columns) as $curr) {
@@ -353,7 +353,7 @@ class Parser
                 $iterate = $maxMergeY;
                 while ($iterate) {
                     $shift++;
-                    $schema->addRow($row + $shift);
+                    $this->addRow($schema, $mergeCells, $row + $shift);
                     $iterate--;
                 }
             }
@@ -715,5 +715,49 @@ class Parser
             },
             $value
         );
+    }
+
+    /**
+     * @param \AnourValar\Office\Sheets\SchemaMapper $schema
+     * @param array $mergeCells
+     * @param int $row
+     * @return void
+     */
+    private function addRow(SchemaMapper &$schema, array &$mergeCells, int $row): void
+    {
+        $schema->addRow($row);
+
+        foreach ($mergeCells as &$mergeCell) {
+            if ($mergeCell[0][1] >= $row) {
+                $mergeCell[0][1]++;
+            }
+
+            if ($mergeCell[1][1] >= $row) {
+                $mergeCell[1][1]++;
+            }
+        }
+        unset($mergeCell);
+    }
+
+    /**
+     * @param \AnourValar\Office\Sheets\SchemaMapper $schema
+     * @param array $mergeCells
+     * @param int $row
+     * @return void
+     */
+    private function deleteRow(SchemaMapper &$schema, array &$mergeCells, int $row): void
+    {
+        $schema->deleteRow($row);
+
+        foreach ($mergeCells as &$mergeCell) {
+            if ($mergeCell[0][1] >= $row) {
+                $mergeCell[0][1]--;
+            }
+
+            if ($mergeCell[1][1] >= $row) {
+                $mergeCell[1][1]--;
+            }
+        }
+        unset($mergeCell);
     }
 }

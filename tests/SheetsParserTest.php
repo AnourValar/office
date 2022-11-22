@@ -6530,4 +6530,383 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
             );
         }
     }
+
+    /**
+     * @return void
+     */
+    public function test_schema_several_tables1()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '[tableOne.a]',
+                        'C' => '',
+                        'D' => '[tableOne.d]',
+                    ],
+                    3 => [
+                        'A' => '[tableTwo.a]',
+                        'C' => '',
+                        'D' => '[tableTwo.d]',
+                    ],
+                    5 => [
+                        'A' => '[tableThree.a]',
+                        'C' => '',
+                        'D' => '[tableThree.d]',
+                    ],
+                ],
+
+                'data' => [
+                    'tableOne' => [
+                        'a' => ['one-a-1', 'one-a-2', 'one-a-3'],
+                        'd' => ['one-d-1', 'one-d-2', 'one-d-3'],
+                    ],
+                    'tableTwo' => [
+                        'a' => ['two-a-1', 'two-a-2', 'two-a-3'],
+                        'd' => ['two-d-1', 'two-d-2', 'two-d-3'],
+                    ],
+                    'tableThree' => [
+                        'a' => ['three-a-1', 'three-a-2', 'three-a-3'],
+                        'd' => ['three-d-1', 'three-d-2', 'three-d-3'],
+                    ],
+                ],
+
+                'merge_cells' => [],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => ['A' => 'one-a-1', 'D' => 'one-d-1'],
+                        2 => ['A' => 'one-a-2', 'D' => 'one-d-2'],
+                        3 => ['A' => 'one-a-3', 'D' => 'one-d-3'],
+                        5 => ['A' => 'two-a-1', 'D' => 'two-d-1'],
+                        6 => ['A' => 'two-a-2', 'D' => 'two-d-2'],
+                        7 => ['A' => 'two-a-3', 'D' => 'two-d-3'],
+                        9 => ['A' => 'three-a-1', 'D' => 'three-d-1'],
+                        10 => ['A' => 'three-a-2', 'D' => 'three-d-2'],
+                        11 => ['A' => 'three-a-3', 'D' => 'three-d-3'],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 2, 'qty' => 2],
+                        ['action' => 'add', 'row' => 6, 'qty' => 2],
+                        ['action' => 'add', 'row' => 10, 'qty' => 2],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A1', 'to' => 'A2:A3'],
+                        ['from' => 'A5', 'to' => 'A6:A7'],
+                        ['from' => 'A9', 'to' => 'A10:A11'],
+                        ['from' => 'C1', 'to' => 'C2:C3'],
+                        ['from' => 'C5', 'to' => 'C6:C7'],
+                        ['from' => 'C9', 'to' => 'C10:C11'],
+                        ['from' => 'D1', 'to' => 'D2:D3'],
+                        ['from' => 'D5', 'to' => 'D6:D7'],
+                        ['from' => 'D9', 'to' => 'D10:D11'],
+                    ],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A1', 'to' => 'A2:A3'],
+                        ['from' => 'A5', 'to' => 'A6:A7'],
+                        ['from' => 'A9', 'to' => 'A10:A11'],
+                        ['from' => 'C1', 'to' => 'C2:C3'],
+                        ['from' => 'C5', 'to' => 'C6:C7'],
+                        ['from' => 'C9', 'to' => 'C10:C11'],
+                        ['from' => 'D1', 'to' => 'D2:D3'],
+                        ['from' => 'D5', 'to' => 'D6:D7'],
+                        ['from' => 'D9', 'to' => 'D10:D11'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_several_tables2()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '[tableOne.a]',
+                        'C' => '',
+                        'D' => '[tableOne.d]',
+                    ],
+                    3 => [
+                        'A' => '[tableTwo.a]',
+                        'C' => '',
+                        'D' => '[tableTwo.d]',
+                    ],
+                    5 => [
+                        'A' => '[tableThree.a]',
+                        'C' => '',
+                        'D' => '[tableThree.d]',
+                    ],
+                ],
+
+                'data' => [
+                    'tableOne' => [
+                        'a' => ['one-a-1'],
+                        'd' => ['one-d-1'],
+                    ],
+                    'tableTwo' => [],
+                    'tableThree' => [
+                        'a' => ['three-a-1', 'three-a-2', 'three-a-3'],
+                        'd' => ['three-d-1', 'three-d-2', 'three-d-3'],
+                    ],
+                ],
+
+                'merge_cells' => [],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => ['A' => 'one-a-1', 'D' => 'one-d-1'],
+                        3 => ['A' => null, 'D' => null],
+                        5 => ['A' => 'three-a-1', 'D' => 'three-d-1'],
+                        6 => ['A' => 'three-a-2', 'D' => 'three-d-2'],
+                        7 => ['A' => 'three-a-3', 'D' => 'three-d-3'],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 6, 'qty' => 2],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A5', 'to' => 'A6:A7'],
+                        ['from' => 'C5', 'to' => 'C6:C7'],
+                        ['from' => 'D5', 'to' => 'D6:D7'],
+                    ],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A5', 'to' => 'A6:A7'],
+                        ['from' => 'C5', 'to' => 'C6:C7'],
+                        ['from' => 'D5', 'to' => 'D6:D7'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_several_tables3()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '[tableOne.a]',
+                        'B' => '[tableOne.b]',
+                    ],
+                    3 => [
+                        'A' => '[tableTwo.a]',
+                        'B' => '[tableTwo.b]',
+                    ],
+                    5 => [
+                        'A' => '[tableThree.a]',
+                        'B' => '[tableThree.b]',
+                    ],
+                ],
+
+                'data' => [
+                    'tableOne' => [
+                        'a' => ['one-a-1', 'one-a-2', 'one-a-3'],
+                        'b' => ['one-b-1', 'one-b-2', 'one-b-3'],
+                    ],
+                    'tableTwo' => [
+                        'a' => ['two-a-1', 'two-a-2', 'two-a-3'],
+                        'b' => ['two-b-1', 'two-b-2', 'two-b-3'],
+                    ],
+                    'tableThree' => [
+                        'a' => ['three-a-1', 'three-a-2', 'three-a-3'],
+                        'b' => ['three-b-1', 'three-b-2', 'three-b-3'],
+                    ],
+                ],
+
+                'merge_cells' => ['A1:A2', 'B1:B2', 'A3:A4', 'B3:B4', 'A5:A6', 'B5:B6'],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => ['A' => 'one-a-1', 'B' => 'one-b-1'],
+                        3 => ['A' => 'one-a-2', 'B' => 'one-b-2'],
+                        5 => ['A' => 'one-a-3', 'B' => 'one-b-3'],
+                        7 => ['A' => 'two-a-1', 'B' => 'two-b-1'],
+                        9 => ['A' => 'two-a-2', 'B' => 'two-b-2'],
+                        11 => ['A' => 'two-a-3', 'B' => 'two-b-3'],
+                        13 => ['A' => 'three-a-1', 'B' => 'three-b-1'],
+                        15 => ['A' => 'three-a-2', 'B' => 'three-b-2'],
+                        17 => ['A' => 'three-a-3', 'B' => 'three-b-3'],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 3, 'qty' => 4],
+                        ['action' => 'add', 'row' => 9, 'qty' => 4],
+                        ['action' => 'add', 'row' => 15, 'qty' => 4],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A1', 'to' => 'A3'],
+                        ['from' => 'A1', 'to' => 'A5'],
+                        ['from' => 'A7', 'to' => 'A9'],
+                        ['from' => 'A7', 'to' => 'A11'],
+                        ['from' => 'A13', 'to' => 'A15'],
+                        ['from' => 'A13', 'to' => 'A17'],
+                        ['from' => 'B1', 'to' => 'B3'],
+                        ['from' => 'B1', 'to' => 'B5'],
+                        ['from' => 'B7', 'to' => 'B9'],
+                        ['from' => 'B7', 'to' => 'B11'],
+                        ['from' => 'B13', 'to' => 'B15'],
+                        ['from' => 'B13', 'to' => 'B17'],
+                    ],
+
+                    'merge_cells' => [
+                        'A3:A4', 'B3:B4',
+                        'A5:A6', 'B5:B6',
+                        'A9:A10', 'B9:B10',
+                        'A11:A12', 'B11:B12',
+                        'A15:A16', 'B15:B16',
+                        'A17:A18', 'B17:B18',
+                    ],
+
+                    'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A1', 'to' => 'A3'],
+                        ['from' => 'A1', 'to' => 'A5'],
+                        ['from' => 'A7', 'to' => 'A9'],
+                        ['from' => 'A7', 'to' => 'A11'],
+                        ['from' => 'A13', 'to' => 'A15'],
+                        ['from' => 'A13', 'to' => 'A17'],
+                        ['from' => 'B1', 'to' => 'B3'],
+                        ['from' => 'B1', 'to' => 'B5'],
+                        ['from' => 'B7', 'to' => 'B9'],
+                        ['from' => 'B7', 'to' => 'B11'],
+                        ['from' => 'B13', 'to' => 'B15'],
+                        ['from' => 'B13', 'to' => 'B17'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_several_tables4()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '[tableOne.a] [= tableOne]',
+                        'B' => '[tableOne.b]',
+                    ],
+                    3 => [
+                        'A' => '[tableTwo.a] [= tableTwo]',
+                        'B' => '[tableTwo.b]',
+                    ],
+                    4 => [
+                        'A' => '[tableThree.a] [= tableThree]',
+                        'B' => '[tableThree.b]',
+                    ],
+                ],
+
+                'data' => [
+                    'tableOne' => [
+                        'a' => ['one-a-1', 'one-a-2', 'one-a-3'],
+                        'b' => ['one-b-1', 'one-b-2', 'one-b-3'],
+                    ],
+                    'tableTwo' => [],
+                    'tableThree' => [
+                        'a' => ['three-a-1', 'three-a-2', 'three-a-3'],
+                        'b' => ['three-b-1', 'three-b-2', 'three-b-3'],
+                    ],
+                ],
+
+                'merge_cells' => ['A1:A2', 'B1:B2', 'A4:A5', 'B4:B5'],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => ['A' => 'one-a-1', 'B' => 'one-b-1'],
+                        3 => ['A' => 'one-a-2', 'B' => 'one-b-2'],
+                        5 => ['A' => 'one-a-3', 'B' => 'one-b-3'],
+                        7 => ['A' => 'three-a-1', 'B' => 'three-b-1'],
+                        9 => ['A' => 'three-a-2', 'B' => 'three-b-2'],
+                        11 => ['A' => 'three-a-3', 'B' => 'three-b-3'],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 3, 'qty' => 4],
+                        ['action' => 'delete', 'row' => 7, 'qty' => 1],
+                        ['action' => 'add', 'row' => 9, 'qty' => 4],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'A1', 'to' => 'A3'],
+                        ['from' => 'A1', 'to' => 'A5'],
+                        ['from' => 'A7', 'to' => 'A9'],
+                        ['from' => 'A7', 'to' => 'A11'],
+                        ['from' => 'B1', 'to' => 'B3'],
+                        ['from' => 'B1', 'to' => 'B5'],
+                        ['from' => 'B7', 'to' => 'B9'],
+                        ['from' => 'B7', 'to' => 'B11'],
+                    ],
+
+                    'merge_cells' => [
+                        'A3:A4', 'B3:B4',
+                        'A5:A6', 'B5:B6',
+                        'A9:A10', 'B9:B10',
+                        'A11:A12', 'B11:B12',
+                    ],
+
+                    'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'A1', 'to' => 'A3'],
+                        ['from' => 'A1', 'to' => 'A5'],
+                        ['from' => 'A7', 'to' => 'A9'],
+                        ['from' => 'A7', 'to' => 'A11'],
+                        ['from' => 'B1', 'to' => 'B3'],
+                        ['from' => 'B1', 'to' => 'B5'],
+                        ['from' => 'B7', 'to' => 'B9'],
+                        ['from' => 'B7', 'to' => 'B11'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
 }

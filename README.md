@@ -29,7 +29,7 @@ composer require mpdf/mpdf: "^8.0"
 
 ## Generate a document from an XLSX (Excel) template
 
-### One-dimensional table
+### One-dimensional table (general usage)
 
 **template1.xlsx:**
 
@@ -61,7 +61,7 @@ $data = [
     ],
 ];
 
-// Save as XLSX (Excel)
+// Save to the file
 (new \AnourValar\Office\SheetsService())
     ->generate(
         'template1.xlsx', // path to template
@@ -71,6 +71,13 @@ $data = [
         'generated_document.xlsx', // path to save
         \AnourValar\Office\Format::Xlsx // save format
     );
+
+// Output to the browser
+header('Content-type: ' . \AnourValar\Office\Format::Xlsx->contentType());
+header('Content-Disposition: attachment; filename="generated_document.xlsx"');
+echo (new \AnourValar\Office\SheetsService())
+    ->generate('template1.xlsx', $data)
+    ->save(\AnourValar\Office\Format::Xlsx);
 
 // Available formats:
 // \AnourValar\Office\Format::Xlsx

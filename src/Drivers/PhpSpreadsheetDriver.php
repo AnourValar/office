@@ -246,6 +246,7 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
     public function copyStyle(string $cellFrom, string $rangeTo): self
     {
         $this->sheet()->duplicateStyle($this->sheet()->getStyle($cellFrom), $rangeTo);
+
         if ($conditionalStyle = $this->sheet()->getConditionalStyles($cellFrom)) {
             $this->sheet()->duplicateConditionalStyle($conditionalStyle, $rangeTo);
         }

@@ -3,7 +3,7 @@
     "description": "Generate documents from existing Excel & Word templates | Export tables to Excel (Grids)",
     "keywords": [
         "excel", "xls", "xlsx", "template", "view", "document", "contract", "report", "generate", "engine", "fill",
-        "markers", "replacers", "templator", "templater", "pdf", "ods", "grid", "export", "generator", "anourvalar",
+        "markers", "replacers", "placeholder", "templater", "pdf", "ods", "grid", "export", "generator", "anourvalar",
         "variables", "word", "doc", "docx"
     ],
     "homepage": "https://github.com/AnourValar/office",

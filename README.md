@@ -29,7 +29,7 @@ composer require mpdf/mpdf: "^8.0"
 
 ## Generate a document from an XLSX (Excel) template
 
-### One-dimensional table (general usage)
+### One-dimensional table (basic usage)
 
 **template1.xlsx:**
 
@@ -64,11 +64,11 @@ $data = [
 // Save to the file
 (new \AnourValar\Office\SheetsService())
     ->generate(
-        'template1.xlsx', // path to template
-        $data // input data
+        'template1.xlsx', // template filename
+        $data // markers
     )
     ->saveAs(
-        'generated_document.xlsx', // path to save
+        'generated_document.xlsx', // filename
         \AnourValar\Office\Format::Xlsx // save format
     );
 
@@ -288,7 +288,7 @@ $data = [
 
 ![Demo](https://anour.ru/resources/office-v1-41.png)
 
-### Advanced usage
+### Advanced usage (generators)
 
 ```php
 $headers = [
@@ -345,3 +345,23 @@ $data = function () {
 **generated_grid.xlsx:**
 
 ![Demo](https://anour.ru/resources/office-v1-51.png)
+
+### Performance
+
+By default, GridService uses PhpSpreadsheetDriver which gives a lot of features and flexability.
+The only cons are performance and memory consumtion.
+
+ZipDriver as an alternative is simpler, but much more faster:
+
+```php
+$data = [
+    ['William', 3000],
+    ['James', 4000],
+    ['Sveta', 5000],
+];
+
+// Save as XLSX (Excel)
+(new \AnourValar\Office\GridService(new \AnourValar\Office\Drivers\ZipDriver()))
+    ->generate(['Name', 'Sales'], $data)
+    ->saveAs('generated_grid.xlsx');
+```

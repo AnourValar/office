@@ -12,6 +12,13 @@ class GridService
     protected \AnourValar\Office\Drivers\GridInterface $driver;
 
     /**
+     * Handle template's creating
+     *
+     * @var \Closure(GridInterface $driver): GridInterface
+     */
+    protected ?\Closure $hookLoad = null;
+
+    /**
      * Actions with template before data inserted
      *
      * @var \Closure(GridInterface $driver, array &$headers, iterable &$data, string $leftTopCorner)
@@ -64,7 +71,11 @@ class GridService
         }
 
         // Create new document
-        $driver = $this->driver->create();
+        if ($this->hookLoad) {
+            $driver = ($this->hookLoad)($this->driver);
+        } else {
+            $driver = $this->driver->create();
+        }
 
         // Hook: before
         if ($this->hookBefore) {
@@ -82,6 +93,19 @@ class GridService
         }
 
         return new Generated($driver);
+    }
+
+    /**
+     * Set hookLoad
+     *
+     * @param ?\Closure $closure
+     * @return self
+     */
+    public function hookLoad(?\Closure $closure): self
+    {
+        $this->hookLoad = $closure;
+
+        return $this;
     }
 
     /**

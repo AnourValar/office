@@ -15,8 +15,9 @@ class Buffer implements \Stringable
     protected readonly string $filename;
 
     /**
-     * @param string $buffer
+     * Creates a temporary file from the buffer
      *
+     * @param string $buffer
      * @return void
      */
     public function __construct(string $buffer)

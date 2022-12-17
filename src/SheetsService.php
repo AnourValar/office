@@ -98,7 +98,11 @@ class SheetsService
         }
 
         // Return
-        return new Generated($driver);
+        $result = new Generated($driver);
+
+        $driver->disconnectWorksheets();
+        
+        return $result;
     }
 
     /**

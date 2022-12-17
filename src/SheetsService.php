@@ -101,7 +101,8 @@ class SheetsService
         $result = new Generated($driver);
 
         $driver->disconnectWorksheets();
-        
+        unset($driver);
+        gc_collect_cycles();
         return $result;
     }
 

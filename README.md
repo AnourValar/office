@@ -17,13 +17,13 @@ composer require phpoffice/phpspreadsheet "^1.25"
 ### Zipstream-php is required to work with Word (docx).
 
 ```bash
-composer require maennchen/zipstream-php "^2.2"
+composer require maennchen/zipstream-php "^2.4"
 ```
 
 ### Mpdf is required to work with PDF.
 
 ```bash
-composer require mpdf/mpdf: "^8.0"
+composer require mpdf/mpdf: "^8.1"
 ```
 
 

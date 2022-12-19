@@ -92,6 +92,19 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
     }
 
     /**
+     * Clean up
+     *
+     * @return void
+     */
+    public function __destruct()
+    {
+        if (isset($this->spreadsheet)) {
+            $this->spreadsheet->disconnectWorksheets();
+            gc_collect_cycles();
+        }
+    }
+
+    /**
      * {@inheritDoc}
      * @see \AnourValar\Office\Drivers\MultiSheetInterface::setSheet()
      */

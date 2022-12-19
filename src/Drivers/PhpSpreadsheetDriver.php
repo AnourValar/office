@@ -89,6 +89,8 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
         }
 
         $writer->save($file);
+        
+        $this->spreadsheet->disconnectWorksheets();
     }
 
     /**

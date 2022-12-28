@@ -75,8 +75,7 @@ class ZipDriver implements DocumentInterface, GridInterface
             throw new \LogicException('Driver only supports saving in the same format.');
         }
 
-        $options = \App::make(\ZipStream\Option\Archive::class);
-        $zipStream = new \ZipStream\ZipStream(null, $options);
+        $zipStream = new \ZipStream\ZipStream(null);
         ob_start();
 
         try {

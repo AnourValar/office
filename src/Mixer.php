@@ -38,7 +38,7 @@ class Mixer
 
             $driver = $driver->driver;
             if (! $driver instanceof $referenceDriver) {
-                throw new \LogicException('All drivers must instances of the same implementation.');
+                throw new \LogicException('All drivers should be instances of the same implementation.');
             }
 
             $count = $driver->getSheetCount();

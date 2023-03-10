@@ -73,6 +73,9 @@ class GridService
         // Create new document
         if ($this->hookLoad) {
             $driver = ($this->hookLoad)($this->driver);
+            if ($driver instanceof Generated) {
+                $driver = $driver->driver;
+            }
         } else {
             $driver = $this->driver->create();
         }

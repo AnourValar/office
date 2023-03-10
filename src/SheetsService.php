@@ -75,6 +75,9 @@ class SheetsService
 
         if ($this->hookLoad) {
             $driver = ($this->hookLoad)($this->driver, $templateFile, $templateFormat);
+            if ($driver instanceof Generated) {
+                $driver = $driver->driver;
+            }
         } else {
             $driver = $this->driver->load($templateFile, $templateFormat);
         }

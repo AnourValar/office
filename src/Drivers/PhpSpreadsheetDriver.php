@@ -437,6 +437,38 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
     }
 
     /**
+     * Apply cell`s style without format
+     *
+     * @param string $cellFrom
+     * @param string $rangeTo
+     * @return self
+     */
+    public function copyStyleWithoutFormat(string $cellFrom, string $rangeTo): self
+    {
+        $style = $this->sheet()->getStyle($cellFrom)->exportArray();
+        unset($style['alignment'], $style['numberFormat'], $style['protection']);
+
+        // @TODO: fixed ?
+        if (
+            ! isset($style['borders']['allBorders'])
+            && isset($style['borders']['bottom'], $style['borders']['top'])
+            && isset($style['borders']['left'], $style['borders']['right'])
+            && $style['borders']['bottom'] == $style['borders']['top']
+            && $style['borders']['bottom'] == $style['borders']['left']
+            && $style['borders']['bottom'] == $style['borders']['right']
+        ) {
+            $style['borders']['allBorders'] = $style['borders']['bottom'];
+
+            unset($style['borders']['bottom'], $style['borders']['top']);
+            unset($style['borders']['left'], $style['borders']['right']);
+        }
+
+        $this->sheet()->getStyle($rangeTo)->applyFromArray($style);
+
+        return $this;
+    }
+
+    /**
      * Set custom style for the range of cells
      *
      * @param string $range

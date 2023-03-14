@@ -37,7 +37,7 @@ interface SheetsInterface extends SaveInterface, LoadInterface, MultiSheetInterf
     public function mergeCells(string $ceilRange): self;
 
     /**
-     * Apple cell`s style
+     * Apply cell`s style
      *
      * @param string $cellFrom
      * @param string $rangeTo

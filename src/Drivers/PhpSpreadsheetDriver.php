@@ -3,6 +3,7 @@
 namespace AnourValar\Office\Drivers;
 
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Cell\Hyperlink;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 
@@ -140,7 +141,8 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
             if ($autoCellFormat) {
                 $this->setCellFormat($cell, static::FORMAT_DATE);
             }
-
+        } elseif ($value instanceof Hyperlink){
+            $this->sheet()->getCell($cell)->setHyperlink($value)->setValue($value->getTooltip() ?? $value->getUrl());
         } elseif (is_string($value) || is_null($value)) {
 
             if (is_numeric($value)) {

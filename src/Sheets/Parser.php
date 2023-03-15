@@ -123,6 +123,7 @@ class Parser
                         $result = null;
                         foreach (explode('.', $patterns[2]) as $pattern) {
                             $changed = true;
+                            $prevResult = $result;
                             while ($changed) {
                                 $changed = false;
 
@@ -143,6 +144,10 @@ class Parser
                                 if (array_key_exists($result, $data)) {
                                     break 2;
                                 }
+                            }
+
+                            if ($result === $prevResult && $pattern != '*' && $pattern != (int) $pattern) {
+                                return $patterns[0];
                             }
                         }
 

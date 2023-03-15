@@ -22,6 +22,109 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+    public function test_collision_names()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '[title]',
+                    ],
+                    2 => [
+                        'A' => '[request.title]',
+                    ],
+                    3 => [
+                        'A' => '[response.body]',
+                    ],
+                    4 => [
+                        'A' => '[body]',
+                    ],
+                ],
+
+                'data' => [
+                    'title' => 'foo',
+                    'request' => [],
+                    'response' => ['body' => 'bar'],
+                    'body' => [],
+                ],
+            ],
+
+            [
+                'values' => [
+                    1 => [
+                        'A' => '[title]',
+                    ],
+                    2 => [
+                        'A' => '[request.title]',
+                    ],
+                    3 => [
+                        'A' => '[response.body]',
+                    ],
+                    4 => [
+                        'A' => '[body]',
+                    ],
+                ],
+
+                'data' => [
+                    'title' => 'foo',
+                    'request' => null,
+                    'response' => ['body' => 'bar'],
+                    'body' => null,
+                ],
+            ],
+
+            [
+                'values' => [
+                    1 => [
+                        'A' => '[title]',
+                    ],
+                    2 => [
+                        'A' => '[request.title]',
+                    ],
+                    3 => [
+                        'A' => '[response.body]',
+                    ],
+                    4 => [
+                        'A' => '[body]',
+                    ],
+                ],
+
+                'data' => [
+                    'title' => 'foo',
+                    'response' => ['body' => 'bar'],
+                ],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => ['A' => 'foo'],
+                        2 => ['A' => null],
+                        3 => ['A' => 'bar'],
+                        4 => ['A' => null],
+                    ],
+
+                    'rows' => [],
+
+                    'copy_style' => [],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
+
+                    'copy_cell_format' => [],
+                ],
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
     public function test_schema_scalar()
     {
         $data = [

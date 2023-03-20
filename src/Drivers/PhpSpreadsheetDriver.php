@@ -441,12 +441,17 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
      *
      * @param string $cellFrom
      * @param string $rangeTo
+     * @param bool $copyAlignment
      * @return self
      */
-    public function copyStyleWithoutFormat(string $cellFrom, string $rangeTo): self
+    public function copyStyleWithoutFormat(string $cellFrom, string $rangeTo, bool $copyAlignment = false): self
     {
         $style = $this->sheet()->getStyle($cellFrom)->exportArray();
-        unset($style['alignment'], $style['numberFormat'], $style['protection']);
+        if (! $copyAlignment) {
+            unset($style['alignment'], $style['numberFormat'], $style['protection']);
+        } else {
+            unset($style['numberFormat'], $style['protection']);
+        }
 
         // @TODO: fixed ?
         if (
@@ -549,6 +554,13 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
                 ->sheet()
                 ->getStyle($range)
                 ->getAlignment()->setVertical($valign);
+        }
+
+        if (isset($style['wrap'])) {
+            $this
+                ->sheet()
+                ->getStyle($range)
+                ->getAlignment()->setWrapText($style['wrap']);
         }
 
         return $this;

@@ -474,6 +474,26 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
     }
 
     /**
+     * Find a cell with the value
+     *
+     * @param mixed $value
+     * @param bool $strict
+     * @return array|null
+     */
+    public function findCell($value, bool $strict = false): ?array
+    {
+        foreach ($this->getValues(null) as $row => $rowData) {
+            foreach ($rowData as $column => $columnData) {
+                if (($strict && $columnData === $value) || (! $strict && $columnData == $value)) {
+                    return [$column, $row];
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Set custom style for the range of cells
      *
      * @param string $range

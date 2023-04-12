@@ -290,7 +290,6 @@ class Parser
                     foreach ($mergeMapX as $mergeItemX) {
                         $curr++;
 
-                        $schema->copyStyle($mergeItemX.($row + $shift), $curr.($row + $shift));
                         $schema->copyWidth($mergeItemX, $curr);
                     }
 
@@ -307,7 +306,7 @@ class Parser
                     $hasMarker = preg_match('#\[([a-z][a-z\d\.\_]+)\]#iS', (string) $currValue);
 
                     foreach ($mergeCells as $item) {
-                        if ($currKey.$originalRow == $item[0][0].$item[0][1]) {
+                        if ($currKey.$originalRow == $item[0][0].$item[0][1] && $item[0][1] != $item[1][1]) {
                             if (! $hasMarker) {
                                 unset($columns[$currKey]);
                                 continue;
@@ -346,11 +345,6 @@ class Parser
                             $schema->mergeCells(
                                 sprintf('%s%s:%s%s', $item[0][0], ($row + $shift), $item[1][0], ($row + $shift + $diff))
                             );
-
-                            while ($item[0][0] < $item[1][0]) {
-                                $item[0][0]++;
-                                $schema->copyStyle($item[0][0].$item[0][1], $item[0][0].($row + $shift));
-                            }
                         }
                     }
                 }
@@ -709,11 +703,11 @@ class Parser
     private function increments(string $value, bool $first, int $shift = 1): ?string
     {
         return preg_replace_callback(
-            '#\[([a-z][a-z\d\.\_]+)\]#iS',
+            '#\[(\$?\!\s*|\$?\=\s*)?([a-z][a-z\d\.\_]+)\]#iS',
             function ($patterns) use ($first, $shift) {
-                $patterns[1] = $this->increment($patterns[1], $first, $shift);
-                if ($patterns[1]) {
-                    return '[' . $patterns[1] . ']';
+                $patterns[2] = $this->increment($patterns[2], $first, $shift);
+                if ($patterns[2]) {
+                    return '[' . $patterns[1] . $patterns[2] . ']';
                 }
 
                 return $patterns[0];

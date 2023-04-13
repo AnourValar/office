@@ -298,7 +298,7 @@ class Parser
                 }
             }
 
-            $dataSchema[$row + $shift] = array_filter($columns);
+            $dataSchema[$row + $shift] = array_filter($columns, fn ($item) => $item !== null && $item !== '');
             $originalRow = ($row + $shift);
 
             if ($additionRows) {
@@ -326,11 +326,13 @@ class Parser
                 $additionRows--;
 
                 foreach ($columns as &$column) {
-                    $column = $this->increments((string) $column, true);
+                    if (is_string($column)) {
+                        $column = $this->increments($column, true);
+                    }
                 }
                 unset($column);
 
-                $dataSchema[$row + $shift] = array_filter($columns);
+                $dataSchema[$row + $shift] = array_filter($columns, fn ($item) => $item !== null && $item !== '');
                 if (! $step) {
                     $this->addRow($schema, $mergeCells, $row + $shift);
                 }

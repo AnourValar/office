@@ -7026,7 +7026,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     'data' => [
                         1 => ['A' => 'Hello', 'B' => 'one', 'C' => 'bar 1', 'D' => 'bar 2', 'F' => 'bar 3'],
                         2 => ['B' => 'two', 'C' => 'bar 1', 'D' => 'bar 2', 'F' => 'bar 3'],
-                        3 => ['B' => 'three', 'C' => 'bar 1', 'D' => 'bar 2', 'F' => 'bar 3' ],
+                        3 => ['B' => 'three', 'C' => 'bar 1', 'D' => 'bar 2', 'F' => 'bar 3'],
                     ],
 
                     'rows' => [
@@ -7052,6 +7052,81 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'C1', 'to' => 'C2:C3'],
                         ['from' => 'D1', 'to' => 'D2:D3'],
                         ['from' => 'F1', 'to' => 'F2:F3'],
+                    ],
+                ],
+                $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function test_schema_merge3()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'Hello',
+                        'C' => '[table.a]',
+                        'D' => 0,
+                        'E' => '0',
+                        'F' => null,
+                        'G' => '',
+                    ],
+                    2 => [
+                        'A' => '[foo]',
+                        'B' => '[bar]',
+                        'C' => 1,
+                        'D' => '1'
+                    ],
+                ],
+
+                'data' => [
+                    'table' => [
+                        'a' => ['one', 'two', 'three'],
+                    ],
+                    'bar' => 'hello',
+                ],
+
+                'merge_cells' => ['A1:B3'],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => ['A' => 'Hello', 'C' => 'one', 'D' => 0, 'E' => '0'],
+                        2 => ['C' => 'two', 'D' => 0, 'E' => '0'],
+                        3 => ['C' => 'three', 'D' => 0, 'E' => '0'],
+                        4 => ['A' => null, 'B' => 'hello'],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'add', 'row' => 2, 'qty' => 2],
+                    ],
+
+                    'copy_style' => [
+                        ['from' => 'C1', 'to' => 'C2:C3'],
+                        ['from' => 'D1', 'to' => 'D2:D3'],
+                        ['from' => 'E1', 'to' => 'E2:E3'],
+                        ['from' => 'F1', 'to' => 'F2:F3'],
+                        ['from' => 'G1', 'to' => 'G2:G3'],
+                    ],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
+
+                    'copy_cell_format' => [
+                        ['from' => 'C1', 'to' => 'C2:C3'],
+                        ['from' => 'D1', 'to' => 'D2:D3'],
+                        ['from' => 'E1', 'to' => 'E2:E3'],
+                        ['from' => 'F1', 'to' => 'F2:F3'],
+                        ['from' => 'G1', 'to' => 'G2:G3'],
                     ],
                 ],
                 $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),

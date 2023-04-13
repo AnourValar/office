@@ -147,14 +147,14 @@ $data = [
 $data = [
     'foo' => 'Hello',
 
-    'bar' => function (\AnourValar\Office\Drivers\SheetsInterface $driver, $cell) {
+    'bar' => function (\AnourValar\Office\Drivers\SheetsInterface $driver, $column, $row) {
         $driver->insertImage('logo.png', $cell, ['width' => 100, 'offset_y' => -45]);
-        return 'Logo!'; // replace marker "[bar]" with return value
+        return 'Logo!'; // replace marker "[bar]" with "Logo!"
     }
 ];
 
 (new \AnourValar\Office\SheetsService())
-    ->hookValue(function (SheetsInterface $driver, $cell, $value, int $sheetIndex) {
+    ->hookValue(function (SheetsInterface $driver, $column, $row, $value, $sheetIndex) {
         // Hook will be called for every cell which is changing
 
         $value .= ' world';
@@ -170,7 +170,7 @@ $data = [
 // Available hooks:
 // hookLoad: Closure(SheetsInterface $driver, string $templateFile, Format $templateFormat)
 // hookBefore: Closure(SheetsInterface $driver, array &$data)
-// hookValue: Closure(SheetsInterface $driver, string $cell, mixed $value, int $sheetIndex)
+// hookValue: Closure(SheetsInterface $driver, string $column, int $row, $value, int $sheetIndex)
 // hookAfter: Closure(SheetsInterface $driver)
 ```
 

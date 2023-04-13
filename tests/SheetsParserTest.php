@@ -7075,6 +7075,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                         'E' => '0',
                         'F' => null,
                         'G' => '',
+                        'H' => '=ROW()-5',
                     ],
                     2 => [
                         'A' => '[foo]',
@@ -7099,9 +7100,9 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
             $this->assertSame(
                 [
                     'data' => [
-                        1 => ['A' => 'Hello', 'C' => 'one', 'D' => 0, 'E' => '0'],
-                        2 => ['C' => 'two', 'D' => 0, 'E' => '0'],
-                        3 => ['C' => 'three', 'D' => 0, 'E' => '0'],
+                        1 => ['A' => 'Hello', 'C' => 'one', 'D' => 0, 'E' => '0', 'H' => '=ROW()-5'],
+                        2 => ['C' => 'two', 'D' => 0, 'E' => '0', 'H' => '=ROW()-5'],
+                        3 => ['C' => 'three', 'D' => 0, 'E' => '0', 'H' => '=ROW()-5'],
                         4 => ['A' => null, 'B' => 'hello'],
                     ],
 
@@ -7115,6 +7116,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'E1', 'to' => 'E2:E3'],
                         ['from' => 'F1', 'to' => 'F2:F3'],
                         ['from' => 'G1', 'to' => 'G2:G3'],
+                        ['from' => 'H1', 'to' => 'H2:H3'],
                     ],
 
                     'merge_cells' => [],
@@ -7127,6 +7129,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                         ['from' => 'E1', 'to' => 'E2:E3'],
                         ['from' => 'F1', 'to' => 'F2:F3'],
                         ['from' => 'G1', 'to' => 'G2:G3'],
+                        ['from' => 'H1', 'to' => 'H2:H3'],
                     ],
                 ],
                 $this->service->schema($item['values'], $item['data'], $item['merge_cells'])->toArray(),

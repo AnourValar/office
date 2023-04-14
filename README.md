@@ -147,7 +147,7 @@ $data = [
 $data = [
     'foo' => 'Hello',
 
-    'bar' => function (\AnourValar\Office\Drivers\SheetsInterface $driver, $column, $row) {
+    'bar' => function (SheetsInterface $driver, $column, $row) {
         $driver->insertImage('logo.png', $cell, ['width' => 100, 'offset_y' => -45]);
         return 'Logo!'; // replace marker "[bar]" with "Logo!"
     }

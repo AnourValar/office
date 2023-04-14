@@ -364,10 +364,10 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
      * Set fixed width for a column
      *
      * @param string $column
-     * @param int $width
+     * @param int|float $width
      * @return self
      */
-    public function setWidth(string $column, int $width): self
+    public function setWidth(string $column, int|float $width): self
     {
         $this->sheet()->getColumnDimension($column)->setWidth($width);
 
@@ -393,10 +393,10 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
      * Set fixed height for a row
      *
      * @param string $row
-     * @param int $height
+     * @param int|float $height
      * @return self
      */
-    public function setHeight(string $row, int $height): self
+    public function setHeight(string $row, int|float $height): self
     {
         $this->sheet()->getRowDimension($row)->setRowHeight($height);
 
@@ -491,6 +491,70 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
         }
 
         return null;
+    }
+
+    /**
+     * Duplicate rows (with style, value) by range
+     *
+     * @param string $ceilRange
+     * @param callable $value
+     * @param int $indentRows
+     * @param bool $addRows
+     * @return self
+     */
+    public function duplicateRows(string $ceilRange, callable $value, int $indentRows = 0, bool $addRows = true): self
+    {
+        $range = explode(':', $ceilRange);
+        $range[0] = preg_split('#([A-Z]+)([\d]+)#S', $range[0], -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+        $range[1] = preg_split('#([A-Z]+)([\d]+)#S', $range[1], -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+
+        $shift = $range[1][1] - $range[0][1] + 1 + $indentRows;
+        $mergeCells = $this->getMergeCells();
+        $values = $this->getValues($ceilRange);
+
+        // Rows
+        if ($addRows) {
+            $this->addRow($range[1][1] + 1, $shift + $indentRows);
+        }
+
+        // Merge
+        foreach ($mergeCells as $item) {
+            $item = explode(':', $item);
+            $item[0] = preg_split('#([A-Z]+)([\d]+)#S', $item[0], -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+            $item[1] = preg_split('#([A-Z]+)([\d]+)#S', $item[1], -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+
+            if (
+                $item[0][1] >= $range[0][1] && $item[0][1] <= $range[1][1] // rows
+                && $item[1][1] >= $range[0][1] && $item[1][1] <= $range[1][1]
+                && $item[0][0] >= $range[0][0] && $item[0][0] <= $range[1][0] // columns
+                && $item[1][0] >= $range[0][0] && $item[1][0] <= $range[1][0]
+            ) {
+                $this->mergeCells($item[0][0].($item[0][1]+$shift) . ':' . $item[1][0].($item[1][1]+$shift));
+            }
+        }
+
+        $curr = $range[0][1];
+        while ($curr <= $range[1][1]) {
+            // Height
+            $this->copyHeight($curr, $curr + $shift);
+
+            // Style, CellFormat, Value
+            $column = $range[0][0];
+            while ($column <= $range[1][0]) {
+                $this->copyStyle($column . $curr, $column . ($curr + $shift));
+                $this->copyCellFormat($column . $curr, $column . ($curr + $shift));
+
+                if (isset($values[$curr][$column])) {
+                    $this->setValue($column . ($curr + $shift), $value($values[$curr][$column], $column, $curr), false);
+                }
+
+                $column++;
+            }
+
+            $curr++;
+        }
+
+        return $this;
     }
 
     /**

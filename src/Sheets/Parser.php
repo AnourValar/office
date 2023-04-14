@@ -140,13 +140,9 @@ class Parser
                                     $result .= '.0';
                                     $changed = true;
                                 }
-
-                                if (array_key_exists($result, $data)) {
-                                    break 2;
-                                }
                             }
 
-                            if ($result === $prevResult && $pattern != '*' && $pattern != (int) $pattern) {
+                            if ($result === $prevResult && ($pattern != '*' || mb_substr($result, -2) != '.0')) {
                                 return $patterns[0];
                             }
                         }
@@ -479,7 +475,7 @@ class Parser
                     $value['from'] >= $merge[0][1]
                     && $value['from'] <= $merge[1][1]
                     && $merge[0][1] != $merge[1][1]
-                    && preg_match('#\[([a-z][a-z\d\.\_]+)\]#iS', $values[$merge[0][1]][$merge[0][0]])
+                    && preg_match('#\[([a-z][a-z\d\.\_]+)\]#iS', ($values[$merge[0][1]][$merge[0][0]] ?? ''))
                 ) {
                     unset($ranges[$key]);
                 }

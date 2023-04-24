@@ -340,6 +340,148 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+   /**
+     * @return void
+     */
+    public function test_schema_conditions1()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => 'AA [$= foo] [$= bar]',
+                        'B' => 'BB [$= baz] [$= foo] [$= bar]',
+                        'C' => 'CC [$= foo] [$= baz] [$= bar]',
+                        'D' => 'DD [$= foo] [$= bar] [$= baz]',
+                    ],
+
+                    2 => [
+                        'A' => 'AA [$! baz] [$! foobar]',
+                        'B' => 'BB [$! foo] [$! baz] [$! foobar]',
+                        'C' => 'CC [$! baz] [$! foo] [$! foobar]',
+                        'D' => 'DD [$! baz] [$! foobar] [$! foo]',
+                    ],
+                ],
+
+                'data' => [
+                    'foo' => 'foo',
+                    'bar' => 'bar',
+                ],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => 'AA',
+                            'B' => null,
+                            'C' => null,
+                            'D' => null,
+                        ],
+                        2 => [
+                            'A' => 'AA',
+                            'B' => null,
+                            'C' => null,
+                            'D' => null,
+                        ],
+                    ],
+
+                    'rows' => [],
+
+                    'copy_style' => [],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
+
+                    'copy_cell_format' => [],
+                ],
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+   /**
+     * @return void
+     */
+    public function test_schema_conditions2()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '11 [= foo] [= bar]',
+                    ],
+                    2 => [
+                        'A' => '22 [= baz] [= foo] [= bar]',
+                    ],
+                    3 => [
+                        'A' => '33 [= foo] [= baz] [= bar]',
+                    ],
+                    4 => [
+                        'A' => '44 [= foo] [= bar] [= baz]',
+                    ],
+
+                    5 => [
+                        'A' => '55 [! baz] [! foobar]',
+                    ],
+                    6 => [
+                        'A' => '66 [! foo] [! baz] [! foobar]',
+                    ],
+                    7 => [
+                        'A' => '77 [! baz] [! foo] [! foobar]',
+                    ],
+                    8 => [
+                        'A' => '88 [! baz] [! foobar] [! foo]',
+                    ],
+                ],
+
+                'data' => [
+                    'foo' => 'foo',
+                    'bar' => 'bar',
+                ],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => '11',
+                        ],
+                        2 => [
+                            'A' => '55',
+                        ],
+                    ],
+
+                    'rows' => [
+                        ['action' => 'delete', 'row' => 2, 'qty' => 1],
+                        ['action' => 'delete', 'row' => 2, 'qty' => 1],
+                        ['action' => 'delete', 'row' => 2, 'qty' => 1],
+
+                        ['action' => 'delete', 'row' => 3, 'qty' => 1],
+                        ['action' => 'delete', 'row' => 3, 'qty' => 1],
+                        ['action' => 'delete', 'row' => 3, 'qty' => 1],
+                    ],
+
+                    'copy_style' => [],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
+
+                    'copy_cell_format' => [],
+                ],
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
+                "$id"
+            );
+        }
+    }
+
     /**
      * @return void
      */
@@ -7411,6 +7553,42 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
 
                 'merge_cells' => [],
             ],
+
+            [
+                'values' => [
+                    1 => [
+                        'A' => '[product.id]',
+                    ],
+                ],
+
+                'data' => [
+                    'product' => [
+                        ['id' => 1],
+                        ['id' => 2],
+                        ['id' => 3],
+                    ],
+                ],
+
+                'merge_cells' => [],
+            ],
+
+            [
+                'values' => [
+                    1 => [
+                        'A' => '[product.*.id]',
+                    ],
+                ],
+
+                'data' => [
+                    'product' => [
+                        ['id' => 1],
+                        ['id' => 2],
+                        ['id' => 3],
+                    ],
+                ],
+
+                'merge_cells' => [],
+            ],
         ];
 
         foreach ($data as $id => $item) {
@@ -7460,6 +7638,24 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                 'data' => [
                     'product' => [
                         'id' => [1, 2, 3],
+                    ],
+                ],
+
+                'merge_cells' => [],
+            ],
+
+            [
+                'values' => [
+                    1 => [
+                        'A' => '[product.id.*]',
+                    ],
+                ],
+
+                'data' => [
+                    'product' => [
+                        ['id' => 1],
+                        ['id' => 2],
+                        ['id' => 3],
                     ],
                 ],
 

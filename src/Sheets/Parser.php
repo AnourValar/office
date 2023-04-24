@@ -642,8 +642,6 @@ class Parser
                         return true;
                     }
                 }
-
-                return false;
             }
         }
 

@@ -4,6 +4,7 @@ namespace AnourValar\Office\Drivers;
 
 class ZipDriver implements DocumentInterface, GridInterface
 {
+    use \Anourvalar\Office\Traits\Parser;
     use \AnourValar\Office\Traits\XFormat;
 
     /**
@@ -192,7 +193,7 @@ class ZipDriver implements DocumentInterface, GridInterface
 
                 if ($value === null || $value === '') {
 
-                    if ($column >= $firstColumn) {
+                    if ($this->isColumnGE($column, $firstColumn)) {
                         $sheet .= '<c r="'.$column.$row.'" s="'.($styles[$column] ?? $styles['string']).'"/>';
                     }
 
@@ -239,7 +240,7 @@ class ZipDriver implements DocumentInterface, GridInterface
         // Columns
         $column = 'A';
         for ($index = 1; $index <= $columnsCount; $index++) {
-            if ($column >= $firstColumn) {
+            if ($this->isColumnGE($column, $firstColumn)) {
                 $width = ($this->gridOptions['width'][$column] ?? 20);
                 $cols .= '<col min="'.$index.'" max="'.$index.'" width="'.$width.'" customWidth="1"/>';
             }

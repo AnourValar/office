@@ -179,9 +179,13 @@ class SheetsService
             }
         }
 
-        // Copy style
+        // Copy style & cell format
         foreach ($schema['copy_style'] as $item) {
             $driver->copyStyle($item['from'], $item['to']);
+
+            if (! $autoCellFormat) {
+                $driver->copyCellFormat($item['from'], $item['to']);
+            }
         }
 
         // Merge cells
@@ -192,13 +196,6 @@ class SheetsService
         // Copy width
         foreach ($schema['copy_width'] as $item) {
             $driver->copyWidth($item['from'], $item['to']);
-        }
-
-        // Copy cell format
-        if (! $autoCellFormat) {
-            foreach ($schema['copy_cell_format'] as $item) {
-                $driver->copyCellFormat($item['from'], $item['to']);
-            }
         }
 
         // Data

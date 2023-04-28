@@ -34,7 +34,7 @@ class Parser
         $schema = new SchemaMapper();
 
         // Step 0: Parse input arguments to a canon format
-        $values = $this->parseValues($values);
+        $values = $this->parseValues($values, $lastColumn);
         $data = $this->parseData($data);
         $mergeCells = $this->parseMergeCells($mergeCells);
 
@@ -42,7 +42,7 @@ class Parser
         $this->canonizeMarkers($values, $data);
 
         // Step 2: Calculate additional rows & columns, redundant data
-        $dataSchema = $this->calculateDataSchema($values, $data, $mergeCells, $schema);
+        $dataSchema = $this->calculateDataSchema($values, $data, $mergeCells, $schema, $lastColumn);
 
         // Step 3: Shift formulas
         $this->shiftFormulas($dataSchema, $schema, $mergeCells);
@@ -55,11 +55,21 @@ class Parser
 
     /**
      * @param array $values
+     * @param mixed $lastColumn
      * @return array
      */
-    protected function parseValues(array $values): array
+    protected function parseValues(array $values, &$lastColumn): array
     {
-        ksort($values); // just in case ;)
+        $lastColumn = 'A';
+        foreach ($values as $row => &$columns) {
+            $currLastColumn = array_key_last($columns);
+            if ($this->isColumnLE($lastColumn, $currLastColumn)) {
+                $lastColumn = $currLastColumn;
+            }
+
+            $columns = array_filter($columns, fn ($item) => $item !== null && $item !== '');
+        }
+        unset($columns);
 
         return $values;
     }
@@ -167,10 +177,15 @@ class Parser
      * @param array $data
      * @param array $mergeCells
      * @param \AnourValar\Office\Sheets\SchemaMapper $schema
+     * @param string $lastColumn
      * @return array
      */
-    protected function calculateDataSchema(array &$values, array &$data, array &$mergeCells, SchemaMapper &$schema): array
-    {
+    protected function calculateDataSchema(
+        array &$values, array &$data,
+        array &$mergeCells,
+        SchemaMapper &$schema,
+        string $lastColumn
+    ): array {
         $dataSchema = [];
         $shift = 0;
         $step = 0;
@@ -260,7 +275,7 @@ class Parser
             $mergeMapX = [];
             foreach ($mergeCells as $item) {
                 if ($additionColumn.($row + $shift) == $item[0][0].$item[0][1] && $item[0][1] == $item[1][1]) {
-                    while ($item[0][0] < $item[1][0]) {
+                    while ($this->isColumnLE($item[0][0], $item[1][0]) && $item[0][0] != $item[1][0]) {
                         $item[0][0]++;
                         $mergeMapX[] = $item[0][0];
                     }
@@ -278,7 +293,6 @@ class Parser
                 $additionColumnValue = $this->increments($additionColumnValue, false);
                 $columns[$curr] = $additionColumnValue;
                 $schema->copyStyle($additionColumn.($row + $shift), $curr.($row + $shift));
-                $schema->copyCellFormat($additionColumn.($row + $shift), $curr.($row + $shift));
                 $schema->copyWidth($additionColumn, $curr);
 
                 if ($mergeMapX) {
@@ -294,10 +308,20 @@ class Parser
                 }
             }
 
-            $dataSchema[$row + $shift] = array_filter($columns, fn ($item) => $item !== null && $item !== '');
+            $dataSchema[$row + $shift] = $columns;
             $originalRow = ($row + $shift);
 
             if ($additionRows) {
+                $firstColumn = 'A';
+                while ($this->isColumnLE($firstColumn, $lastColumn)) {
+                    if (! isset($columns[$firstColumn]) && ! $this->insideMerge($firstColumn, $originalRow, $mergeCells)) {
+                        $columns[$firstColumn] = null;
+                    }
+
+                    $firstColumn++;
+                }
+                uksort($columns, fn ($a, $b) => $this->isColumnLE($a, $b) ? -1 : 1);
+
                 foreach ($columns as $currKey => $currValue) {
                     $hasMarker = preg_match('#\[([a-z][a-z\d\.\_]+)\]#iS', (string) $currValue);
 
@@ -335,7 +359,6 @@ class Parser
 
                 foreach (array_keys($columns) as $curr) {
                     $schema->copyStyle($curr.$originalRow, $curr.($row + $shift));
-                    $schema->copyCellFormat($curr.$originalRow, $curr.($row + $shift));
 
                     foreach ($mergeCells as $item) {
                         if ($curr.$originalRow == $item[0][0].$item[0][1]) {
@@ -754,5 +777,28 @@ class Parser
             }
         }
         unset($mergeCell);
+    }
+
+    /**
+     * @param string $column
+     * @param int $row
+     * @param array $mergeCells
+     * @return bool
+     */
+    private function insideMerge(string $column, int $row, array &$mergeCells): bool
+    {
+        foreach ($mergeCells as $item) {
+            if (
+                $this->isColumnLE($item[0][0], $column)
+                && $this->isColumnGE($item[1][0], $column)
+                && $item[0][1] <= $row
+                && $item[1][1] >= $row
+                && ($item[0][0] != $column || $item[0][1] != $row)
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

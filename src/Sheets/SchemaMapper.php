@@ -17,8 +17,6 @@ class SchemaMapper
         'merge_cells' => [], //[ 'A1:B1', 'C1:D1']
 
         'copy_width' => [], //[ ['from' => 'B', 'to' => 'C'] ]
-
-        'copy_cell_format' => [], //[ ['from' => 'A1', 'to' => 'A2'] ]
     ];
 
     /**
@@ -33,8 +31,6 @@ class SchemaMapper
         $this->normalizeCells($this->payload['copy_style']);
 
         sort($this->payload['copy_width']);
-
-        $this->normalizeCells($this->payload['copy_cell_format']);
 
         return $this->payload;
     }
@@ -113,18 +109,6 @@ class SchemaMapper
     public function copyWidth(string $from, string $to): self
     {
         $this->payload['copy_width'][$from . $to] = ['from' => $from, 'to' => $to];
-
-        return $this;
-    }
-
-    /**
-     * @param string $from
-     * @param string $to
-     * @return self
-     */
-    public function copyCellFormat(string $from, string $to): self
-    {
-        $this->payload['copy_cell_format'][$from.$to] = ['from' => $from, 'to' => $to];
 
         return $this;
     }

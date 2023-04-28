@@ -8,6 +8,8 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 
 class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterface
 {
+    use \AnourValar\Office\Traits\Parser;
+
     /**
      * @var string
      */
@@ -526,8 +528,8 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
             if (
                 $item[0][1] >= $range[0][1] && $item[0][1] <= $range[1][1] // rows
                 && $item[1][1] >= $range[0][1] && $item[1][1] <= $range[1][1]
-                && $item[0][0] >= $range[0][0] && $item[0][0] <= $range[1][0] // columns
-                && $item[1][0] >= $range[0][0] && $item[1][0] <= $range[1][0]
+                && $this->isColumnGE($item[0][0], $range[0][0]) && $this->isColumnLE($item[0][0], $range[1][0]) // columns
+                && $this->isColumnGE($item[1][0], $range[0][0]) && $this->isColumnLE($item[1][0], $range[1][0])
             ) {
                 $this->mergeCells($item[0][0].($item[0][1]+$shift) . ':' . $item[1][0].($item[1][1]+$shift));
             }
@@ -540,7 +542,7 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
 
             // Style, CellFormat, Value
             $column = $range[0][0];
-            while ($column <= $range[1][0]) {
+            while ($this->isColumnLE($column, $range[1][0])) {
                 $this->copyStyle($column . $curr, $column . ($curr + $shift));
                 $this->copyCellFormat($column . $curr, $column . ($curr + $shift));
 

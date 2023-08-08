@@ -181,7 +181,8 @@ class Parser
      * @return array
      */
     protected function calculateDataSchema(
-        array &$values, array &$data,
+        array &$values,
+        array &$data,
         array &$mergeCells,
         SchemaMapper &$schema,
         string $lastColumn

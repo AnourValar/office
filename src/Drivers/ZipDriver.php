@@ -4,7 +4,7 @@ namespace AnourValar\Office\Drivers;
 
 class ZipDriver implements DocumentInterface, GridInterface
 {
-    use \Anourvalar\Office\Traits\Parser;
+    use \AnourValar\Office\Traits\Parser;
     use \AnourValar\Office\Traits\XFormat;
 
     /**
@@ -41,10 +41,10 @@ class ZipDriver implements DocumentInterface, GridInterface
             throw new \LogicException('Driver only supports Docx, Xlsx formats.');
         }
 
-        $instance = new static;
+        $instance = new static();
         $fileSystem = [];
 
-        $zipArchive = new \ZipArchive;
+        $zipArchive = new \ZipArchive();
         $zipArchive->open($file);
         try {
             $count = $zipArchive->numFiles;
@@ -82,7 +82,7 @@ class ZipDriver implements DocumentInterface, GridInterface
         try {
             foreach ($this->fileSystem as $filename => $content) {
                 $zipStream->addFile($filename, $content);
-             }
+            }
         } catch (\Throwable $e) {
             $zipStream->finish();
             ob_get_clean();
@@ -148,7 +148,7 @@ class ZipDriver implements DocumentInterface, GridInterface
             $column = 'A';
             foreach ($titles as $value) {
                 $value = (string) $value;
-                if ($value === null || $value === '') {
+                if ($value === '') {
                     $firstColumn++;
                     $column++;
                     continue;

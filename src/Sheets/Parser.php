@@ -223,7 +223,7 @@ class Parser
                     $qty = 0;
                     $pattern = $markerName;
                     while (array_key_exists($pattern = $this->increment($pattern, true), $data)) {
-                         $qty++;
+                        $qty++;
                     }
                     $additionRows = max($additionRows, $qty);
 

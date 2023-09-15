@@ -1,0 +1,50 @@
+parameters:
+
+    paths:
+        - src
+        - tests
+
+    # The level 9 is the highest level
+    level: 5
+
+    ignoreErrors:
+        - '#has an uninitialized readonly property#'
+        - '#Binary operation \"\+\" between string#'
+        - '#Call to an undefined method AnourValar\\Office\\Drivers\\SaveInterface\:\:getSheetCount\(\)#'
+        - '#Call to an undefined method AnourValar\\Office\\Drivers\\SaveInterface\:\:replace\(\)#'
+        - '#unknown class PhpOffice#'
+        - '#Unsafe usage of new static#'
+        - '#Call to an undefined method AnourValar\\Office\\Drivers\\SaveInterface\:\:setGrid\(\)#'
+        - '#Parameter \#1 \$driver of method AnourValar\\Office\\GridService\:\:getGenerator\(\) expects AnourValar\\Office\\Drivers\\GridInterface#'
+        - '#Class AnourValar\\Office\\Tests\\SheetsParserTest has an uninitialized property \$service#'
+        - '#has an uninitialized property \$fileSystem#'
+        - '#\(\) on iterable\.#'
+        - '#Instantiated class ZipStream#'
+        - '#unknown class ZipStream#'
+        - '#has an uninitialized property \$sourceActiveSheetIndex#'
+        - '#\$format is assigned outside of the constructor#'
+        - '#has invalid return type PhpOffice#'
+        - '#\$spreadsheet is assigned outside of the constructor#'
+        - '#Binary operation \"\-\" between string and string results in an error#'
+        - '#Instantiated class PhpOffice#'
+        - '#expects string, int given#'
+        - '#expects int, string given#'
+        - '#has invalid type PhpOffice#'
+        - '#Match expression does not handle remaining value: mixed#'
+        - '#Access to an undefined property AnourValar\\Office\\Drivers\\MixInterface\:\:\$spreadsheet#'
+        - '#Call to an undefined method AnourValar\\Office\\Drivers\\MixInterface\:\:sheet\(\)#'
+
+
+    excludePaths:
+
+
+    checkFunctionNameCase: true
+    checkInternalClassCaseSensitivity: true
+    checkAlwaysTrueInstanceof: true
+    reportMaybesInMethodSignatures: true
+    reportStaticMethodSignatures: true
+    checkUninitializedProperties: true
+    checkDynamicProperties: true
+    reportAlwaysTrueInLastCondition: true
+    reportWrongPhpDocTypeInVarTag: true
+    checkMissingCallableSignature: true

@@ -583,8 +583,7 @@ class GridServiceTest extends \PHPUnit\Framework\TestCase
      */
     protected function getDriver(): \AnourValar\Office\Drivers\GridInterface
     {
-        return new class implements \AnourValar\Office\Drivers\GridInterface
-        {
+        return new class () implements \AnourValar\Office\Drivers\GridInterface {
             public function create(): self
             {
                 return $this;

@@ -15,7 +15,7 @@ enum Format: string
      */
     public function fileExtension(): string
     {
-        return match($this) {
+        return match ($this) {
             Format::Xlsx => 'xlsx',
             Format::Pdf => 'pdf',
             Format::Html => 'html',
@@ -31,7 +31,7 @@ enum Format: string
      */
     public function contentType(): string
     {
-        return match($this) {
+        return match ($this) {
             Format::Xlsx => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             Format::Pdf => 'application/pdf',
             Format::Html => 'text/html',

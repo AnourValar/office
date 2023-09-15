@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!-- @see https://pear.php.net/manual/en/package.php.php-codesniffer.annotated-ruleset.php -->
+<ruleset name="PHPCS Rules">
+
+    <description>PHPCS ruleset</description>
+
+    <file>src</file>
+    <file>tests</file>
+
+    <!-- Show progress of the run -->
+    <arg value= "p"/>
+
+    <!-- Show sniff codes in all reports -->
+    <arg value= "s"/>
+
+    <!-- Our base rule: set to PSR12 -->
+    <rule ref="PSR12">
+        <exclude name="PSR12.Operators.OperatorSpacing.NoSpaceBefore"/>
+        <exclude name="PSR12.Operators.OperatorSpacing.NoSpaceAfter"/>
+        <exclude name="PSR12.Traits.UseDeclaration.MultipleImport"/>
+        <exclude name="Generic.Files.LineLength.TooLong"/>
+        <exclude name="PSR2.Methods.FunctionClosingBrace.SpacingBeforeClose"/>
+        <exclude name="PSR12.Classes.OpeningBraceSpace.Found"/>
+        <exclude name="Squiz.WhiteSpace.ControlStructureSpacing.SpacingAfterOpen"/>
+        <exclude name="Squiz.WhiteSpace.ControlStructureSpacing.SpacingBeforeClose"/>
+    </rule>
+
+    <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
+        <exclude-pattern>tests/</exclude-pattern>
+    </rule>
+
+    <rule ref="Internal.NoCodeFound">
+        <exclude-pattern>tests/</exclude-pattern>
+    </rule>
+
+</ruleset>

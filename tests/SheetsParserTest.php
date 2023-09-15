@@ -281,10 +281,14 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                 ],
 
                 'data' => [
-                    'foo' => function () {},
+                    'foo' => function () {
+                    },
                     'baz' => new \DateTime('2022-11-16'),
-                    'test' => function () {},
-                    'test2' => function () { throw new \LogicException('oops'); },
+                    'test' => function () {
+                    },
+                    'test2' => function () {
+                        throw new \LogicException('oops');
+                    },
                 ],
             ],
         ];
@@ -337,13 +341,14 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
 
                 'copy_width' => [],
             ],
-            $this->service->schema([1 => ['A' => 'hello [world]']], ['world' => function () {}], [])->toArray()
+            $this->service->schema([1 => ['A' => 'hello [world]']], ['world' => function () {
+            }], [])->toArray()
         );
     }
 
-   /**
-     * @return void
-     */
+    /**
+      * @return void
+      */
     public function test_schema_conditions1()
     {
         $data = [
@@ -403,9 +408,9 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-   /**
-     * @return void
-     */
+    /**
+      * @return void
+      */
     public function test_schema_conditions2()
     {
         $data = [

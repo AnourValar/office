@@ -61,7 +61,7 @@ class GridService
      * Generate a document from the template (grid)
      *
      * @param array $headers
-     * @param iterable|\Closure<iterable> $data
+     * @param iterable|\Closure $data
      * @param string $leftTopCorner
      * @return \AnourValar\Office\Generated
      */

@@ -45,7 +45,7 @@ class Mixer
             for ($i = 0; $i < $count; $i++) {
                 $driver->setSheet($i);
 
-                $driver->setSheetTitle( $titles[] = $this->getTitle($driver->getSheetTitle(), $titles) );
+                $driver->setSheetTitle($titles[] = $this->getTitle($driver->getSheetTitle(), $titles));
                 $referenceDriver->mergeDriver($driver);
             }
         }

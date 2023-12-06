@@ -40,6 +40,7 @@ class Buffer implements \Stringable
 
     /**
      * @return void
+     * @psalm-suppress InaccessibleProperty
      */
     public function __destruct()
     {

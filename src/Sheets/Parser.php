@@ -61,7 +61,7 @@ class Parser
     protected function parseValues(array $values, &$lastColumn): array
     {
         $lastColumn = 'A';
-        foreach ($values as $row => &$columns) {
+        foreach ($values as &$columns) {
             $currLastColumn = array_key_last($columns);
             if ($this->isColumnLE($lastColumn, $currLastColumn)) {
                 $lastColumn = $currLastColumn;
@@ -179,6 +179,7 @@ class Parser
      * @param \AnourValar\Office\Sheets\SchemaMapper $schema
      * @param string $lastColumn
      * @return array
+     * @psalm-suppress UnusedForeachValue
      */
     protected function calculateDataSchema(
         array &$values,

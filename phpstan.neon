@@ -34,9 +34,7 @@ parameters:
         - '#Access to an undefined property AnourValar\\Office\\Drivers\\MixInterface\:\:\$spreadsheet#'
         - '#Call to an undefined method AnourValar\\Office\\Drivers\\MixInterface\:\:sheet\(\)#'
 
-
     excludePaths:
-
 
     checkFunctionNameCase: true
     checkInternalClassCaseSensitivity: true

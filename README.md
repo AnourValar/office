@@ -246,6 +246,20 @@ $mixer = new \AnourValar\Office\Mixer();
 $mixer($documentA, $documentB)->saveAs('generated_document.xlsx');
 ```
 
+### Access the PhpSpreadsheetDriver directly (default driver)
+
+```php
+(new \AnourValar\Office\SheetsService())
+    ->hookBefore(function (\AnourValar\Office\Drivers\PhpSpreadsheetDriver $driver, array &$data) {
+        $spreadsheet = $driver->spreadsheet;
+
+        // @see \PhpOffice\PhpSpreadsheet\Spreadsheet
+        $spreadsheet->createSheet()->setTitle('Foo Bar'); // adding a new Worksheet
+    })
+    ->generate('template.xlsx', [])
+    ->saveAs('generated_document.xlsx');
+```
+
 
 ## Generate a document from an DOCX (Word) template
 

@@ -6,6 +6,7 @@
 
     <file>src</file>
     <file>tests</file>
+    <exclude-pattern>src/resources</exclude-pattern>
 
     <!-- Show progress of the run -->
     <arg value= "p"/>

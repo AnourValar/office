@@ -175,6 +175,7 @@ class GridService
      * @param mixed $totalRange
      * @param mixed $columns
      * @return \Closure
+     * @psalm-suppress UnusedForeachValue
      */
     protected function getGenerator(
         \AnourValar\Office\Drivers\GridInterface $driver,

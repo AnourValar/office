@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<psalm
+    errorLevel="7"
+    resolveFromConfigFile="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="true"
+    findUnusedPsalmSuppress="true"
+    findUnusedVariablesAndParams="true"
+>
+    <projectFiles>
+        <directory name="src"/>
+        <directory name="tests"/>
+        <ignoreFiles>
+            <directory name="vendor"/>
+        </ignoreFiles>
+    </projectFiles>
+
+    <issueHandlers>
+      <UnusedClosureParam errorLevel="suppress" />
+      <PossiblyUnusedMethod errorLevel="suppress" />
+      <UnusedClass errorLevel="suppress" />
+      <UndefinedClass errorLevel="suppress" />
+      <PossiblyUnusedParam errorLevel="suppress" />
+      <PossiblyUnusedProperty errorLevel="suppress" />
+      <PossiblyUnusedReturnValue errorLevel="suppress" />
+      <MissingTemplateParam errorLevel="suppress" />
+      <UnsupportedPropertyReferenceUsage errorLevel="suppress" />
+    </issueHandlers>
+    
+    <forbiddenFunctions>
+        <function name="var_dump" />
+        <function name="dd" />
+        <function name="dump" />
+    </forbiddenFunctions>
+</psalm>

@@ -246,7 +246,7 @@ $mixer = new \AnourValar\Office\Mixer();
 $mixer($documentA, $documentB)->saveAs('generated_document.xlsx');
 ```
 
-### Access the PhpSpreadsheetDriver directly (default driver)
+### Access the PhpSpreadsheet directly (default driver)
 
 ```php
 (new \AnourValar\Office\SheetsService())

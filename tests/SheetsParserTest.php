@@ -162,7 +162,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                         'Q' => '=A1+B2+C3+D4+E5',
                         'X' => '= A1',
                         'W' => '=1',
-                        'Y' => '=AB100',
+                        'Y' => '=AB100 + [test]',
                     ],
                     2 => [
                         'A' => '[bar]',
@@ -221,7 +221,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                             'K' => null,
                             'L' => null,
                             'Q' => '=A1+B2+C3+D3+E4',
-                            'Y' => '=AB99',
+                            'Y' => '=AB99 + 3',
                         ],
                         2 => [
                             'A' => 'world',

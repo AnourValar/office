@@ -28,7 +28,6 @@ parameters:
         - '#Binary operation \"\-\" between string and string results in an error#'
         - '#Instantiated class PhpOffice#'
         - '#expects string, int given#'
-        - '#expects int, string given#'
         - '#has invalid type PhpOffice#'
         - '#Match expression does not handle remaining value: mixed#'
         - '#Access to an undefined property AnourValar\\Office\\Drivers\\MixInterface\:\:\$spreadsheet#'

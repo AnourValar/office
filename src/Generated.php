@@ -48,10 +48,10 @@ class Generated
      * Save generated document to the file
      *
      * @param string $filename
-     * @param \AnourValar\Office\Format $format
+     * @param \AnourValar\Office\Format|null $format
      * @return int|null
      */
-    public function saveAs(string $filename, Format $format = null): ?int
+    public function saveAs(string $filename, ?Format $format = null): ?int
     {
         if (! $format) {
             $format = Format::from(mb_strtolower(pathinfo($filename, PATHINFO_EXTENSION)));
@@ -63,7 +63,7 @@ class Generated
     /**
      * Set hookSave
      *
-     * @param ?\Closure $closure
+     * @param \Closure|null $closure
      * @return self
      */
     public function hookSave(?\Closure $closure): self

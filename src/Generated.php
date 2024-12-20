@@ -12,7 +12,7 @@ class Generated
     /**
      * Handle template's saving
      *
-     * @var \Closure(\AnourValar\Office\Drivers\SaveInterface $driver, \AnourValar\Office\Format $format)
+     * @var \Closure(\AnourValar\Office\Drivers\SaveInterface $driver, \AnourValar\Office\Format $format): void
      */
     protected ?\Closure $hookSave = null;
 

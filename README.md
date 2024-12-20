@@ -11,7 +11,7 @@ composer require anourvalar/office
 ### Phpspreadsheet is required to work with Excel (xlsx).
 
 ```bash
-composer require phpoffice/phpspreadsheet "^1.29"
+composer require phpoffice/phpspreadsheet "^3.6"
 ```
 
 ### Zipstream-php is required to work with Word (docx).

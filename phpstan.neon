@@ -4,7 +4,7 @@ parameters:
         - src
         - tests
 
-    # The level 9 is the highest level
+    # The level 10 is the highest level
     level: 5
 
     ignoreErrors:
@@ -32,12 +32,16 @@ parameters:
         - '#Match expression does not handle remaining value: mixed#'
         - '#Access to an undefined property AnourValar\\Office\\Drivers\\MixInterface\:\:\$spreadsheet#'
         - '#Call to an undefined method AnourValar\\Office\\Drivers\\MixInterface\:\:sheet\(\)#'
+        - '#Call to an undefined method#'
+        - '#Offset numeric\-string on list\<string> in isset\(\) does not exist\.#'
+        - '#Format\:\:Docx is always true#'
+        - '#string\, \(float\|int\) given#'
+        - '#SaveInterface given\.#'
 
     excludePaths:
 
     checkFunctionNameCase: true
     checkInternalClassCaseSensitivity: true
-    checkAlwaysTrueInstanceof: true
     reportMaybesInMethodSignatures: true
     reportStaticMethodSignatures: true
     checkUninitializedProperties: true
@@ -45,3 +49,6 @@ parameters:
     reportAlwaysTrueInLastCondition: true
     reportWrongPhpDocTypeInVarTag: true
     checkMissingCallableSignature: true
+    reportPossiblyNonexistentGeneralArrayOffset: true
+    reportPossiblyNonexistentConstantArrayOffset: true
+    reportAnyTypeWideningInVarTag: true

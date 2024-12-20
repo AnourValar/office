@@ -26,21 +26,21 @@ class SheetsService
     /**
      * Actions with template before data inserted
      *
-     * @var \Closure(SheetsInterface $driver, array &$data)
+     * @var \Closure(SheetsInterface $driver, array &$data): void
      */
     protected ?\Closure $hookBefore = null;
 
     /**
      * Cell's value handler (on set)
      *
-     * @var \Closure(SheetsInterface $driver, string $column, int $row, mixed $value, int $sheetIndex)
+     * @var \Closure(SheetsInterface $driver, string $column, int $row, mixed $value, int $sheetIndex): mixed
      */
     protected ?\Closure $hookValue = null;
 
     /**
      * Actions with template after data inserted
      *
-     * @var \Closure(SheetsInterface $driver)
+     * @var \Closure(SheetsInterface $driver): void
      */
     protected ?\Closure $hookAfter = null;
 

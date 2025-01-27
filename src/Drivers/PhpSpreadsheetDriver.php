@@ -538,7 +538,7 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
         }
 
         $curr = $range[0][1];
-        while ($curr <= $range[1][1]) {
+        while ($curr <= $range[1][1]) { // rows
             // Height
             $this->copyHeight($curr, $curr + $shift);
 

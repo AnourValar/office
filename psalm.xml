@@ -29,6 +29,7 @@
       <PossiblyUnusedReturnValue errorLevel="suppress" />
       <MissingTemplateParam errorLevel="suppress" />
       <UnsupportedPropertyReferenceUsage errorLevel="suppress" />
+      <MissingOverrideAttribute errorLevel="suppress" />
     </issueHandlers>
 
     <forbiddenFunctions>

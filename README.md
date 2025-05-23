@@ -367,6 +367,10 @@ The only cons are performance and memory consumtion.
 
 ZipDriver as an alternative is simpler, but much more faster:
 
+```bash
+composer require maennchen/zipstream-php "^3.1"
+```
+
 ```php
 $data = [
     ['William', 3000],

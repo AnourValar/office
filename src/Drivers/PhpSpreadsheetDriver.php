@@ -734,7 +734,9 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
      */
     protected function writeConfiguration(\PhpOffice\PhpSpreadsheet\Writer\IWriter $writer): void
     {
-        //
+        if ($writer instanceof \PhpOffice\PhpSpreadsheet\Writer\Csv) {
+            $writer->setDelimiter(';');
+        }
     }
 
     /**
@@ -748,6 +750,7 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
             \AnourValar\Office\Format::Pdf => 'Mpdf',
             \AnourValar\Office\Format::Html => 'Html',
             \AnourValar\Office\Format::Ods => 'Ods',
+            \AnourValar\Office\Format::Csv => 'Csv',
             default => throw new \RuntimeException('Format is not supported.'),
         };
     }

@@ -9,10 +9,11 @@ parameters:
 
     ignoreErrors:
         - '#has an uninitialized readonly property#'
-        - '#Binary operation \"\+\" between string#'
+        - '#Binary operation \"\-\" between non\-empty\-string#'
         - '#Call to an undefined method AnourValar\\Office\\Drivers\\SaveInterface\:\:getSheetCount\(\)#'
         - '#Call to an undefined method AnourValar\\Office\\Drivers\\SaveInterface\:\:replace\(\)#'
         - '#unknown class PhpOffice#'
+        - '#Class PhpOffice\\PhpSpreadsheet\\Writer\\Csv not found#'
         - '#Unsafe usage of new static#'
         - '#Call to an undefined method AnourValar\\Office\\Drivers\\SaveInterface\:\:setGrid\(\)#'
         - '#Parameter \#1 \$driver of method AnourValar\\Office\\GridService\:\:getGenerator\(\) expects AnourValar\\Office\\Drivers\\GridInterface#'
@@ -25,7 +26,7 @@ parameters:
         - '#\$format is assigned outside of the constructor#'
         - '#has invalid return type PhpOffice#'
         - '#\$spreadsheet is assigned outside of the constructor#'
-        - '#Binary operation \"\-\" between string and string results in an error#'
+        - '#Binary operation \"\+\" between non\-empty\-string#'
         - '#Instantiated class PhpOffice#'
         - '#expects string, int given#'
         - '#has invalid type PhpOffice#'

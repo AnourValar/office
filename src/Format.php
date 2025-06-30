@@ -8,6 +8,7 @@ enum Format: string
     case Pdf = 'pdf'; // sheets | grid => writer
     case Html = 'html'; // sheets | grid => reader + writer
     case Ods = 'ods'; // sheets | grid => reader + writer
+    case Csv = 'csv'; // sheets | grid => reader + writer
     case Docx = 'docx'; // document => reader + writer
 
     /**
@@ -20,6 +21,7 @@ enum Format: string
             Format::Pdf => 'pdf',
             Format::Html => 'html',
             Format::Ods => 'ods',
+            Format::Csv => 'csv',
             Format::Docx => 'docx',
         };
     }
@@ -36,6 +38,7 @@ enum Format: string
             Format::Pdf => 'application/pdf',
             Format::Html => 'text/html',
             Format::Ods => 'application/vnd.oasis.opendocument.spreadsheet',
+            Format::Csv => 'text/csv',
             Format::Docx => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         };
     }

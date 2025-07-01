@@ -149,7 +149,7 @@ class ZipDriver implements DocumentInterface, GridInterface
                 continue;
             }
 
-            $sheet .= '<row r="'.$row.'" spans="1:'.$columnsCount.'" ht="25" customHeight="1" x14ac:dyDescent="0.3">';
+            $sheet .= '<row r="'.$row.'" spans="1:'.$columnsCount.'" ht="'.($this->gridOptions['height'][$row] ?? 25).'" customHeight="1" x14ac:dyDescent="0.3">';
             $column = 'A';
             foreach ($titles as $value) {
                 $value = (string) $value;
@@ -189,7 +189,12 @@ class ZipDriver implements DocumentInterface, GridInterface
             $data->next();
             $row++;
 
-            $sheet .= '<row r="'.$row.'" spans="1:'.$columnsCount.'" x14ac:dyDescent="0.3">';
+            $ht = '';
+            if (isset($this->gridOptions['height'][$row])) {
+                $ht = 'ht="'.$this->gridOptions['height'][$row].'" customHeight="1" ';
+            }
+
+            $sheet .= '<row r="'.$row.'" '.$ht.'spans="1:'.$columnsCount.'" x14ac:dyDescent="0.3">';
             $column = 'A';
             foreach ($values as $value) {
                 if ($value instanceof \Stringable && ! $value instanceof \DateTimeInterface) {
@@ -317,6 +322,20 @@ class ZipDriver implements DocumentInterface, GridInterface
     public function setWidth(string $column, int $width): self
     {
         $this->gridOptions['width'][$column] = $width;
+
+        return $this;
+    }
+
+    /**
+     * Set row's height for the grid
+     *
+     * @param string $row
+     * @param int|float $height
+     * @return self
+     */
+    public function setHeight(string $row, int|float $height): self
+    {
+        $this->gridOptions['height'][$row] = $height;
 
         return $this;
     }

@@ -30,14 +30,14 @@ class GridService
     /**
      * Header handler
      *
-     * @var \Closure(GridInterface $driver, mixed $header, string|int $key, string $column): string
+     * @var \Closure(GridInterface $driver, mixed $header, string|int $key, string $column, int $rowNumber): string
      */
     protected ?\Closure $hookHeader = null;
 
     /**
      * Row data handler
      *
-     * @var \Closure(GridInterface $driver, mixed $row, string|int $key): array
+     * @var \Closure(GridInterface $driver, mixed $row, string|int $key, int $rowNumber): array
      */
     protected ?\Closure $hookRow = null;
 
@@ -219,7 +219,7 @@ class GridService
 
                 if ($this->hookHeader) {
                     // Hook: header
-                    $header = ($this->hookHeader)($driver, $header, $key, $lastColumn);
+                    $header = ($this->hookHeader)($driver, $header, $key, $lastColumn, $headerRow);
                 }
 
                 if ($header) {
@@ -241,7 +241,7 @@ class GridService
             foreach ($data as $key => $row) {
                 // Hook: row
                 if ($this->hookRow) {
-                    $row = ($this->hookRow)($driver, $row, $key);
+                    $row = ($this->hookRow)($driver, $row, $key, $dataRow + 1);
                 }
 
                 if (is_null($row)) {

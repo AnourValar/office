@@ -38,6 +38,8 @@ parameters:
         - '#Format\:\:Docx is always true#'
         - '#string\, \(float\|int\) given#'
         - '#SaveInterface given\.#'
+        - '#has invalid return type Illuminate#'
+        - '#has invalid type Illuminate#'
 
     excludePaths:
 

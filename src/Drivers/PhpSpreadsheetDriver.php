@@ -735,7 +735,7 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
     protected function writeConfiguration(\PhpOffice\PhpSpreadsheet\Writer\IWriter $writer): void
     {
         if ($writer instanceof \PhpOffice\PhpSpreadsheet\Writer\Csv) {
-            $writer->setDelimiter(';');
+            $writer->setDelimiter(';')->setUseBOM(true);
         }
     }
 

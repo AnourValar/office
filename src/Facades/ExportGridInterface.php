@@ -4,6 +4,24 @@ namespace AnourValar\Office\Facades;
 
 use AnourValar\Office\Drivers\GridInterface;
 
+/**
+ * Usage example:
+ *
+ * if (! in_array($format, [\AnourValar\Office\Format::Xlsx, \AnourValar\Office\Format::Csv])) {
+ *     throw new \App\Exceptions\ValidationException('Format is not supported.');
+ * }
+ *
+ * $generatorData = $this->buildBy($deviceGrid->query()->acl(), array_replace($this->profile, $this->profileExport));
+ *
+ * return response()->streamDownload(
+ *     function () use ($generatorData, $deviceGrid, $exportService, $format) {
+ *         echo $exportService->grid($generatorData, $deviceGrid, $format);
+ *     },
+ *     $deviceGrid->fileName($format->fileExtension()),
+ *     ['Access-Control-Expose-Headers' => 'Content-Disposition']
+ * );
+ */
+
 interface ExportGridInterface
 {
     /**

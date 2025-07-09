@@ -11,13 +11,13 @@ use AnourValar\Office\Drivers\GridInterface;
  *     throw new \App\Exceptions\ValidationException('Format is not supported.');
  * }
  *
- * $generatorData = $this->buildBy($deviceGrid->query()->acl(), array_replace($this->profile, $this->profileExport));
+ * $generatorData = $this->buildBy($myGrid->query()->acl(), array_replace($this->profile, $this->profileExport)); // outside of the stream
  *
  * return response()->streamDownload(
- *     function () use ($generatorData, $deviceGrid, $exportService, $format) {
- *         echo $exportService->grid($generatorData, $deviceGrid, $format);
+ *     function () use ($generatorData, $myGrid, $exportService, $format) {
+ *         echo $exportService->grid($generatorData, $myGrid, $format);
  *     },
- *     $deviceGrid->fileName($format->fileExtension()),
+ *     $myGrid->fileName($format->fileExtension()),
  *     ['Access-Control-Expose-Headers' => 'Content-Disposition']
  * );
  */

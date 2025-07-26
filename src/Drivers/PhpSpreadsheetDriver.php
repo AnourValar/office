@@ -11,19 +11,19 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
     use \AnourValar\Office\Traits\Parser;
 
     /**
+     * @see \PhpOffice\PhpSpreadsheet\Style\NumberFormat
+     *
      * @var string
      */
-    protected const FORMAT_DATE = 'm/d/yyyy';
+    public const FORMAT_DATE = 'm/d/yyyy';
+    public const FORMAT_DATETIME = 'm/d/yyyy h:mm';
 
     /**
      * @var string
      */
-    protected const FORMAT_DOUBLE = '#,##0.00';
-
-    /**
-     * @var string
-     */
-    protected const FORMAT_INT = '#,##0';
+    public const FORMAT_INT = '#,##0';
+    public const FORMAT_DOUBLE = '#,##0.00';
+    public const FORMAT_PERCENTAGE = '0.00%';
 
     /**
      * @var \PhpOffice\PhpSpreadsheet\Spreadsheet

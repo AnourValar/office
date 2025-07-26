@@ -17,14 +17,23 @@ class ExportService
      */
     public function grid(\Closure $dataGenerator, ExportGridInterface $grid, Format $format = Format::Xlsx): string
     {
+        $extra = [];
+
         return (new \AnourValar\Office\GridService($this->getDriver($format)))
-            ->hookHeader(function (GridInterface $driver, mixed $header, string|int $key, string $column, int $rowNumber) {
+            ->hookHeader(function (GridInterface $driver, mixed $header, string|int $key, string $column, int $rowNumber) use (&$extra) {
                 if (isset($header['width'])) {
                     $driver->setWidth($column, $header['width']);
                 }
 
                 if (isset($header['height'])) {
                     $driver->setHeight($rowNumber, $header['height']);
+                }
+
+                if (! empty($header['percentage'])) {
+                    if ($driver instanceof \AnourValar\Office\Drivers\ZipDriver) {
+                        $driver->setStyle($column, 'percentage');
+                    }
+                    $extra[] = $column;
                 }
 
                 return $header['title'];
@@ -38,7 +47,13 @@ class ExportService
                 ?string $dataRange,
                 ?string $totalRange,
                 array $columns
-            ) use ($grid) {
+            ) use ($grid, &$extra) {
+                if ($driver instanceof \AnourValar\Office\Drivers\PhpSpreadsheetDriver) {
+                    foreach ($extra as $columnKey) {
+                        $driver->setCellFormat($columnKey, \AnourValar\Office\Drivers\PhpSpreadsheetDriver::FORMAT_PERCENTAGE);
+                    }
+                }
+
                 $driver->setSheetTitle($grid->sheetTitle());
             })
             ->generate($grid->columns(), $dataGenerator)

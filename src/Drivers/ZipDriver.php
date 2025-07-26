@@ -299,7 +299,7 @@ class ZipDriver implements DocumentInterface, GridInterface
 
 
     /**
-     * Set styles map for the grid
+     * Set styles map for the grid template [header, integer, float, string, date, percentage, ...]
      *
      * @param string $column
      * @param string $style

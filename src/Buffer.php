@@ -44,6 +44,6 @@ class Buffer implements \Stringable
      */
     public function __destruct()
     {
-        fclose($this->resource);
+        fclose($this->resource); // works with php-fpm, octane, queue
     }
 }

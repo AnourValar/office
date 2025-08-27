@@ -221,9 +221,9 @@ class ZipDriver implements DocumentInterface, GridInterface
                     $style = ($styles[$column] ?? $styles['string']);
                     $sheet .= '<c r="'.$column.$row.'" t="s" s="'.$style.'"><v>'.$curr.'</v></c>';
 
-                } elseif (is_float($value)) {
+                } elseif (is_double($value)) {
 
-                    $style = ($styles[$column] ?? $styles['float']);
+                    $style = ($styles[$column] ?? $styles['double']);
                     $sheet .= '<c r="'.$column.$row.'" s="'.$style.'"><v>'.$value.'</v></c>';
 
                 } elseif (is_integer($value)) {
@@ -299,7 +299,7 @@ class ZipDriver implements DocumentInterface, GridInterface
 
 
     /**
-     * Set styles map for the grid template [header, integer, float, string, date, percentage, ...]
+     * Set styles map for the grid template [header, integer, double, double_10, string, date, percentage, ...]
      *
      * @param string $column
      * @param string $style
@@ -383,7 +383,7 @@ class ZipDriver implements DocumentInterface, GridInterface
         }
 
         // Presets
-        return array_merge(['header' => 1, 'string' => 1, 'float' => 1, 'integer' => 1, 'date' => 1], $styles);
+        return array_merge(['header' => 1, 'string' => 1, 'double' => 1, 'integer' => 1, 'date' => 1], $styles);
     }
 
     /**

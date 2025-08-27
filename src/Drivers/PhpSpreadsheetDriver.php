@@ -23,6 +23,7 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
      */
     public const FORMAT_INT = '#,##0';
     public const FORMAT_DOUBLE = '#,##0.00';
+    public const FORMAT_DOUBLE_10 = '#,##########0.0000000000';
     public const FORMAT_PERCENTAGE = '0.00%';
 
     /**

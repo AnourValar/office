@@ -8,6 +8,14 @@ use AnourValar\Office\Format;
 class ExportService
 {
     /**
+     * Extra options
+     *
+     * @var string
+     */
+    public const PERCENTAGE = 'percentage';
+    public const DOUBLE_10 = 'double_10';
+
+    /**
      * Generate a grid
      *
      * @param \Closure $dataGenerator
@@ -17,10 +25,10 @@ class ExportService
      */
     public function grid(\Closure $dataGenerator, ExportGridInterface $grid, Format $format = Format::Xlsx): string
     {
-        $extra = [];
+        $extras = [];
 
         return (new \AnourValar\Office\GridService($this->getDriver($format)))
-            ->hookHeader(function (GridInterface $driver, mixed $header, string|int $key, string $column, int $rowNumber) use (&$extra) {
+            ->hookHeader(function (GridInterface $driver, mixed $header, string|int $key, string $column, int $rowNumber) use (&$extras) {
                 if (isset($header['width'])) {
                     $driver->setWidth($column, $header['width']);
                 }
@@ -29,12 +37,7 @@ class ExportService
                     $driver->setHeight($rowNumber, $header['height']);
                 }
 
-                if (! empty($header['percentage'])) {
-                    if ($driver instanceof \AnourValar\Office\Drivers\ZipDriver) {
-                        $driver->setStyle($column, 'percentage');
-                    }
-                    $extra[] = $column;
-                }
+                $extras = array_merge($extras, $this->handleExtras($driver, $column, $header));
 
                 return $header['title'];
             })
@@ -47,17 +50,50 @@ class ExportService
                 ?string $dataRange,
                 ?string $totalRange,
                 array $columns
-            ) use ($grid, &$extra) {
-                if ($driver instanceof \AnourValar\Office\Drivers\PhpSpreadsheetDriver) {
-                    foreach ($extra as $columnKey) {
-                        $driver->setCellFormat($columnKey, \AnourValar\Office\Drivers\PhpSpreadsheetDriver::FORMAT_PERCENTAGE);
-                    }
-                }
-
+            ) use ($grid, &$extras) {
                 $driver->setSheetTitle($grid->sheetTitle());
+
+                foreach ($extras as $extra) {
+                    $extra();
+                }
             })
             ->generate($grid->columns(), $dataGenerator)
             ->save($format);
+    }
+
+    /**
+     * @param \AnourValar\Office\Drivers\GridInterface $driver
+     * @param string $column
+     * @param array $header
+     * @return array
+     */
+    protected function handleExtras(GridInterface $driver, string $column, array $header): array
+    {
+        $extras = [];
+
+        // percentage
+        if (! empty($header[self::PERCENTAGE])) {
+            if ($driver instanceof \AnourValar\Office\Drivers\ZipDriver) {
+                $driver->setStyle($column, 'percentage');
+            } elseif ($driver instanceof \AnourValar\Office\Drivers\PhpSpreadsheetDriver) {
+                $extras[] = fn () => $driver->setCellFormat($column, \AnourValar\Office\Drivers\PhpSpreadsheetDriver::FORMAT_PERCENTAGE);
+            } else {
+                throw new \RuntimeException('The driver does not support the "percentage" feature.');
+            }
+        }
+
+        // double_10
+        if (! empty($header[self::DOUBLE_10])) {
+            if ($driver instanceof \AnourValar\Office\Drivers\ZipDriver) {
+                $driver->setStyle($column, 'double_10');
+            } elseif ($driver instanceof \AnourValar\Office\Drivers\PhpSpreadsheetDriver) {
+                $extras[] = fn () => $driver->setCellFormat($column, \AnourValar\Office\Drivers\PhpSpreadsheetDriver::FORMAT_DOUBLE_10);
+            } else {
+                throw new \RuntimeException('The driver does not support the "double_10" feature.');
+            }
+        }
+
+        return $extras;
     }
 
     /**

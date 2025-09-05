@@ -66,6 +66,7 @@ class ExportService
      * @param string $column
      * @param array $header
      * @return array
+     * @throws \RuntimeException
      */
     protected function handleExtras(GridInterface $driver, string $column, array $header): array
     {

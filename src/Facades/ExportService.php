@@ -14,6 +14,7 @@ class ExportService
      */
     public const PERCENTAGE = 'percentage';
     public const DOUBLE_10 = 'double_10';
+    public const DATETIME = 'datetime';
 
     /**
      * Generate a grid
@@ -91,6 +92,17 @@ class ExportService
                 $extras[] = fn () => $driver->setCellFormat($column, \AnourValar\Office\Drivers\PhpSpreadsheetDriver::FORMAT_DOUBLE_10);
             } else {
                 throw new \RuntimeException('The driver does not support the "double_10" feature.');
+            }
+        }
+
+        // datetime
+        if (! empty($header[self::DATETIME])) {
+            if ($driver instanceof \AnourValar\Office\Drivers\ZipDriver) {
+                $driver->setStyle($column, 'datetime');
+            } elseif ($driver instanceof \AnourValar\Office\Drivers\PhpSpreadsheetDriver) {
+                $extras[] = fn () => $driver->setCellFormat($column, \AnourValar\Office\Drivers\PhpSpreadsheetDriver::FORMAT_DATETIME);
+            } else {
+                throw new \RuntimeException('The driver does not support the "datetime" feature.');
             }
         }
 

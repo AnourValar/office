@@ -35,7 +35,6 @@ parameters:
         - '#Call to an undefined method AnourValar\\Office\\Drivers\\MixInterface\:\:sheet\(\)#'
         - '#Call to an undefined method#'
         - '#Offset numeric\-string on list\<string> in isset\(\) does not exist\.#'
-        - '#Format\:\:Docx is always true#'
         - '#string\, \(float\|int\) given#'
         - '#SaveInterface given\.#'
         - '#has invalid return type Illuminate#'

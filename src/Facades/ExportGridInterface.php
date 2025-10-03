@@ -32,18 +32,18 @@ interface ExportGridInterface
     public function query(): \Illuminate\Database\Eloquent\Builder;
 
     /**
-     * Columns structure
-     *
-     * @return array
-     */
-    public function columns(): array;
-
-    /**
      * Sheet title
      *
      * @return string
      */
     public function sheetTitle(): string;
+
+    /**
+     * Columns structure
+     *
+     * @return array
+     */
+    public function columns(): array;
 
     /**
      * Row iteration

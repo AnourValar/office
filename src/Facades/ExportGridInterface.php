@@ -17,7 +17,7 @@ use AnourValar\Office\Drivers\GridInterface;
  *     function () use ($generatorData, $myGrid, $exportService, $format) {
  *         echo $exportService->grid($generatorData, $myGrid, $format);
  *     },
- *     $myGrid->fileName($format->fileExtension()),
+ *     $myGrid->fileName($format->fileExtension(), $this->getBuildRequest()->get()),
  *     ['Access-Control-Expose-Headers' => 'Content-Disposition']
  * );
  */
@@ -59,7 +59,8 @@ interface ExportGridInterface
      * Filename
      *
      * @param string $ext
+     * @param array $request
      * @return string
      */
-    public function fileName(string $ext): string;
+    public function fileName(string $ext, array $request): string;
 }

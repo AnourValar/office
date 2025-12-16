@@ -22,9 +22,10 @@ class ExportService
      * @param \Closure $dataGenerator
      * @param \AnourValar\Office\Facades\ExportGridInterface $grid
      * @param \AnourValar\Office\Format $format
+     * @param array $request
      * @return string
      */
-    public function grid(\Closure $dataGenerator, ExportGridInterface $grid, Format $format = Format::Xlsx): string
+    public function grid(\Closure $dataGenerator, ExportGridInterface $grid, Format $format = Format::Xlsx, array $request = []): string
     {
         $extras = [];
 
@@ -42,8 +43,8 @@ class ExportService
 
                 return $header['title'];
             })
-            ->hookRow(function (GridInterface $driver, mixed $row, string|int $key, int $rowNumber) use ($grid) {
-                return $grid->item($row, $driver, $rowNumber);
+            ->hookRow(function (GridInterface $driver, mixed $row, string|int $key, int $rowNumber) use ($grid, $request) {
+                return $grid->item($row, $driver, $rowNumber, $request);
             })
             ->hookAfter(function (
                 GridInterface $driver,
@@ -51,14 +52,14 @@ class ExportService
                 ?string $dataRange,
                 ?string $totalRange,
                 array $columns
-            ) use ($grid, &$extras) {
-                $driver->setSheetTitle($grid->sheetTitle());
+            ) use ($grid, $request, &$extras) {
+                $driver->setSheetTitle($grid->sheetTitle($request));
 
                 foreach ($extras as $extra) {
                     $extra();
                 }
             })
-            ->generate($grid->columns(), $dataGenerator)
+            ->generate($grid->columns($request), $dataGenerator)
             ->save($format);
     }
 

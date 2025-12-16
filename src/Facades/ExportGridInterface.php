@@ -12,12 +12,13 @@ use AnourValar\Office\Drivers\GridInterface;
  * }
  *
  * $generatorData = $this->buildBy($myGrid->query()->acl(), array_replace($this->profile, $this->profileExport)); // outside of the stream
+ * $request = $this->getBuildRequest()->get();
  *
  * return response()->streamDownload(
- *     function () use ($generatorData, $myGrid, $exportService, $format) {
- *         echo $exportService->grid($generatorData, $myGrid, $format);
+ *     function () use ($generatorData, $myGrid, $exportService, $format, $request) {
+ *         echo $exportService->grid($generatorData, $myGrid, $format, $request);
  *     },
- *     $myGrid->fileName($format->fileExtension(), $this->getBuildRequest()->get()),
+ *     $myGrid->fileName($format->fileExtension(), $request),
  *     ['Access-Control-Expose-Headers' => 'Content-Disposition']
  * );
  */
@@ -34,16 +35,18 @@ interface ExportGridInterface
     /**
      * Sheet title
      *
+     * @param array $request
      * @return string
      */
-    public function sheetTitle(): string;
+    public function sheetTitle(array $request): string;
 
     /**
      * Columns structure
      *
+     * @param array $request
      * @return array
      */
-    public function columns(): array;
+    public function columns(array $request): array;
 
     /**
      * Row iteration
@@ -51,9 +54,10 @@ interface ExportGridInterface
      * @param \Illuminate\Database\Eloquent\Model $model
      * @param \AnourValar\Office\Drivers\GridInterface $driver
      * @param int $rowNumber
+     * @param array $request
      * @return array
      */
-    public function item(\Illuminate\Database\Eloquent\Model $model, GridInterface $driver, int $rowNumber): array;
+    public function item(\Illuminate\Database\Eloquent\Model $model, GridInterface $driver, int $rowNumber, array $request): array;
 
     /**
      * Filename

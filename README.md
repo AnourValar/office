@@ -11,13 +11,13 @@ composer require anourvalar/office
 ### Phpspreadsheet is required to work with Excel (xlsx).
 
 ```bash
-composer require phpoffice/phpspreadsheet "^3.6"
+composer require phpoffice/phpspreadsheet "^3.10"
 ```
 
 ### Zipstream-php is required to work with Word (docx).
 
 ```bash
-composer require maennchen/zipstream-php "^3.1"
+composer require maennchen/zipstream-php "^3.2"
 ```
 
 ### Mpdf is required to work with PDF.
@@ -368,7 +368,7 @@ The only cons are performance and memory consumtion.
 ZipDriver as an alternative is simpler, but much more faster:
 
 ```bash
-composer require maennchen/zipstream-php "^3.1"
+composer require maennchen/zipstream-php "^3.2"
 ```
 
 ```php

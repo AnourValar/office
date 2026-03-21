@@ -158,7 +158,7 @@ class SchemaMapper
         $curr = [];
         foreach ($data as $item) {
             $expect = preg_split('#([A-Z]+)([\d]+)#S', $item['to'], -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-            $expect[1]++;
+            $expect[1]++; // @phpstan-ignore-line
             $expect = implode('', $expect);
 
             if ($curr) {

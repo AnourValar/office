@@ -202,7 +202,7 @@ class GridService
             $firstColumn = 'A';
             $indent = [];
             while ($this->isColumnLE($firstColumn, $ltc[0]) && $firstColumn != $ltc[0]) {
-                $firstColumn++;
+                $firstColumn = $this->strIncrement($firstColumn);
                 $indent[] = '';
             }
 
@@ -214,7 +214,7 @@ class GridService
                 if ($isFirst) {
                     $isFirst = false;
                 } else {
-                    $lastColumn++;
+                    $lastColumn = $this->strIncrement($lastColumn);
                 }
 
                 if ($this->hookHeader) {
@@ -253,7 +253,7 @@ class GridService
                         if ($isFirst) {
                             $isFirst = false;
                         } else {
-                            $lastColumn++;
+                            $lastColumn = $this->strIncrement($lastColumn);
                         }
                     }
                 }
@@ -295,7 +295,7 @@ class GridService
                         $columns[array_shift($keys)] = $firstColumn;
                     }
 
-                    $firstColumn++;
+                    $firstColumn = $this->strIncrement($firstColumn);
                 }
             }
         };

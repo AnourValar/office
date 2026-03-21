@@ -223,14 +223,20 @@ class Parser
 
                     $qty = 0;
                     $pattern = $markerName;
-                    while (array_key_exists($pattern = $this->increment($pattern, true), $data)) {
+                    while ($pattern = $this->increment($pattern, true)) {
+                        if (! array_key_exists($pattern, $data)) {
+                            break;
+                        }
                         $qty++;
                     }
                     $additionRows = max($additionRows, $qty);
 
                     $qty = 0;
                     $pattern = $markerName;
-                    while (array_key_exists($pattern = $this->increment($pattern, false), $data)) {
+                    while ($pattern = $this->increment($pattern, false)) {
+                        if (! array_key_exists($pattern, $data)) {
+                            break;
+                        }
                         $qty++;
                     }
                     if ($qty) {
@@ -272,24 +278,24 @@ class Parser
             }
 
             $curr = $additionColumn;
-            $additionColumnValue = ($columns[$curr] ?? null);
+            $additionColumnValue = isset($curr) ? ($columns[$curr] ?? null) : null;
 
             $mergeMapX = [];
             foreach ($mergeCells as $item) {
                 if ($additionColumn.($row + $shift) == $item[0][0].$item[0][1] && $item[0][1] == $item[1][1]) {
                     while ($this->isColumnLE($item[0][0], $item[1][0]) && $item[0][0] != $item[1][0]) {
-                        $item[0][0]++;
+                        $item[0][0] = $this->strIncrement($item[0][0]);
                         $mergeMapX[] = $item[0][0];
                     }
                 }
             }
 
             foreach ($mergeMapX as $mergeItemX) {
-                $curr++;
+                $curr = $this->strIncrement($curr);
             }
 
             while ($additionColumns) {
-                $curr++;
+                $curr = $this->strIncrement($curr);
                 $additionColumns--;
 
                 $additionColumnValue = $this->increments($additionColumnValue, false);
@@ -300,7 +306,7 @@ class Parser
                 if ($mergeMapX) {
                     $originalCurr = $curr;
                     foreach ($mergeMapX as $mergeItemX) {
-                        $curr++;
+                        $curr = $this->strIncrement($curr);
 
                         $schema->copyWidth($mergeItemX, $curr);
                     }
@@ -320,7 +326,7 @@ class Parser
                         $columns[$firstColumn] = null;
                     }
 
-                    $firstColumn++;
+                    $firstColumn = $this->strIncrement($firstColumn);
                 }
                 uksort($columns, fn ($a, $b) => $this->isColumnLE($a, $b) ? -1 : 1);
 
@@ -539,6 +545,10 @@ class Parser
         $canonizeKeys = ['scalar' => [], 'closure' => []];
         $canonizeValues = ['scalar' => [], 'closure' => []];
         foreach ($data as $from => $to) {
+            if (! preg_match('#^[a-z][a-z\d\.\_]+$#iS', $from)) {
+                continue;
+            }
+
             if (is_scalar($to) || is_null($to)) {
                 $canonizeKeys['scalar'][] = "[$from]";
                 $canonizeValues['scalar'][] = $to;

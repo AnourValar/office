@@ -142,6 +142,70 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+    public function test_empty()
+    {
+        $data = [
+            [
+                'values' => [
+                    1 => [
+                        'A' => '[foo] []',
+                        'B' => '[]',
+                        'C' => '[bar] []',
+                        'D' => '[foo] [baz.]',
+                        'E' => '[foo] [б]',
+                        'F' => '[foo] [$]',
+                        'G' => '[foo] [%]',
+                        'H' => '[foo] [5]',
+                        'K' => '[foo] [a]',
+                    ],
+                ],
+
+                'data' => [
+                    '' => 'NO',
+                    'bar' => 'BAR',
+                    'baz' => ['' => 'BAZ'],
+                    '5' => 'NO',
+                    'б' => 'NO',
+                    '$' => 'NO',
+                    '%' => 'NO',
+                    'a' => 'NO',
+                ],
+            ],
+        ];
+
+        foreach ($data as $id => $item) {
+            $this->assertSame(
+                [
+                    'data' => [
+                        1 => [
+                            'A' => '[]',
+                            'C' => 'BAR []',
+                            'D' => 'BAZ',
+                            'E' => '[б]',
+                            'F' => '[$]',
+                            'G' => '[%]',
+                            'H' => '[5]',
+                            'K' => '[a]',
+                        ],
+                    ],
+
+                    'rows' => [],
+
+                    'copy_style' => [],
+
+                    'merge_cells' => [],
+
+                    'copy_width' => [],
+                ],
+                $this->service->schema($item['values'], $item['data'], [])->toArray(),
+                "$id"
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
     public function test_schema_scalar()
     {
         $data = [
@@ -7863,6 +7927,7 @@ class SheetsParserTest extends \PHPUnit\Framework\TestCase
                     'bar' => [
                         'id' => [4, 5, 6],
                     ],
+                    '' => 'baz',
                 ],
 
                 'merge_cells' => ['A2:B2', 'C2:G2', 'A4:H4'],

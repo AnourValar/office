@@ -65,4 +65,20 @@ trait Parser
 
         return $compareColumn >= $referenceColumn;
     }
+
+    /**
+     * Polyfill
+     *
+     * @param string $value
+     * @return string
+     */
+    protected function strIncrement(string $value): string
+    {
+        if (PHP_VERSION_ID >= 80300) {
+            return str_increment($value);
+        }
+
+        $value++; // @phpstan-ignore-line
+        return $value;
+    }
 }

@@ -200,7 +200,7 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
                     $this->setValue($column.$row, $value);
                 }
 
-                $column++;
+                $column = $this->strIncrement($column);
             }
         }
 

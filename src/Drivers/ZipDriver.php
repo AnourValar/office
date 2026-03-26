@@ -169,7 +169,7 @@ class ZipDriver implements DocumentInterface, GridInterface
                 }
 
                 $sheet .= '<c r="'.$column.$row.'" t="s" s="'.$styles['header'].'"><v>'.$curr.'</v></c>';
-                $column++;
+                $column = $this->strIncrement($column);
             }
             $sheet .= '</row>';
 

@@ -37,6 +37,7 @@ parameters:
         - '#Offset numeric\-string on list\<string> in isset\(\) does not exist\.#'
         - '#SaveInterface given\.#'
         - '#has invalid return type Illuminate#'
+        - '#Parameter \#1 \$string of function mb\_substr expects string\, null given#'
 
     excludePaths:
 

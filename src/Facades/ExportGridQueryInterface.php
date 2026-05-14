@@ -17,7 +17,10 @@ namespace AnourValar\Office\Facades;
  *         echo $exportService->grid($generatorData, $grid, $format, $request);
  *     },
  *     $grid->fileName($format->fileExtension(), $request),
- *     ['Access-Control-Expose-Headers' => 'Content-Disposition']
+ *     [
+ *         'Access-Control-Expose-Headers' => 'Content-Disposition',
+ *         'Content-Type' => $format->contentType(),
+ *     ]
  * );
  */
 

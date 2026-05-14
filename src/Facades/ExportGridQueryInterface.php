@@ -3,7 +3,7 @@
 namespace AnourValar\Office\Facades;
 
 /**
- * Usage example:
+ * Usage example: // timezone should be sent via "Intl.DateTimeFormat().resolvedOptions().timeZone" from JS
  *
  * if (! in_array($format, [\AnourValar\Office\Format::Xlsx, \AnourValar\Office\Format::Csv])) {
  *     throw new \App\Exceptions\ValidationException('Format is not supported.');

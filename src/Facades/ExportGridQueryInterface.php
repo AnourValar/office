@@ -9,14 +9,14 @@ namespace AnourValar\Office\Facades;
  *     throw new \App\Exceptions\ValidationException('Format is not supported.');
  * }
  *
- * $generatorData = $this->buildBy($myGrid->query()->acl(), array_replace($this->profile, $this->profileExport)); // out of context
+ * $generatorData = $this->buildBy($grid->query()->acl(), array_replace($this->profile, $this->profileExport)); // out of context
  * $request = $this->getBuildRequest()->get();
  *
  * return response()->streamDownload(
- *     function () use ($generatorData, $myGrid, $exportService, $format, $request) {
- *         echo $exportService->grid($generatorData, $myGrid, $format, $request);
+ *     function () use ($generatorData, $grid, $exportService, $format, $request) {
+ *         echo $exportService->grid($generatorData, $grid, $format, $request);
  *     },
- *     $myGrid->fileName($format->fileExtension(), $request),
+ *     $grid->fileName($format->fileExtension(), $request),
  *     ['Access-Control-Expose-Headers' => 'Content-Disposition']
  * );
  */

@@ -34,10 +34,10 @@ parameters:
         - '#Access to an undefined property AnourValar\\Office\\Drivers\\MixInterface\:\:\$spreadsheet#'
         - '#Call to an undefined method AnourValar\\Office\\Drivers\\MixInterface\:\:sheet\(\)#'
         - '#Call to an undefined method#'
-        - '#Offset numeric\-string on list\<string> in isset\(\) does not exist\.#'
         - '#SaveInterface given\.#'
         - '#has invalid return type Illuminate#'
         - '#Parameter \#1 \$string of function mb\_substr expects string\, null given#'
+        - '#Offset decimal\-int\-string on list\<string\> in isset\(\) does not exist#'
 
     excludePaths:
 

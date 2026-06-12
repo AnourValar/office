@@ -47,7 +47,6 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
     /**
      * {@inheritDoc}
      * @see \AnourValar\Office\Drivers\GridInterface::create()
-     * @psalm-suppress InaccessibleProperty
      */
     public function create(): self
     {
@@ -62,7 +61,6 @@ class PhpSpreadsheetDriver implements SheetsInterface, GridInterface, MixInterfa
     /**
      * {@inheritDoc}
      * @see \AnourValar\Office\Drivers\LoadInterface::load()
-     * @psalm-suppress InaccessibleProperty
      */
     public function load(string $file, \AnourValar\Office\Format $format): self
     {

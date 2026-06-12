@@ -179,7 +179,6 @@ class Parser
      * @param \AnourValar\Office\Sheets\SchemaMapper $schema
      * @param string $lastColumn
      * @return array
-     * @psalm-suppress UnusedForeachValue
      */
     protected function calculateDataSchema(
         array &$values,

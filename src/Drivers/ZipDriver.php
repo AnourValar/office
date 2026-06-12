@@ -34,7 +34,6 @@ class ZipDriver implements DocumentInterface, GridInterface
     /**
      * {@inheritDoc}
      * @see \AnourValar\Office\Drivers\LoadInterface::load()
-     * @psalm-suppress InaccessibleProperty
      */
     public function load(string $file, \AnourValar\Office\Format $format): self
     {

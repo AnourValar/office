@@ -33,7 +33,7 @@ composer require mpdf/mpdf: "^8.1"
 
 **template1.xlsx:**
 
-![Demo](https://anour.ru/resources/office-v1-10.png)
+![Demo](./images/10.png)
 
 ```php
 $data = [
@@ -88,19 +88,19 @@ echo (new \AnourValar\Office\SheetsService())
 
 **generated_document.xlsx:**
 
-![Demo](https://anour.ru/resources/office-v1-11.png)
+![Demo](./images/11.png)
 
 
 **The same template with empty data**
 
-![Demo](https://anour.ru/resources/office-v1-12.png)
+![Demo](./images/12.png)
 
 
 ### Two-dimensional table
 
 **template2.xlsx:**
 
-![Demo](https://anour.ru/resources/office-v1-20.png)
+![Demo](./images/20.png)
 
 ```php
 $data = [
@@ -135,13 +135,13 @@ $data = [
 
 **generated_document.xlsx:**
 
-![Demo](https://anour.ru/resources/office-v1-21.png)
+![Demo](./images/21.png)
 
 ### Additional Features
 
 **template3.xlsx:**
 
-![Demo](https://anour.ru/resources/office-v1-30.png)
+![Demo](./images/30.png)
 
 ```php
 $data = [
@@ -176,7 +176,7 @@ $data = [
 
 **generated_document.xlsx:**
 
-![Demo](https://anour.ru/resources/office-v1-31.png)
+![Demo](./images/31.png)
 
 ### Dynamic templates
 
@@ -227,11 +227,11 @@ $data = [
 
 **Dynamic template overview**
 
-![Demo](https://anour.ru/resources/office-v1-61.png)
+![Demo](./images/61.png)
 
 **generated_document.xlsx:**
 
-![Demo](https://anour.ru/resources/office-v1-62.png)
+![Demo](./images/62.png)
 
 ### Merge (union) few documents to a single file
 
@@ -271,11 +271,11 @@ $mixer($documentA, $documentB)->saveAs('generated_document.xlsx');
 
 **template.docx:**
 
-![Demo](https://anour.ru/resources/office-v1-70.png)
+![Demo](./images/70.png)
 
 **generated_document.docx:**
 
-![Demo](https://anour.ru/resources/office-v1-71.png)
+![Demo](./images/71.png)
 
 
 ## Export table (Grid)
@@ -300,7 +300,7 @@ $data = [
 
 **generated_grid.xlsx:**
 
-![Demo](https://anour.ru/resources/office-v1-41.png)
+![Demo](./images/41.png)
 
 ### Advanced usage (generators)
 
@@ -358,7 +358,7 @@ $data = function () {
 
 **generated_grid.xlsx:**
 
-![Demo](https://anour.ru/resources/office-v1-51.png)
+![Demo](./images/51.png)
 
 ### Performance
 

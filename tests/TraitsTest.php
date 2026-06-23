@@ -56,4 +56,49 @@ class TraitsTest extends \PHPUnit\Framework\TestCase
             $columns
         );
     }
+
+    /**
+     * @return void
+     */
+    public function test_dot()
+    {
+        $this->assertSame(
+            ['a' => 1, 'b.c' => 2, 'b.d.e' => 3],
+            $this->dot(['a' => 1, 'b' => ['c' => 2, 'd' => ['e' => 3]]])
+        );
+
+        // empty arrays produce no keys
+        $this->assertSame(['x' => 1], $this->dot(['x' => 1, 'y' => []]));
+
+        // numeric keys are preserved as-is
+        $this->assertSame(
+            ['list.0' => 'foo', 'list.1' => 'bar'],
+            $this->dot(['list' => ['foo', 'bar']])
+        );
+
+        $this->assertSame([], $this->dot([]));
+    }
+
+    /**
+     * @return void
+     */
+    public function test_dot_with_prefix()
+    {
+        $this->assertSame(
+            ['root.a' => 1, 'root.b.c' => 2],
+            $this->dot(['a' => 1, 'b' => ['c' => 2]], 'root.')
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function test_strIncrement()
+    {
+        $this->assertSame('B', $this->strIncrement('A'));
+        $this->assertSame('AA', $this->strIncrement('Z'));
+        $this->assertSame('AB', $this->strIncrement('AA'));
+        $this->assertSame('BA', $this->strIncrement('AZ'));
+        $this->assertSame('AAA', $this->strIncrement('ZZ'));
+    }
 }

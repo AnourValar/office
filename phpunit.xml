@@ -3,7 +3,7 @@
   bootstrap="vendor/autoload.php"
   backupGlobals="false"
   colors="true"
-  stopOnFailure="true"
+  stopOnFailure="false"
   xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.3/phpunit.xsd"
   cacheDirectory=".phpunit.cache"
   backupStaticProperties="false"

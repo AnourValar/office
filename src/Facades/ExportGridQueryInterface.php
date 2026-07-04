@@ -9,7 +9,7 @@ namespace AnourValar\Office\Facades;
  *     throw new \App\Exceptions\ValidationException('Format is not supported.');
  * }
  *
- * $generatorData = $this->buildBy($grid->query()->acl(), array_replace($this->profile, $this->profileExport)); // out of context
+ * $generatorData = $this->buildBy($grid->query()->withTrashed()->acl(), array_replace($this->profile, $this->profileExport)); // out of context
  * $request = $this->getBuildRequest()->get();
  *
  * return response()->streamDownload(
